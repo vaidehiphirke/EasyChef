@@ -1,70 +1,52 @@
 package com.example.easychef.activities;
 
 import android.os.Bundle;
-import android.util.Log;
+import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
-import com.codepath.asynchttpclient.AsyncHttpClient;
-import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
-import com.example.easychef.BuildConfig;
-import com.example.easychef.adapters.SuggestedRecipeAdapter;
+import com.example.easychef.R;
 import com.example.easychef.databinding.ActivityMainBinding;
-import com.example.easychef.models.Recipe;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import okhttp3.Headers;
+import com.example.easychef.fragments.IngredientFragment;
+import com.example.easychef.fragments.ProfileFragment;
+import com.example.easychef.fragments.SearchFragment;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String TEMPORARY_HARDCODED_API_RECIPE_CALL = String.format("https://api.spoonacular.com/recipes/findByIngredients?apiKey=%s&ingredients=apples,+flour,+sugar", BuildConfig.SPOONACULAR_KEY);
-    private static final String TAG = "MainActivity";
-    private List<Recipe> recipeList;
-    private SuggestedRecipeAdapter suggestedRecipeAdapter;
+    private final FragmentManager fragmentManager = getSupportFragmentManager();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        final ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        final ActivityMainBinding mainBinding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(mainBinding.getRoot());
 
-        recipeList = new ArrayList<>();
-
-        suggestedRecipeAdapter = new SuggestedRecipeAdapter(this, recipeList);
-        binding.rvSuggestedRecipes.setAdapter(suggestedRecipeAdapter);
-        binding.rvSuggestedRecipes.setLayoutManager(new LinearLayoutManager(this));
-
-        final AsyncHttpClient client = new AsyncHttpClient();
-        client.get(TEMPORARY_HARDCODED_API_RECIPE_CALL, new RecipeJsonHttpResponseHandler());
+        mainBinding.bottomNavigation.setOnNavigationItemSelectedListener(new EasyChefBottomMenuItemSelectedListener());
+        mainBinding.bottomNavigation.setSelectedItemId(R.id.action_ingredient);
     }
 
-    private class RecipeJsonHttpResponseHandler extends JsonHttpResponseHandler {
+    private class EasyChefBottomMenuItemSelectedListener implements BottomNavigationView.OnNavigationItemSelectedListener {
         @Override
-        public void onSuccess(int i, Headers headers, JSON json) {
-            Log.d(TAG, "onSuccess");
-            final JSONArray jsonArray = json.jsonArray;
-            try {
-                for (int j = 0; j < jsonArray.length(); j++) {
-                    final JSONObject jsonObject = jsonArray.getJSONObject(j);
-                    recipeList.add(new Recipe(jsonObject.getString("title")));
-                }
-                suggestedRecipeAdapter.notifyDataSetChanged();
-            } catch (JSONException e) {
-                Log.e(TAG, "Hit json exception", e);
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            final Fragment fragment;
+            switch (item.getItemId()) {
+                case R.id.action_profile:
+                    fragment = new ProfileFragment();
+                    break;
+                case R.id.action_search:
+                    fragment = new SearchFragment();
+                    break;
+                case R.id.action_ingredient:
+                default:
+                    fragment = new IngredientFragment();
+                    break;
             }
-        }
-
-        @Override
-        public void onFailure(int i, Headers headers, String s, Throwable throwable) {
-            Log.d(TAG, "onFailure" + throwable.getMessage());
+            fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
+            return true;
         }
     }
 }
