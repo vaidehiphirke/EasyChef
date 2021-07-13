@@ -23,6 +23,9 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "SPOONACULAR_KEY", apikeyProperties['SPOONACULAR_KEY'])
+        buildConfigField("String", "PARSE_APP_ID", apikeyProperties['PARSE_APP_ID'])
+        buildConfigField("String", "PARSE_CONSUMER_KEY", apikeyProperties['PARSE_CONSUMER_KEY'])
+
     }
 
     buildTypes {
@@ -48,4 +51,5 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     implementation 'com.codepath.libraries:asynchttpclient:2.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    implementation "com.github.parse-community.Parse-SDK-Android:parse:1.18.5"
 }

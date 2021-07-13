@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="border_margin">8dp</dimen>
+    <dimen name="layout_margin">16dp</dimen>
+    <item name="text_size" format="integer" type="dimen">10</item>
 </resources>
