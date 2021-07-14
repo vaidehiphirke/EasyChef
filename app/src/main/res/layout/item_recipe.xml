@@ -11,4 +11,12 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:text="@string/recipe_name" />
+
+    <Button
+        android:id="@+id/btnSaveRecipe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:text="@string/save_recipe" />
 </RelativeLayout>

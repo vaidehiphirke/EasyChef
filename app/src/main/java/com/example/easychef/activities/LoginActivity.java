@@ -41,7 +41,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void loginUser(String username, String password) {
         Log.i(TAG, "Attempted to login user " + username);
-        ParseUser.logInInBackground(username, password, new InstagramLogInCallback());
+        ParseUser.logInInBackground(username, password, new EasyChefLogInCallback());
     }
 
     private void registerUser(String username, String password) {
@@ -50,7 +50,7 @@ public class LoginActivity extends AppCompatActivity {
         final ParseUser newUser = new ParseUser();
         newUser.setUsername(username);
         newUser.setPassword(password);
-        newUser.signUpInBackground(new InstagramSignUpCallback());
+        newUser.signUpInBackground(new EasyChefSignUpCallback());
     }
 
     private void goToMainActivity() {
@@ -81,7 +81,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private class InstagramLogInCallback implements LogInCallback {
+    private class EasyChefLogInCallback implements LogInCallback {
 
         @Override
         public void done(ParseUser user, ParseException e) {
@@ -94,7 +94,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private class InstagramSignUpCallback implements SignUpCallback {
+    private class EasyChefSignUpCallback implements SignUpCallback {
 
         @Override
         public void done(ParseException e) {

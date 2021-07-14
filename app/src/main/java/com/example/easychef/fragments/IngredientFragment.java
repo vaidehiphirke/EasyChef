@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.codepath.asynchttpclient.AsyncHttpClient;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import com.example.easychef.BuildConfig;
-import com.example.easychef.adapters.SuggestedRecipeAdapter;
+import com.example.easychef.adapters.RecipeAdapter;
 import com.example.easychef.databinding.FragmentIngredientBinding;
 import com.example.easychef.models.Recipe;
 
@@ -29,10 +29,15 @@ import okhttp3.Headers;
 
 public class IngredientFragment extends Fragment {
 
-    private static final String TEMPORARY_HARDCODED_API_RECIPE_CALL = String.format("https://api.spoonacular.com/recipes/findByIngredients?apiKey=%s&ingredients=apples,+flour,+sugar", BuildConfig.SPOONACULAR_KEY);
+    private static final String API_URL_ROOT = "https://api.spoonacular.com/recipes";
+    private static final String TEMPORARY_HARDCODED_API_RECIPE_CALL =
+            String.format(
+                    "%s/findByIngredients?apiKey=%s&ingredients=apples,+flour,+sugar",
+                    API_URL_ROOT,
+                    BuildConfig.SPOONACULAR_KEY);
     private static final String TAG = "IngredientFragment";
-    private List<Recipe> recipeList;
-    private SuggestedRecipeAdapter suggestedRecipeAdapter;
+    private List<Recipe> suggestedRecipeList;
+    private RecipeAdapter recipeAdapter;
     private FragmentIngredientBinding ingredientBinding;
 
     public IngredientFragment() {
@@ -55,10 +60,10 @@ public class IngredientFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        recipeList = new ArrayList<>();
+        suggestedRecipeList = new ArrayList<>();
 
-        suggestedRecipeAdapter = new SuggestedRecipeAdapter(getContext(), recipeList);
-        ingredientBinding.rvSuggestedRecipes.setAdapter(suggestedRecipeAdapter);
+        recipeAdapter = new RecipeAdapter(getContext(), suggestedRecipeList);
+        ingredientBinding.rvSuggestedRecipes.setAdapter(recipeAdapter);
         ingredientBinding.rvSuggestedRecipes.setLayoutManager(new LinearLayoutManager(getContext()));
 
         final AsyncHttpClient client = new AsyncHttpClient();
@@ -74,9 +79,9 @@ public class IngredientFragment extends Fragment {
             try {
                 for (int j = 0; j < jsonArray.length(); j++) {
                     final JSONObject jsonObject = jsonArray.getJSONObject(j);
-                    recipeList.add(new Recipe(jsonObject.getString("title")));
+                    suggestedRecipeList.add(new Recipe(jsonObject));
                 }
-                suggestedRecipeAdapter.notifyDataSetChanged();
+                recipeAdapter.notifyDataSetChanged();
             } catch (JSONException e) {
                 Log.e(TAG, "Hit json exception", e);
             }

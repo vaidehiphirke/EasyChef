@@ -10,4 +10,5 @@
     <string name="password">password</string>
     <string name="username">username</string>
     <string name="button_text_logout">Logout</string>
+    <string name="save_recipe">Save</string>
 </resources>
