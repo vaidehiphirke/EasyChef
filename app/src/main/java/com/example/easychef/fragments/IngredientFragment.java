@@ -5,40 +5,28 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.codepath.asynchttpclient.AsyncHttpClient;
-import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
-import com.example.easychef.BuildConfig;
-import com.example.easychef.adapters.RecipeAdapter;
+import com.example.easychef.adapters.IngredientAdapter;
 import com.example.easychef.databinding.FragmentIngredientBinding;
-import com.example.easychef.models.Recipe;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.example.easychef.models.SavedIngredient;
+import com.parse.ParseException;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import okhttp3.Headers;
-
 public class IngredientFragment extends Fragment {
 
-    private static final String API_URL_ROOT = "https://api.spoonacular.com/recipes";
-    private static final String TEMPORARY_HARDCODED_API_RECIPE_CALL =
-            String.format(
-                    "%s/findByIngredients?apiKey=%s&ingredients=apples,+flour,+sugar",
-                    API_URL_ROOT,
-                    BuildConfig.SPOONACULAR_KEY);
-    private static final String TAG = "IngredientFragment";
-    private List<Recipe> suggestedRecipeList;
-    private RecipeAdapter recipeAdapter;
     private FragmentIngredientBinding ingredientBinding;
+    private List<SavedIngredient> userIngredients;
+    private IngredientAdapter ingredientAdapter;
 
     public IngredientFragment() {
         // Required empty public constructor
@@ -53,6 +41,7 @@ public class IngredientFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         ingredientBinding = FragmentIngredientBinding.inflate(inflater, container, false);
+        userIngredients = new ArrayList<>();
         return ingredientBinding.getRoot();
     }
 
@@ -60,36 +49,47 @@ public class IngredientFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        suggestedRecipeList = new ArrayList<>();
-
-        recipeAdapter = new RecipeAdapter(getContext(), suggestedRecipeList);
-        ingredientBinding.rvSuggestedRecipes.setAdapter(recipeAdapter);
+        ingredientAdapter = new IngredientAdapter(userIngredients, new IngredientOnLongClickListener());
+        ingredientBinding.rvSuggestedRecipes.setAdapter(ingredientAdapter);
         ingredientBinding.rvSuggestedRecipes.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        final AsyncHttpClient client = new AsyncHttpClient();
-        client.get(TEMPORARY_HARDCODED_API_RECIPE_CALL, new RecipeJsonHttpResponseHandler());
-
+        ingredientBinding.btnAdd.setOnClickListener(new AddIngredientOnClickListener());
     }
 
-    private class RecipeJsonHttpResponseHandler extends JsonHttpResponseHandler {
+    private class IngredientOnLongClickListener implements IngredientAdapter.OnLongClickListener {
         @Override
-        public void onSuccess(int i, Headers headers, JSON json) {
-            Log.d(TAG, "onSuccess");
-            final JSONArray jsonArray = json.jsonArray;
-            try {
-                for (int j = 0; j < jsonArray.length(); j++) {
-                    final JSONObject jsonObject = jsonArray.getJSONObject(j);
-                    suggestedRecipeList.add(new Recipe(jsonObject));
-                }
-                recipeAdapter.notifyDataSetChanged();
-            } catch (JSONException e) {
-                Log.e(TAG, "Hit json exception", e);
-            }
+        public void onItemLongClicked(int position) {
+            userIngredients.remove(position);
+            ingredientAdapter.notifyItemRemoved(position);
+            Toast.makeText(getContext(), "Item was removed!", Toast.LENGTH_SHORT).show();
         }
+    }
 
+    private class AddIngredientOnClickListener implements View.OnClickListener {
         @Override
-        public void onFailure(int i, Headers headers, String s, Throwable throwable) {
-            Log.d(TAG, "onFailure" + throwable.getMessage());
+        public void onClick(View view) {
+            final SavedIngredient savedIngredient = new SavedIngredient();
+            savedIngredient.setName(ingredientBinding.etAddIngredient.getText().toString());
+            savedIngredient.setUser(ParseUser.getCurrentUser());
+            savedIngredient.saveInBackground(new SaveIngredientSaveCallback());
+
+            userIngredients.add(savedIngredient);
+
+            ingredientAdapter.notifyItemInserted(userIngredients.size() - 1);
+            ingredientBinding.etAddIngredient.setText("");
+            Toast.makeText(getContext(), "Ingredient was added!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private class SaveIngredientSaveCallback implements SaveCallback {
+        @Override
+        public void done(ParseException e) {
+            if (e != null) {
+                Log.e("Saving Ingredient", "Error while saving", e);
+                Toast.makeText(getContext(), "Error while saving", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            Toast.makeText(getContext(), "Ingredient saved", Toast.LENGTH_SHORT).show();
         }
     }
 }

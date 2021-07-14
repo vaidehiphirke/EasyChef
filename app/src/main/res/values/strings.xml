@@ -11,4 +11,7 @@
     <string name="username">username</string>
     <string name="button_text_logout">Logout</string>
     <string name="save_recipe">Save</string>
+    <string name="pantry">Pantry</string>
+    <string name="add">Add</string>
+    <string name="add_an_item_here">Add an item here!</string>
 </resources>

@@ -12,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.easychef.databinding.ItemRecipeBinding;
-import com.example.easychef.models.Recipe;
+import com.example.easychef.models.RecipeFromAPI;
 import com.example.easychef.models.SavedRecipe;
 import com.parse.ParseException;
 import com.parse.ParseUser;
@@ -23,11 +23,11 @@ import java.util.List;
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder> {
 
     private final Context context;
-    private final List<Recipe> suggestedRecipes;
+    private final List<RecipeFromAPI> suggestedRecipesFromAPI;
 
-    public RecipeAdapter(Context context, List<Recipe> suggestedRecipeList) {
+    public RecipeAdapter(Context context, List<RecipeFromAPI> suggestedRecipeFromAPIList) {
         this.context = context;
-        suggestedRecipes = suggestedRecipeList;
+        suggestedRecipesFromAPI = suggestedRecipeFromAPIList;
     }
 
     @NonNull
@@ -39,13 +39,13 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        final Recipe recipe = suggestedRecipes.get(position);
-        holder.bind(recipe);
+        final RecipeFromAPI recipeFromAPI = suggestedRecipesFromAPI.get(position);
+        holder.bind(recipeFromAPI);
     }
 
     @Override
     public int getItemCount() {
-        return suggestedRecipes.size();
+        return suggestedRecipesFromAPI.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -61,8 +61,8 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
             itemRecipeBinding.btnSaveRecipe.setOnClickListener(new SaveRecipeButtonViewOnClickListener());
         }
 
-        public void bind(Recipe recipe) {
-            tvRecipeName.setText(recipe.getName());
+        public void bind(RecipeFromAPI recipeFromAPI) {
+            tvRecipeName.setText(recipeFromAPI.getName());
         }
 
         private class SaveRecipeButtonViewOnClickListener implements View.OnClickListener {

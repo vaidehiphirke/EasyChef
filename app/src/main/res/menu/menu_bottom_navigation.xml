@@ -5,7 +5,7 @@
     <item
         android:id="@+id/action_ingredient"
         android:icon="@android:drawable/ic_menu_add"
-        android:title="@string/ingredients"
+        android:title="@string/pantry"
         app:showAsAction="always" />
     <item
         android:id="@+id/action_search"
