@@ -91,6 +91,7 @@ public class IngredientFragment extends Fragment {
 
             ingredientAdapter.notifyItemInserted(0);
             ingredientBinding.etAddIngredient.setText("");
+            ingredientBinding.rvRecipes.smoothScrollToPosition(0);
             Toast.makeText(getContext(), "Ingredient was added!", Toast.LENGTH_SHORT).show();
         }
     }
