@@ -70,10 +70,17 @@ public class IngredientFragment extends Fragment {
         query.findInBackground(new RetrievePantryIngredientsFindCallback());
     }
 
+    private void deletePantryIngredientFromParse(String objectId) {
+        Log.i(TAG, "Ingredient objectId for deletion: " + objectId);
+        final ParseQuery<SavedIngredient> query = ParseQuery.getQuery(SavedIngredient.class);
+        query.getInBackground(objectId, new DeletePantryIngredientsGetCallback());
+    }
+
     private class IngredientOnLongClickListener implements IngredientAdapter.OnLongClickListener {
         @Override
         public void onItemLongClicked(int position) {
-            userIngredients.remove(position);
+            final String objectIdToDelete = userIngredients.remove(position).getObjectId();
+            deletePantryIngredientFromParse(objectIdToDelete);
             ingredientAdapter.notifyItemRemoved(position);
             Toast.makeText(getContext(), "Item was removed!", Toast.LENGTH_SHORT).show();
         }
@@ -100,7 +107,7 @@ public class IngredientFragment extends Fragment {
         @Override
         public void done(ParseException e) {
             if (e != null) {
-                Log.e("Saving Ingredient", "Error while saving", e);
+                Log.e(TAG, "Error while saving", e);
                 Toast.makeText(getContext(), "Error while saving", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -126,6 +133,18 @@ public class IngredientFragment extends Fragment {
             ingredientAdapter.clear();
             userIngredients.addAll(ingredients);
             ingredientAdapter.notifyDataSetChanged();
+        }
+    }
+
+    private class DeletePantryIngredientsGetCallback implements com.parse.GetCallback<SavedIngredient> {
+        @Override
+        public void done(SavedIngredient ingredient, ParseException e) {
+            if (e != null) {
+                Log.e(TAG, "Issue with deleting ingredient", e);
+                return;
+            }
+            ingredient.deleteInBackground();
+            Toast.makeText(getContext(), "Ingredient deleted", Toast.LENGTH_SHORT).show();
         }
     }
 }

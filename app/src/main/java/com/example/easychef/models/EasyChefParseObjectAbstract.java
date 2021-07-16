@@ -8,6 +8,7 @@ public abstract class EasyChefParseObjectAbstract extends ParseObject {
     public static final String KEY_NAME = "name";
     public static final String KEY_USER = "user";
     public static final String KEY_CREATED_AT = "createdAt";
+    public static final String KEY_OBJECT_ID = "objectId";
 
     public String getName() {
         return getString(KEY_NAME);
