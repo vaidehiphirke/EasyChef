@@ -87,7 +87,7 @@ public class IngredientFragment extends Fragment {
             savedIngredient.setUser(ParseUser.getCurrentUser());
             savedIngredient.saveInBackground(new SaveIngredientSaveCallback());
 
-            userIngredients.add(savedIngredient);
+            userIngredients.add(0, savedIngredient);
 
             ingredientAdapter.notifyItemInserted(0);
             ingredientBinding.etAddIngredient.setText("");

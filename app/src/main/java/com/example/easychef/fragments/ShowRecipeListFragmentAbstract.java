@@ -76,8 +76,7 @@ public abstract class ShowRecipeListFragmentAbstract extends Fragment {
             final JSONArray jsonArray = json.jsonArray;
             try {
                 for (int j = 0; j < jsonArray.length(); j++) {
-                    final JSONObject jsonObject = jsonArray.getJSONObject(j);
-                    recipesFromAPIList.add(new RecipeFromAPI(jsonObject));
+                    recipesFromAPIList.add(new RecipeFromAPI(jsonArray.getJSONObject(j)));
                 }
                 recipeAdapter.notifyDataSetChanged();
             } catch (JSONException e) {

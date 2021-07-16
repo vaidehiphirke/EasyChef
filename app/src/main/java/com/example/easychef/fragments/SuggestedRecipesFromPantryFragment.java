@@ -28,8 +28,7 @@ public class SuggestedRecipesFromPantryFragment extends ShowRecipeListFragmentAb
         query.addDescendingOrder(SavedIngredient.KEY_CREATED_AT);
         query.whereEqualTo(SavedIngredient.KEY_USER, ParseUser.getCurrentUser());
         try {
-            final List<SavedIngredient> ingredients = query.find();
-            userIngredientsFromParse.addAll(ingredients);
+            userIngredientsFromParse.addAll(query.find());
         } catch (ParseException e) {
             e.printStackTrace();
         }

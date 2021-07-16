@@ -28,14 +28,13 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.Vi
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        final View view = LayoutInflater.from(parent.getContext()).inflate(simple_list_item_1, parent, false);
-        return new ViewHolder(view);
+        return new ViewHolder(
+                LayoutInflater.from(parent.getContext()).inflate(simple_list_item_1, parent, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull IngredientAdapter.ViewHolder holder, int position) {
-        final SavedIngredient item = savedIngredientList.get(position);
-        holder.bind(item);
+        holder.bind(savedIngredientList.get(position));
     }
 
     @Override

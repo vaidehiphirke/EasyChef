@@ -41,8 +41,7 @@ public class ProfileFragment extends Fragment {
     }
 
     private void goToLoginActivity() {
-        final Intent intent = new Intent(getContext(), LoginActivity.class);
-        startActivity(intent);
+        startActivity(new Intent(getContext(), LoginActivity.class));
         getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
     }
 

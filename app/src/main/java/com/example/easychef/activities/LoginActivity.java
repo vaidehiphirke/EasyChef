@@ -54,8 +54,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void goToMainActivity() {
-        final Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
+        startActivity(new Intent(this, MainActivity.class));
         finish();
     }
 
@@ -64,9 +63,7 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         public void onClick(View view) {
             Log.i(TAG, "onClick login button");
-            final String username = etUsername.getText().toString();
-            final String password = etPassword.getText().toString();
-            loginUser(username, password);
+            loginUser(etUsername.getText().toString(), etPassword.getText().toString());
         }
     }
 
@@ -75,9 +72,7 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         public void onClick(View view) {
             Log.i(TAG, "onClick register button");
-            final String username = etUsername.getText().toString();
-            final String password = etPassword.getText().toString();
-            registerUser(username, password);
+            registerUser(etUsername.getText().toString(), etPassword.getText().toString());
         }
     }
 

@@ -33,14 +33,13 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        final ItemRecipeBinding itemRecipeBinding = ItemRecipeBinding.inflate(LayoutInflater.from(context), parent, false);
-        return new ViewHolder(itemRecipeBinding, context);
+        return new ViewHolder(
+                ItemRecipeBinding.inflate(LayoutInflater.from(context), parent, false), context);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        final RecipeFromAPI recipeFromAPI = recipesFromAPI.get(position);
-        holder.bind(recipeFromAPI);
+        holder.bind(recipesFromAPI.get(position));
     }
 
     @Override
