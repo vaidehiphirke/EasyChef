@@ -13,13 +13,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.codepath.asynchttpclient.AsyncHttpClient;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
-import com.example.easychef.adapters.RecipeAdapter;
+import com.example.easychef.adapters.RecipeFromAPIAdapter;
 import com.example.easychef.databinding.FragmentShowRecipeListBinding;
 import com.example.easychef.models.RecipeFromAPI;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +32,7 @@ public abstract class ShowRecipeListFragmentAbstract extends Fragment {
     private final StringBuilder apiCall = new StringBuilder(API_URL_ROOT);
 
     private List<RecipeFromAPI> recipesFromAPIList;
-    private RecipeAdapter recipeAdapter;
+    private RecipeFromAPIAdapter recipeFromAPIAdapter;
     private FragmentShowRecipeListBinding showRecipeListBinding;
 
     public ShowRecipeListFragmentAbstract() {
@@ -57,16 +56,13 @@ public abstract class ShowRecipeListFragmentAbstract extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         recipesFromAPIList = new ArrayList<>();
-
-        recipeAdapter = new RecipeAdapter(getContext(), recipesFromAPIList);
-        showRecipeListBinding.rvRecipes.setAdapter(recipeAdapter);
+        recipeFromAPIAdapter = new RecipeFromAPIAdapter(getContext(), recipesFromAPIList);
+        showRecipeListBinding.rvRecipes.setAdapter(recipeFromAPIAdapter);
         showRecipeListBinding.rvRecipes.setLayoutManager(new LinearLayoutManager(getContext()));
 
         final AsyncHttpClient client = new AsyncHttpClient();
         client.get(apiCall.append(getAPICall()).toString(), new RecipeJsonHttpResponseHandler());
-
     }
 
     private class RecipeJsonHttpResponseHandler extends JsonHttpResponseHandler {
@@ -78,7 +74,7 @@ public abstract class ShowRecipeListFragmentAbstract extends Fragment {
                 for (int j = 0; j < jsonArray.length(); j++) {
                     recipesFromAPIList.add(new RecipeFromAPI(jsonArray.getJSONObject(j)));
                 }
-                recipeAdapter.notifyDataSetChanged();
+                recipeFromAPIAdapter.notifyDataSetChanged();
             } catch (JSONException e) {
                 Log.e(TAG, "Hit json exception", e);
             }

@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentManager;
 
 import com.example.easychef.R;
 import com.example.easychef.databinding.ActivityMainBinding;
+import com.example.easychef.fragments.FavoritesFragment;
 import com.example.easychef.fragments.IngredientFragment;
 import com.example.easychef.fragments.ProfileFragment;
 import com.example.easychef.fragments.SearchFragment;
@@ -39,6 +40,9 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case R.id.action_search:
                     fragment = new SearchFragment();
+                    break;
+                case R.id.action_favorites:
+                    fragment = new FavoritesFragment();
                     break;
                 case R.id.action_ingredient:
                 default:

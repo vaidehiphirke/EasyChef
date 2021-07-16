@@ -20,12 +20,12 @@ import com.parse.SaveCallback;
 
 import java.util.List;
 
-public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder> {
+public class RecipeFromAPIAdapter extends RecyclerView.Adapter<RecipeFromAPIAdapter.ViewHolder> {
 
     private final Context context;
     private final List<RecipeFromAPI> recipesFromAPI;
 
-    public RecipeAdapter(Context context, List<RecipeFromAPI> suggestedRecipeFromAPIList) {
+    public RecipeFromAPIAdapter(Context context, List<RecipeFromAPI> suggestedRecipeFromAPIList) {
         this.context = context;
         recipesFromAPI = suggestedRecipeFromAPIList;
     }
@@ -86,5 +86,4 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
             }
         }
     }
-
 }
