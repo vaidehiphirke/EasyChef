@@ -6,15 +6,15 @@
         android:id="@+id/action_ingredient"
         android:icon="@android:drawable/ic_menu_add"
         android:title="@string/pantry"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_search"
         android:icon="@android:drawable/ic_menu_search"
         android:title="@string/search"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_profile"
         android:icon="@android:drawable/ic_menu_my_calendar"
         android:title="@string/profile"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
 </menu>

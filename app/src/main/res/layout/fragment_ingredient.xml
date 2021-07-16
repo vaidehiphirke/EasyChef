@@ -13,6 +13,14 @@
         android:layout_alignParentEnd="true"
         android:text="@string/add" />
 
+    <Button
+        android:id="@+id/btnGetRecipes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:text="@string/get_recipes" />
+
     <EditText
         android:id="@+id/etAddIngredient"
         android:layout_width="match_parent"
@@ -26,7 +34,7 @@
         android:inputType="text" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvSuggestedRecipes"
+        android:id="@+id/rv_recipes"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/btnAdd"

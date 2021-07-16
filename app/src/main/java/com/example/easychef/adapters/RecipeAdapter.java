@@ -23,11 +23,11 @@ import java.util.List;
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder> {
 
     private final Context context;
-    private final List<RecipeFromAPI> suggestedRecipesFromAPI;
+    private final List<RecipeFromAPI> recipesFromAPI;
 
     public RecipeAdapter(Context context, List<RecipeFromAPI> suggestedRecipeFromAPIList) {
         this.context = context;
-        suggestedRecipesFromAPI = suggestedRecipeFromAPIList;
+        recipesFromAPI = suggestedRecipeFromAPIList;
     }
 
     @NonNull
@@ -39,13 +39,13 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        final RecipeFromAPI recipeFromAPI = suggestedRecipesFromAPI.get(position);
+        final RecipeFromAPI recipeFromAPI = recipesFromAPI.get(position);
         holder.bind(recipeFromAPI);
     }
 
     @Override
     public int getItemCount() {
-        return suggestedRecipesFromAPI.size();
+        return recipesFromAPI.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

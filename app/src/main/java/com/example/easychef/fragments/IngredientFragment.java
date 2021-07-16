@@ -12,10 +12,13 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.example.easychef.R;
 import com.example.easychef.adapters.IngredientAdapter;
 import com.example.easychef.databinding.FragmentIngredientBinding;
 import com.example.easychef.models.SavedIngredient;
+import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
@@ -24,6 +27,7 @@ import java.util.List;
 
 public class IngredientFragment extends Fragment {
 
+    private static final String TAG = "IngredientFragment";
     private FragmentIngredientBinding ingredientBinding;
     private List<SavedIngredient> userIngredients;
     private IngredientAdapter ingredientAdapter;
@@ -50,10 +54,20 @@ public class IngredientFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         ingredientAdapter = new IngredientAdapter(userIngredients, new IngredientOnLongClickListener());
-        ingredientBinding.rvSuggestedRecipes.setAdapter(ingredientAdapter);
-        ingredientBinding.rvSuggestedRecipes.setLayoutManager(new LinearLayoutManager(getContext()));
+        ingredientBinding.rvRecipes.setAdapter(ingredientAdapter);
+        ingredientBinding.rvRecipes.setLayoutManager(new LinearLayoutManager(getContext()));
 
         ingredientBinding.btnAdd.setOnClickListener(new AddIngredientOnClickListener());
+        ingredientBinding.btnGetRecipes.setOnClickListener(new GetRecipesOnClickListener());
+
+        queryPantryIngredients();
+    }
+
+    private void queryPantryIngredients() {
+        final ParseQuery<SavedIngredient> query = ParseQuery.getQuery(SavedIngredient.class);
+        query.include(SavedIngredient.KEY_NAME);
+        query.addDescendingOrder(SavedIngredient.KEY_CREATED_AT);
+        query.findInBackground(new RetrievePantryIngredientsFindCallback());
     }
 
     private class IngredientOnLongClickListener implements IngredientAdapter.OnLongClickListener {
@@ -75,7 +89,7 @@ public class IngredientFragment extends Fragment {
 
             userIngredients.add(savedIngredient);
 
-            ingredientAdapter.notifyItemInserted(userIngredients.size() - 1);
+            ingredientAdapter.notifyItemInserted(0);
             ingredientBinding.etAddIngredient.setText("");
             Toast.makeText(getContext(), "Ingredient was added!", Toast.LENGTH_SHORT).show();
         }
@@ -90,6 +104,27 @@ public class IngredientFragment extends Fragment {
                 return;
             }
             Toast.makeText(getContext(), "Ingredient saved", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private class GetRecipesOnClickListener implements View.OnClickListener {
+        @Override
+        public void onClick(View view) {
+            final SuggestedRecipesFromPantryFragment fromPantryFragment = new SuggestedRecipesFromPantryFragment();
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, fromPantryFragment).commit();
+        }
+    }
+
+    protected class RetrievePantryIngredientsFindCallback implements FindCallback<SavedIngredient> {
+        @Override
+        public void done(List<SavedIngredient> ingredients, ParseException e) {
+            if (e != null) {
+                Log.e(TAG, "Issue with getting ingredients", e);
+                return;
+            }
+            ingredientAdapter.clear();
+            userIngredients.addAll(ingredients);
+            ingredientAdapter.notifyDataSetChanged();
         }
     }
 }

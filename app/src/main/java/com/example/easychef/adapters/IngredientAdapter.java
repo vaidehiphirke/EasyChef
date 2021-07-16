@@ -43,6 +43,11 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.Vi
         return savedIngredientList.size();
     }
 
+    public void clear() {
+        savedIngredientList.clear();
+        notifyDataSetChanged();
+    }
+
     public interface OnLongClickListener {
         void onItemLongClicked(int position);
     }
