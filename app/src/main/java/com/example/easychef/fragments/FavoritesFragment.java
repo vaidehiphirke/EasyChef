@@ -1,105 +1,63 @@
 package com.example.easychef.fragments;
 
-import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-
-import com.example.easychef.adapters.SavedRecipeAdapter;
-import com.example.easychef.databinding.FragmentShowRecipeListBinding;
-import com.example.easychef.models.SavedIngredient;
-import com.example.easychef.models.SavedRecipe;
-import com.parse.GetCallback;
+import com.example.easychef.adapters.RecipeAdapter;
+import com.example.easychef.models.Ingredient;
+import com.example.easychef.models.Recipe;
+import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class FavoritesFragment extends Fragment {
+public class FavoritesFragment extends RecipeListFragmentAbstract {
+
     private static final String TAG = "FavoritesFragment";
-    private FragmentShowRecipeListBinding showRecipeListBinding;
-    private List<SavedRecipe> userFavoriteRecipes;
-    private SavedRecipeAdapter savedRecipeAdapter;
-
-    public FavoritesFragment() {
-        // Required empty public constructor
-    }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        showRecipeListBinding = FragmentShowRecipeListBinding.inflate(inflater, container, false);
-        userFavoriteRecipes = new ArrayList<>();
-        return showRecipeListBinding.getRoot();
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        savedRecipeAdapter = new SavedRecipeAdapter(getContext(), userFavoriteRecipes, new RecipeUnsaveOnClickListener());
-        showRecipeListBinding.rvRecipes.setAdapter(savedRecipeAdapter);
-        showRecipeListBinding.rvRecipes.setLayoutManager(new LinearLayoutManager(getContext()));
-
-        querySavedRecipes();
-    }
-
-    private void querySavedRecipes() {
-        final ParseQuery<SavedRecipe> query = ParseQuery.getQuery(SavedRecipe.class);
-        query.include(SavedIngredient.KEY_NAME);
-        query.addDescendingOrder(SavedIngredient.KEY_CREATED_AT);
+    protected void getRecipesToShowInList() {
+        final ParseQuery<Recipe> query = ParseQuery.getQuery(Recipe.class);
+        query.include(Ingredient.KEY_NAME);
+        query.addDescendingOrder(Ingredient.KEY_CREATED_AT);
         query.findInBackground(new RetrieveSavedRecipesFindCallback());
     }
 
-    private void deleteSavedRecipeFromParse(String objectIdToDelete) {
-        final ParseQuery<SavedRecipe> query = ParseQuery.getQuery(SavedRecipe.class);
-        query.getInBackground(objectIdToDelete, new DeleteSavedRecipeGetCallback());
+    @Override
+    protected RecipeAdapter.OnUnsavedListener getOnUnsavedListener() {
+        return new UnsaveOnClickListener();
     }
 
-    private class RetrieveSavedRecipesFindCallback implements com.parse.FindCallback<SavedRecipe> {
+    private class UnsaveOnClickListener implements RecipeAdapter.OnUnsavedListener {
         @Override
-        public void done(List<SavedRecipe> recipes, ParseException e) {
+        public void onUnsavedChecked(int position) {
+            final ParseQuery<Recipe> query = ParseQuery.getQuery(Recipe.class);
+            query.whereEqualTo(Recipe.KEY_RECIPE_ID, recipes.get(position).getId());
+            query.whereEqualTo(Recipe.KEY_USER, ParseUser.getCurrentUser());
+            try {
+                final String objectIdToDelete = query.getFirst().getObjectId();
+                deleteSavedRecipeFromParse(objectIdToDelete);
+                recipes.remove(position);
+                recipeAdapter.notifyItemRemoved(position);
+            } catch (ParseException e) {
+                Log.e(TAG, "Recipe id not found", e);
+            }
+            Toast.makeText(getContext(), "Recipe removed from favorites!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private class RetrieveSavedRecipesFindCallback implements FindCallback<Recipe> {
+        @Override
+        public void done(List<Recipe> savedRecipes, ParseException e) {
             if (e != null) {
                 Log.e(TAG, "Issue with getting ingredients", e);
                 return;
             }
-            savedRecipeAdapter.clear();
-            userFavoriteRecipes.addAll(recipes);
-            savedRecipeAdapter.notifyDataSetChanged();
-        }
-    }
-
-    private class RecipeUnsaveOnClickListener implements SavedRecipeAdapter.OnClickListener {
-        @Override
-        public void onItemClicked(int position) {
-            final String objectIdToDelete = userFavoriteRecipes.remove(position).getObjectId();
-            deleteSavedRecipeFromParse(objectIdToDelete);
-            savedRecipeAdapter.notifyItemRemoved(position);
-            Toast.makeText(getContext(), "Item was removed!", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private class DeleteSavedRecipeGetCallback implements GetCallback<SavedRecipe> {
-        @Override
-        public void done(SavedRecipe recipe, ParseException e) {
-            if (e != null) {
-                Log.e(TAG, "Issue with removing recipe from favorites", e);
-                return;
-            }
-            recipe.deleteInBackground();
-            Toast.makeText(getContext(), "Recipe removed from favorites", Toast.LENGTH_SHORT).show();
+            recipeAdapter.clear();
+            recipes.addAll(savedRecipes);
+            recipeAdapter.notifyDataSetChanged();
         }
     }
 }

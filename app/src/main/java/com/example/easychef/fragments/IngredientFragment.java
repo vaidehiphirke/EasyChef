@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.easychef.R;
 import com.example.easychef.adapters.IngredientAdapter;
 import com.example.easychef.databinding.FragmentIngredientBinding;
-import com.example.easychef.models.SavedIngredient;
+import com.example.easychef.models.Ingredient;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -29,7 +29,7 @@ public class IngredientFragment extends Fragment {
 
     private static final String TAG = "IngredientFragment";
     private FragmentIngredientBinding ingredientBinding;
-    private List<SavedIngredient> userIngredients;
+    private List<Ingredient> userIngredients;
     private IngredientAdapter ingredientAdapter;
 
     public IngredientFragment() {
@@ -64,15 +64,15 @@ public class IngredientFragment extends Fragment {
     }
 
     private void queryPantryIngredients() {
-        final ParseQuery<SavedIngredient> query = ParseQuery.getQuery(SavedIngredient.class);
-        query.include(SavedIngredient.KEY_NAME);
-        query.addDescendingOrder(SavedIngredient.KEY_CREATED_AT);
+        final ParseQuery<Ingredient> query = ParseQuery.getQuery(Ingredient.class);
+        query.include(Ingredient.KEY_NAME);
+        query.addDescendingOrder(Ingredient.KEY_CREATED_AT);
         query.findInBackground(new RetrievePantryIngredientsFindCallback());
     }
 
     private void deletePantryIngredientFromParse(String objectId) {
         Log.i(TAG, "Ingredient objectId for deletion: " + objectId);
-        final ParseQuery<SavedIngredient> query = ParseQuery.getQuery(SavedIngredient.class);
+        final ParseQuery<Ingredient> query = ParseQuery.getQuery(Ingredient.class);
         query.getInBackground(objectId, new DeletePantryIngredientsGetCallback());
     }
 
@@ -89,12 +89,12 @@ public class IngredientFragment extends Fragment {
     private class AddIngredientOnClickListener implements View.OnClickListener {
         @Override
         public void onClick(View view) {
-            final SavedIngredient savedIngredient = new SavedIngredient();
-            savedIngredient.setName(ingredientBinding.etAddIngredient.getText().toString());
-            savedIngredient.setUser(ParseUser.getCurrentUser());
-            savedIngredient.saveInBackground(new SaveIngredientSaveCallback());
+            final Ingredient ingredient = new Ingredient();
+            ingredient.setName(ingredientBinding.etAddIngredient.getText().toString());
+            ingredient.setUser(ParseUser.getCurrentUser());
+            ingredient.saveInBackground(new SaveIngredientSaveCallback());
 
-            userIngredients.add(0, savedIngredient);
+            userIngredients.add(0, ingredient);
 
             ingredientAdapter.notifyItemInserted(0);
             ingredientBinding.etAddIngredient.setText("");
@@ -123,9 +123,9 @@ public class IngredientFragment extends Fragment {
         }
     }
 
-    protected class RetrievePantryIngredientsFindCallback implements FindCallback<SavedIngredient> {
+    protected class RetrievePantryIngredientsFindCallback implements FindCallback<Ingredient> {
         @Override
-        public void done(List<SavedIngredient> ingredients, ParseException e) {
+        public void done(List<Ingredient> ingredients, ParseException e) {
             if (e != null) {
                 Log.e(TAG, "Issue with getting ingredients", e);
                 return;
@@ -136,9 +136,9 @@ public class IngredientFragment extends Fragment {
         }
     }
 
-    private class DeletePantryIngredientsGetCallback implements com.parse.GetCallback<SavedIngredient> {
+    private class DeletePantryIngredientsGetCallback implements com.parse.GetCallback<Ingredient> {
         @Override
-        public void done(SavedIngredient ingredient, ParseException e) {
+        public void done(Ingredient ingredient, ParseException e) {
             if (e != null) {
                 Log.e(TAG, "Issue with deleting ingredient", e);
                 return;

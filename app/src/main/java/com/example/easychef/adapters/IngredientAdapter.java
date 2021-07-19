@@ -8,7 +8,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.easychef.models.SavedIngredient;
+import com.example.easychef.models.Ingredient;
 
 import java.util.List;
 
@@ -17,11 +17,11 @@ import static android.R.layout.*;
 
 public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.ViewHolder> {
 
-    private final List<SavedIngredient> savedIngredientList;
+    private final List<Ingredient> ingredientList;
     private final OnLongClickListener longClickListener;
 
-    public IngredientAdapter(List<SavedIngredient> savedIngredientList, OnLongClickListener longClickListener) {
-        this.savedIngredientList = savedIngredientList;
+    public IngredientAdapter(List<Ingredient> ingredientList, OnLongClickListener longClickListener) {
+        this.ingredientList = ingredientList;
         this.longClickListener = longClickListener;
     }
 
@@ -34,16 +34,16 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull IngredientAdapter.ViewHolder holder, int position) {
-        holder.bind(savedIngredientList.get(position));
+        holder.bind(ingredientList.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return savedIngredientList.size();
+        return ingredientList.size();
     }
 
     public void clear() {
-        savedIngredientList.clear();
+        ingredientList.clear();
         notifyDataSetChanged();
     }
 
@@ -60,7 +60,7 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.Vi
             tvIngredient = itemView.findViewById(text1);
         }
 
-        public void bind(SavedIngredient item) {
+        public void bind(Ingredient item) {
             tvIngredient.setText(item.getName());
             tvIngredient.setOnLongClickListener(view -> {
                 longClickListener.onItemLongClicked(getAdapterPosition());

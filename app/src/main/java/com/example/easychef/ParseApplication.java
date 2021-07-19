@@ -2,8 +2,8 @@ package com.example.easychef;
 
 import android.app.Application;
 
-import com.example.easychef.models.SavedIngredient;
-import com.example.easychef.models.SavedRecipe;
+import com.example.easychef.models.Ingredient;
+import com.example.easychef.models.Recipe;
 import com.parse.Parse;
 import com.parse.ParseObject;
 
@@ -13,8 +13,8 @@ public class ParseApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        ParseObject.registerSubclass(SavedRecipe.class);
-        ParseObject.registerSubclass(SavedIngredient.class);
+        ParseObject.registerSubclass(Recipe.class);
+        ParseObject.registerSubclass(Ingredient.class);
 
         Parse.initialize(new Parse.Configuration.Builder(this)
                 .applicationId(BuildConfig.PARSE_APP_ID)

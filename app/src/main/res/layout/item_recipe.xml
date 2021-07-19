@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/border_margin">
@@ -12,11 +13,13 @@
         android:layout_alignParentTop="true"
         android:text="@string/recipe_name" />
 
-    <Button
+    <ToggleButton
         android:id="@+id/btnSaveRecipe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:text="@string/save_recipe" />
+        android:checked="false"
+        android:textOff="@string/save_recipe"
+        android:textOn="@string/unsave_recipe" />
 </RelativeLayout>

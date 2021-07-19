@@ -5,18 +5,11 @@ import com.parse.ParseUser;
 
 public abstract class EasyChefParseObjectAbstract extends ParseObject {
 
-    public static final String KEY_NAME = "name";
     public static final String KEY_USER = "user";
+    public static final String KEY_IMAGE_URL = "imageURL";
+    public static final String KEY_ID = "id";
     public static final String KEY_CREATED_AT = "createdAt";
     public static final String KEY_OBJECT_ID = "objectId";
-
-    public String getName() {
-        return getString(KEY_NAME);
-    }
-
-    public void setName(String name) {
-        put(KEY_NAME, name);
-    }
 
     public ParseUser getUser() {
         return getParseUser(KEY_USER);
@@ -25,4 +18,13 @@ public abstract class EasyChefParseObjectAbstract extends ParseObject {
     public void setUser(ParseUser user) {
         put(KEY_USER, user);
     }
+
+    public abstract String getName();
+
+    public abstract void setName(String name);
+
+    public abstract String getImageUrl();
+
+    public abstract void setImageUrl(String imageUrl);
+
 }

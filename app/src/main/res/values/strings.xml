@@ -16,4 +16,5 @@
     <string name="add_an_item_here">Add an item here!</string>
     <string name="get_recipes">Get Recipes</string>
     <string name="favorites">Favorites</string>
+    <string name="unsave_recipe">Unsave</string>
 </resources>
