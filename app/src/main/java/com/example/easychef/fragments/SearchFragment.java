@@ -30,7 +30,12 @@ public class SearchFragment extends RecipeListFragmentAbstract {
             String.format(
                     "%s/complexSearch?apiKey=%s&query=",
                     API_URL_ROOT, BuildConfig.SPOONACULAR_KEY);
+    private static final String RECIPE_EXPLORE_API_CALL =
+            String.format(
+                    "%s/random?apiKey=%s&number=10",
+                    API_URL_ROOT, BuildConfig.SPOONACULAR_KEY);
     private static final String TAG = "SearchFragment";
+    private final AsyncHttpClient client = new AsyncHttpClient();
     private FragmentSearchBinding binding;
     private String searchQuery;
 
@@ -49,17 +54,23 @@ public class SearchFragment extends RecipeListFragmentAbstract {
         binding.rvRecipes.setLayoutManager(new LinearLayoutManager(getContext()));
 
         binding.btnSearch.setOnClickListener(new GetRecipesOnClickListener());
+
+        getExploreRecipes();
     }
 
     @Override
     protected void getRecipesToShowInList() {
-        final AsyncHttpClient client = new AsyncHttpClient();
         client.get(RECIPE_SEARCH_API_CALL.concat(searchQuery), new SearchRecipeJsonHttpResponseHandler());
     }
 
     @Override
     protected RecipeAdapter.OnUnsavedListener getOnUnsavedListener() {
         return new UnsaveButPersistOnClickListener();
+    }
+
+    private void getExploreRecipes() {
+        client.get(RECIPE_EXPLORE_API_CALL, new ExploreRecipeJsonHttpResponseHandler());
+
     }
 
     private class GetRecipesOnClickListener implements View.OnClickListener {
@@ -73,11 +84,32 @@ public class SearchFragment extends RecipeListFragmentAbstract {
     private class SearchRecipeJsonHttpResponseHandler extends JsonHttpResponseHandler {
         @Override
         public void onSuccess(int i, Headers headers, JSON json) {
-            Log.d(TAG, "onSuccess");
             try {
                 adapter.clear();
                 recipes.clear();
                 final JSONArray results = json.jsonObject.getJSONArray("results");
+                for (int j = 0; j < results.length(); j++) {
+                    recipes.add(new Recipe(results.getJSONObject(j)));
+                }
+                adapter.notifyDataSetChanged();
+            } catch (JSONException e) {
+                Log.e(TAG, "Hit json exception", e);
+            }
+        }
+
+        @Override
+        public void onFailure(int i, Headers headers, String s, Throwable throwable) {
+            Log.d(TAG, "onFailure" + throwable.getMessage());
+        }
+    }
+
+    private class ExploreRecipeJsonHttpResponseHandler extends JsonHttpResponseHandler {
+        @Override
+        public void onSuccess(int i, Headers headers, JSON json) {
+            try {
+                adapter.clear();
+                recipes.clear();
+                final JSONArray results = json.jsonObject.getJSONArray("recipes");
                 for (int j = 0; j < results.length(); j++) {
                     recipes.add(new Recipe(results.getJSONObject(j)));
                 }
