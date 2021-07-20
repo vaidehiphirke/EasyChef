@@ -1,8 +1,10 @@
 package com.example.easychef.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.TextView;
@@ -10,9 +12,13 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.easychef.R;
 import com.example.easychef.databinding.ItemRecipeBinding;
+import com.example.easychef.fragments.RecipeDetailsFragment;
+import com.example.easychef.fragments.SuggestedRecipesFromPantryFragment;
 import com.example.easychef.models.Recipe;
 import com.parse.GetCallback;
 import com.parse.ParseException;
@@ -20,6 +26,8 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder> {
@@ -61,7 +69,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
         void onUnsavedChecked(int position);
     }
 
-    protected class ViewHolder extends RecyclerView.ViewHolder {
+    protected class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private final TextView tvRecipeName;
         private final ToggleButton btnSaveRecipe;
@@ -74,6 +82,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
             btnSaveRecipe = itemRecipeBinding.btnSaveRecipe;
             btnSaveRecipe.setOnCheckedChangeListener(new SaveUnsaveButtonListener());
 
+            itemView.setOnClickListener(this);
         }
 
         public void bind(Recipe recipe) {
@@ -82,6 +91,15 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
             query.whereEqualTo(Recipe.KEY_RECIPE_ID, recipe.getId());
             query.whereEqualTo(Recipe.KEY_USER, ParseUser.getCurrentUser());
             query.getFirstInBackground(new SeeIfSavedAndToggleGetCallback());
+        }
+
+        @Override
+        public void onClick(View view) {
+            if (getAdapterPosition() != RecyclerView.NO_POSITION) {
+                final AppCompatActivity activity = (AppCompatActivity) view.getContext();
+                final RecipeDetailsFragment fragment = new RecipeDetailsFragment(recipes.get(getAdapterPosition()).getId());
+                activity.getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, fragment).commit();
+            }
         }
 
         private class SaveUnsaveButtonListener implements CompoundButton.OnCheckedChangeListener {
