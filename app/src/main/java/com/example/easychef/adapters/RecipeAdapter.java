@@ -91,11 +91,12 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
 
         @Override
         public void onClick(View view) {
-            if (getAdapterPosition() != RecyclerView.NO_POSITION) {
-                final AppCompatActivity activity = (AppCompatActivity) view.getContext();
-                final RecipeDetailsFragment fragment = new RecipeDetailsFragment(recipes.get(getAdapterPosition()).getId());
-                activity.getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, fragment).commit();
+            if (getAdapterPosition() == RecyclerView.NO_POSITION) {
+                return;
             }
+            final AppCompatActivity activity = (AppCompatActivity) view.getContext();
+            final RecipeDetailsFragment fragment = new RecipeDetailsFragment(recipes.get(getAdapterPosition()).getId());
+            activity.getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, fragment).commit();
         }
 
         private class SaveUnsaveButtonListener implements CompoundButton.OnCheckedChangeListener {

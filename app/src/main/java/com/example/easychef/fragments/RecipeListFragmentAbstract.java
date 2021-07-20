@@ -33,8 +33,6 @@ public abstract class RecipeListFragmentAbstract extends Fragment {
 
     private static final String TAG = "RecipeListFragmentAbstract";
     protected static final String API_URL_ROOT = "https://api.spoonacular.com/recipes";
-    protected final StringBuilder apiCall = new StringBuilder(API_URL_ROOT);
-
     protected List<Recipe> recipes;
     protected RecipeAdapter adapter;
     private FragmentRecipeListBinding binding;

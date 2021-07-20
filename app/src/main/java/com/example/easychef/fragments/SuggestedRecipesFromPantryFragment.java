@@ -2,8 +2,8 @@ package com.example.easychef.fragments;
 
 import android.util.Log;
 
-import com.codepath.asynchttpclient.AsyncHttpClient;
 import com.example.easychef.BuildConfig;
+import com.example.easychef.AsyncClient;
 import com.example.easychef.adapters.RecipeAdapter;
 import com.example.easychef.models.Ingredient;
 import com.parse.ParseException;
@@ -20,12 +20,10 @@ public class SuggestedRecipesFromPantryFragment extends RecipeListFragmentAbstra
             String.format(
                     "/findByIngredients?apiKey=%s",
                     BuildConfig.SPOONACULAR_KEY);
-    private final List<Ingredient> userIngredientsFromParse = new ArrayList<>();
 
     @Override
     protected void getRecipesToShowInList() {
-        final AsyncHttpClient client = new AsyncHttpClient();
-        client.get(apiCall.append(getAPICall()).toString(), new RecipeJsonHttpResponseHandler());
+        AsyncClient.CLIENT.get(API_URL_ROOT.concat(getAPICall()), new RecipeJsonHttpResponseHandler());
     }
 
     @Override
@@ -34,6 +32,7 @@ public class SuggestedRecipesFromPantryFragment extends RecipeListFragmentAbstra
     }
 
     private String getAPICall() {
+        final List<Ingredient> userIngredientsFromParse = new ArrayList<>();
         final ParseQuery<Ingredient> query = ParseQuery.getQuery(Ingredient.class);
         query.include(Ingredient.KEY_NAME);
         query.addDescendingOrder(Ingredient.KEY_CREATED_AT);

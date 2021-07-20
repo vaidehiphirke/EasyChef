@@ -10,9 +10,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.codepath.asynchttpclient.AsyncHttpClient;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import com.example.easychef.BuildConfig;
+import com.example.easychef.AsyncClient;
 import com.example.easychef.adapters.RecipeAdapter;
 import com.example.easychef.databinding.FragmentSearchBinding;
 import com.example.easychef.models.Recipe;
@@ -35,7 +35,7 @@ public class SearchFragment extends RecipeListFragmentAbstract {
                     "%s/random?apiKey=%s&number=10",
                     API_URL_ROOT, BuildConfig.SPOONACULAR_KEY);
     private static final String TAG = "SearchFragment";
-    private final AsyncHttpClient client = new AsyncHttpClient();
+
     private FragmentSearchBinding binding;
     private String searchQuery;
 
@@ -60,7 +60,7 @@ public class SearchFragment extends RecipeListFragmentAbstract {
 
     @Override
     protected void getRecipesToShowInList() {
-        client.get(RECIPE_SEARCH_API_CALL.concat(searchQuery), new SearchRecipeJsonHttpResponseHandler());
+        AsyncClient.CLIENT.get(RECIPE_SEARCH_API_CALL.concat(searchQuery), new SearchRecipeJsonHttpResponseHandler());
     }
 
     @Override
@@ -69,7 +69,7 @@ public class SearchFragment extends RecipeListFragmentAbstract {
     }
 
     private void getExploreRecipes() {
-        client.get(RECIPE_EXPLORE_API_CALL, new ExploreRecipeJsonHttpResponseHandler());
+        AsyncClient.CLIENT.get(RECIPE_EXPLORE_API_CALL, new ExploreRecipeJsonHttpResponseHandler());
 
     }
 

@@ -11,8 +11,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
-import com.codepath.asynchttpclient.AsyncHttpClient;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
+import com.example.easychef.AsyncClient;
 import com.example.easychef.BuildConfig;
 import com.example.easychef.databinding.FragmentRecipeDetailsBinding;
 
@@ -53,8 +53,7 @@ public class RecipeDetailsFragment extends Fragment {
     private void getRecipeDetails() {
         final String recipeDetailsAPICall = String.format(RecipeListFragmentAbstract.API_URL_ROOT + "/%d/card?apiKey=%s", id, BuildConfig.SPOONACULAR_KEY);
         Log.i(TAG, recipeDetailsAPICall);
-        final AsyncHttpClient client = new AsyncHttpClient();
-        client.get(recipeDetailsAPICall, new RecipeDetailsJsonHttpResponseHandler());
+        AsyncClient.CLIENT.get(recipeDetailsAPICall, new RecipeDetailsJsonHttpResponseHandler());
     }
 
     private class RecipeDetailsJsonHttpResponseHandler extends JsonHttpResponseHandler {
