@@ -1,7 +1,6 @@
 package com.example.easychef.adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +17,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.easychef.R;
 import com.example.easychef.databinding.ItemRecipeBinding;
 import com.example.easychef.fragments.RecipeDetailsFragment;
-import com.example.easychef.fragments.SuggestedRecipesFromPantryFragment;
 import com.example.easychef.models.Recipe;
 import com.parse.GetCallback;
 import com.parse.ParseException;
@@ -26,8 +24,6 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
-import java.text.Format;
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder> {
