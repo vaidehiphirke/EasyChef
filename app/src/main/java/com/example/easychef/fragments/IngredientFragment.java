@@ -28,9 +28,9 @@ import java.util.List;
 public class IngredientFragment extends Fragment {
 
     private static final String TAG = "IngredientFragment";
-    private FragmentIngredientBinding ingredientBinding;
+    private FragmentIngredientBinding binding;
     private List<Ingredient> userIngredients;
-    private IngredientAdapter ingredientAdapter;
+    private IngredientAdapter adapter;
 
     public IngredientFragment() {
         // Required empty public constructor
@@ -44,21 +44,21 @@ public class IngredientFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        ingredientBinding = FragmentIngredientBinding.inflate(inflater, container, false);
+        binding = FragmentIngredientBinding.inflate(inflater, container, false);
         userIngredients = new ArrayList<>();
-        return ingredientBinding.getRoot();
+        return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        ingredientAdapter = new IngredientAdapter(userIngredients, new IngredientOnLongClickListener());
-        ingredientBinding.rvRecipes.setAdapter(ingredientAdapter);
-        ingredientBinding.rvRecipes.setLayoutManager(new LinearLayoutManager(getContext()));
+        adapter = new IngredientAdapter(userIngredients, new IngredientOnLongClickListener());
+        binding.rvRecipes.setAdapter(adapter);
+        binding.rvRecipes.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        ingredientBinding.btnAdd.setOnClickListener(new AddIngredientOnClickListener());
-        ingredientBinding.btnGetRecipes.setOnClickListener(new GetRecipesOnClickListener());
+        binding.btnAdd.setOnClickListener(new AddIngredientOnClickListener());
+        binding.btnGetRecipes.setOnClickListener(new GetRecipesOnClickListener());
 
         queryPantryIngredients();
     }
@@ -81,7 +81,7 @@ public class IngredientFragment extends Fragment {
         public void onItemLongClicked(int position) {
             final String objectIdToDelete = userIngredients.remove(position).getObjectId();
             deletePantryIngredientFromParse(objectIdToDelete);
-            ingredientAdapter.notifyItemRemoved(position);
+            adapter.notifyItemRemoved(position);
             Toast.makeText(getContext(), "Item was removed!", Toast.LENGTH_SHORT).show();
         }
     }
@@ -90,15 +90,15 @@ public class IngredientFragment extends Fragment {
         @Override
         public void onClick(View view) {
             final Ingredient ingredient = new Ingredient();
-            ingredient.setName(ingredientBinding.etAddIngredient.getText().toString());
+            ingredient.setName(binding.etAddIngredient.getText().toString());
             ingredient.setUser(ParseUser.getCurrentUser());
             ingredient.saveInBackground(new SaveIngredientSaveCallback());
 
             userIngredients.add(0, ingredient);
 
-            ingredientAdapter.notifyItemInserted(0);
-            ingredientBinding.etAddIngredient.setText("");
-            ingredientBinding.rvRecipes.smoothScrollToPosition(0);
+            adapter.notifyItemInserted(0);
+            binding.etAddIngredient.setText("");
+            binding.rvRecipes.smoothScrollToPosition(0);
             Toast.makeText(getContext(), "Ingredient was added!", Toast.LENGTH_SHORT).show();
         }
     }
@@ -118,8 +118,8 @@ public class IngredientFragment extends Fragment {
     private class GetRecipesOnClickListener implements View.OnClickListener {
         @Override
         public void onClick(View view) {
-            final SuggestedRecipesFromPantryFragment fromPantryFragment = new SuggestedRecipesFromPantryFragment();
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, fromPantryFragment).commit();
+            final SuggestedRecipesFromPantryFragment fragment = new SuggestedRecipesFromPantryFragment();
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, fragment).commit();
         }
     }
 
@@ -130,9 +130,9 @@ public class IngredientFragment extends Fragment {
                 Log.e(TAG, "Issue with getting ingredients", e);
                 return;
             }
-            ingredientAdapter.clear();
+            adapter.clear();
             userIngredients.addAll(ingredients);
-            ingredientAdapter.notifyDataSetChanged();
+            adapter.notifyDataSetChanged();
         }
     }
 

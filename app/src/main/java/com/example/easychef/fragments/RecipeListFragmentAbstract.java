@@ -32,12 +32,12 @@ import okhttp3.Headers;
 public abstract class RecipeListFragmentAbstract extends Fragment {
 
     private static final String TAG = "RecipeListFragmentAbstract";
-    private static final String API_URL_ROOT = "https://api.spoonacular.com/recipes";
+    protected static final String API_URL_ROOT = "https://api.spoonacular.com/recipes";
     protected final StringBuilder apiCall = new StringBuilder(API_URL_ROOT);
 
     protected List<Recipe> recipes;
-    protected RecipeAdapter recipeAdapter;
-    private FragmentRecipeListBinding showRecipeListBinding;
+    protected RecipeAdapter adapter;
+    private FragmentRecipeListBinding binding;
 
     public RecipeListFragmentAbstract() {
         // Required empty public constructor
@@ -55,17 +55,17 @@ public abstract class RecipeListFragmentAbstract extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        showRecipeListBinding = FragmentRecipeListBinding.inflate(inflater, container, false);
-        return showRecipeListBinding.getRoot();
+        binding = FragmentRecipeListBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         recipes = new ArrayList<>();
-        recipeAdapter = new RecipeAdapter(getContext(), recipes, getOnUnsavedListener());
-        showRecipeListBinding.rvRecipes.setAdapter(recipeAdapter);
-        showRecipeListBinding.rvRecipes.setLayoutManager(new LinearLayoutManager(getContext()));
+        adapter = new RecipeAdapter(getContext(), recipes, getOnUnsavedListener());
+        binding.rvRecipes.setAdapter(adapter);
+        binding.rvRecipes.setLayoutManager(new LinearLayoutManager(getContext()));
 
         getRecipesToShowInList();
     }
@@ -95,7 +95,7 @@ public abstract class RecipeListFragmentAbstract extends Fragment {
                 for (int j = 0; j < jsonArray.length(); j++) {
                     recipes.add(new Recipe(jsonArray.getJSONObject(j)));
                 }
-                recipeAdapter.notifyDataSetChanged();
+                adapter.notifyDataSetChanged();
             } catch (JSONException e) {
                 Log.e(TAG, "Hit json exception", e);
             }

@@ -40,7 +40,7 @@ public class FavoritesFragment extends RecipeListFragmentAbstract {
                 final String objectIdToDelete = query.getFirst().getObjectId();
                 deleteSavedRecipeFromParse(objectIdToDelete);
                 recipes.remove(position);
-                recipeAdapter.notifyItemRemoved(position);
+                adapter.notifyItemRemoved(position);
             } catch (ParseException e) {
                 Log.e(TAG, "Recipe id not found", e);
             }
@@ -52,12 +52,12 @@ public class FavoritesFragment extends RecipeListFragmentAbstract {
         @Override
         public void done(List<Recipe> savedRecipes, ParseException e) {
             if (e != null) {
-                Log.e(TAG, "Issue with getting ingredients", e);
+                Log.e(TAG, "Issue with getting recipes from pantry ingredients", e);
                 return;
             }
-            recipeAdapter.clear();
+            adapter.clear();
             recipes.addAll(savedRecipes);
-            recipeAdapter.notifyDataSetChanged();
+            adapter.notifyDataSetChanged();
         }
     }
 }

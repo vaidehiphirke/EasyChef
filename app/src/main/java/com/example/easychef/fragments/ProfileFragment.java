@@ -16,7 +16,7 @@ import com.parse.ParseUser;
 
 public class ProfileFragment extends Fragment {
 
-    private FragmentProfileBinding profileBinding;
+    private FragmentProfileBinding binding;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -30,14 +30,14 @@ public class ProfileFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        profileBinding = FragmentProfileBinding.inflate(inflater, container, false);
-        return profileBinding.getRoot();
+        binding = FragmentProfileBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        profileBinding.btnLogout.setOnClickListener(new LogoutButtonViewOnClickListener());
+        binding.btnLogout.setOnClickListener(new LogoutButtonViewOnClickListener());
     }
 
     private void goToLoginActivity() {

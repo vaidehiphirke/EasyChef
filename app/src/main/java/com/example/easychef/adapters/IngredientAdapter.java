@@ -17,11 +17,11 @@ import static android.R.layout.*;
 
 public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.ViewHolder> {
 
-    private final List<Ingredient> ingredientList;
+    private final List<Ingredient> ingredients;
     private final OnLongClickListener longClickListener;
 
-    public IngredientAdapter(List<Ingredient> ingredientList, OnLongClickListener longClickListener) {
-        this.ingredientList = ingredientList;
+    public IngredientAdapter(List<Ingredient> ingredients, OnLongClickListener longClickListener) {
+        this.ingredients = ingredients;
         this.longClickListener = longClickListener;
     }
 
@@ -34,16 +34,16 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull IngredientAdapter.ViewHolder holder, int position) {
-        holder.bind(ingredientList.get(position));
+        holder.bind(ingredients.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return ingredientList.size();
+        return ingredients.size();
     }
 
     public void clear() {
-        ingredientList.clear();
+        ingredients.clear();
         notifyDataSetChanged();
     }
 

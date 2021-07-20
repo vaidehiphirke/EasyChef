@@ -33,7 +33,7 @@ public class SuggestedRecipesFromPantryFragment extends RecipeListFragmentAbstra
         return new UnsaveButPersistOnClickListener();
     }
 
-    protected String getAPICall() {
+    private String getAPICall() {
         final ParseQuery<Ingredient> query = ParseQuery.getQuery(Ingredient.class);
         query.include(Ingredient.KEY_NAME);
         query.addDescendingOrder(Ingredient.KEY_CREATED_AT);
