@@ -25,27 +25,27 @@ EasyChef is a cooking app that finds recipes using ingredients a user already ha
 
 **Required Must-have Stories**
 
-* User can sign up for a new account
-* User can log into their account
-* User can log out of their account
-* User can add their ingredients to their Pantry/Ingredient list
-* User ingredients can be used to get suggested recipes
-* User can search for recipes
-* User can save recipes to their Favorites
-* User can view recipe details by clicking on a recipe
+- [X] User can sign up for a new account
+- [X] User can log into their account
+- [X] User can log out of their account
+- [X] User can add ingredients to their Pantry/Ingredient list
+- [X] User ingredients can be used to get suggested recipes
+- [X] User can search for recipes
+- [X] User can save recipes to their Favorites
+- [X] User can view recipe details by clicking on a recipe
 
 **Optional Nice-to-have Stories**
 
-* Ingredient adding autocompletes
-* User can add ingredients to purchase to a Grocery list
-* Recipe search autocompletes
-* Search tab displays popular recipes on open (like an Explore feature)
-* Explore feature is personalized to user's tastes based on data
-* Missing ingredients for a specific recipe can be autoadded to a user's Grocery list
-* User can swipe to remove an ingredient from their Pantry
-* Explore tab has infinite scroll
-* Recipe and Ingredient representations have images and nice UI
-* App has a cute logo and UI is consistent and coherent
+- [ ] Ingredient adding autocompletes
+- [ ] User can add ingredients to purchase to a Grocery list
+- [ ] Recipe search autocompletes
+- [X] Search tab displays popular recipes on open (like an Explore feature)
+- [ ] Explore feature is personalized to user's tastes based on data
+- [ ] Missing ingredients for a specific recipe can be autoadded to a user's Grocery list
+- [ ] User can swipe to remove an ingredient from their Pantry
+- [ ] Explore tab has infinite scroll
+- [ ] Recipe and Ingredient representations have images and nice UI
+- [ ] App has a cute logo and UI is consistent and coherent
 
 ### 2. Screen Archetypes
 
