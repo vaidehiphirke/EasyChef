@@ -13,14 +13,14 @@
         android:layout_alignParentEnd="true"
         android:text="@string/search" />
 
-    <EditText
-        android:id="@+id/etAddIngredient"
+    <AutoCompleteTextView
+        android:id="@+id/etSearchForRecipe"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_toStartOf="@+id/btnSearch"
-        android:autofillHints="@string/ingredients"
+        android:autofillHints="@string/search_for_a_recipe"
         android:ems="@dimen/text_size"
         android:hint="@string/search_for_a_recipe"
         android:inputType="text" />
