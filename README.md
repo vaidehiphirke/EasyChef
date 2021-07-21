@@ -36,9 +36,9 @@ EasyChef is a cooking app that finds recipes using ingredients a user already ha
 
 **Optional Nice-to-have Stories**
 
-- [ ] Ingredient adding autocompletes
+- [X] Ingredient adding autocompletes
 - [ ] User can add ingredients to purchase to a Grocery list
-- [ ] Recipe search autocompletes
+- [X] Recipe search autocompletes
 - [X] Search tab displays popular recipes on open (like an Explore feature)
 - [ ] Explore feature is personalized to user's tastes based on data
 - [ ] Missing ingredients for a specific recipe can be autoadded to a user's Grocery list
