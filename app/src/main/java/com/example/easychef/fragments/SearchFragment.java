@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import com.example.easychef.BuildConfig;
-import com.example.easychef.AsyncClient;
 import com.example.easychef.adapters.RecipeAdapter;
 import com.example.easychef.databinding.FragmentSearchBinding;
 import com.example.easychef.models.Recipe;
@@ -23,6 +22,8 @@ import org.json.JSONException;
 import java.util.ArrayList;
 
 import okhttp3.Headers;
+
+import static com.example.easychef.AsyncClient.CLIENT;
 
 public class SearchFragment extends RecipeListFragmentAbstract {
 
@@ -60,7 +61,7 @@ public class SearchFragment extends RecipeListFragmentAbstract {
 
     @Override
     protected void getRecipesToShowInList() {
-        AsyncClient.CLIENT.get(RECIPE_SEARCH_API_CALL.concat(searchQuery), new SearchRecipeJsonHttpResponseHandler());
+        CLIENT.get(RECIPE_SEARCH_API_CALL.concat(searchQuery), new SearchRecipeJsonHttpResponseHandler());
     }
 
     @Override
@@ -69,7 +70,7 @@ public class SearchFragment extends RecipeListFragmentAbstract {
     }
 
     private void getExploreRecipes() {
-        AsyncClient.CLIENT.get(RECIPE_EXPLORE_API_CALL, new ExploreRecipeJsonHttpResponseHandler());
+        CLIENT.get(RECIPE_EXPLORE_API_CALL, new ExploreRecipeJsonHttpResponseHandler());
 
     }
 

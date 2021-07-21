@@ -3,7 +3,6 @@ package com.example.easychef.fragments;
 import android.util.Log;
 
 import com.example.easychef.BuildConfig;
-import com.example.easychef.AsyncClient;
 import com.example.easychef.adapters.RecipeAdapter;
 import com.example.easychef.models.Ingredient;
 import com.parse.ParseException;
@@ -12,6 +11,8 @@ import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.example.easychef.AsyncClient.CLIENT;
 
 public class SuggestedRecipesFromPantryFragment extends RecipeListFragmentAbstract {
 
@@ -23,7 +24,7 @@ public class SuggestedRecipesFromPantryFragment extends RecipeListFragmentAbstra
 
     @Override
     protected void getRecipesToShowInList() {
-        AsyncClient.CLIENT.get(API_URL_ROOT.concat(getAPICall()), new RecipeJsonHttpResponseHandler());
+        CLIENT.get(API_URL_ROOT.concat(getAPICall()), new RecipeJsonHttpResponseHandler());
     }
 
     @Override

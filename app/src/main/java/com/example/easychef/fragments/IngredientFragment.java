@@ -1,6 +1,11 @@
 package com.example.easychef.fragments;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,9 +17,13 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
+import com.example.easychef.BuildConfig;
 import com.example.easychef.R;
+import com.example.easychef.adapters.AutoCompleteAdapter;
 import com.example.easychef.adapters.IngredientAdapter;
 import com.example.easychef.databinding.FragmentIngredientBinding;
+import com.example.easychef.models.EasyChefParseObjectAbstract;
 import com.example.easychef.models.Ingredient;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -22,8 +31,17 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import org.json.JSONException;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.Headers;
+
+import static com.example.easychef.AsyncClient.CLIENT;
+import static com.example.easychef.adapters.AutoCompleteAdapter.AUTO_COMPLETE_DELAY_CODE;
+import static com.example.easychef.adapters.AutoCompleteAdapter.THRESHOLD;
+import static com.example.easychef.adapters.AutoCompleteAdapter.TRIGGER_AUTO_COMPLETE_CODE;
 
 public class IngredientFragment extends Fragment {
 
@@ -31,6 +49,12 @@ public class IngredientFragment extends Fragment {
     private FragmentIngredientBinding binding;
     private List<Ingredient> userIngredients;
     private IngredientAdapter adapter;
+
+    private static final String INGREDIENT_AUTOCOMPLETE_API_BASE_CALL = "https://api.spoonacular.com/food/ingredients/autocomplete?apiKey=%s&query=";
+    private static final String INGREDIENT_AUTOCOMPLETE_API_CALL_WITH_KEY =
+            String.format(
+                    INGREDIENT_AUTOCOMPLETE_API_BASE_CALL, BuildConfig.SPOONACULAR_KEY);
+    private AutoCompleteAdapter autoCompleteAdapter;
 
     public IngredientFragment() {
         // Required empty public constructor
@@ -46,6 +70,13 @@ public class IngredientFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentIngredientBinding.inflate(inflater, container, false);
         userIngredients = new ArrayList<>();
+
+        autoCompleteAdapter = new AutoCompleteAdapter(getContext(),
+                android.R.layout.simple_dropdown_item_1line);
+        binding.etAddIngredient.setThreshold(THRESHOLD);
+        binding.etAddIngredient.setAdapter(autoCompleteAdapter);
+        binding.etAddIngredient.addTextChangedListener(new IngredientAutocompleteTextWatcher());
+
         return binding.getRoot();
     }
 
@@ -68,6 +99,10 @@ public class IngredientFragment extends Fragment {
         query.include(Ingredient.KEY_NAME);
         query.addDescendingOrder(Ingredient.KEY_CREATED_AT);
         query.findInBackground(new RetrievePantryIngredientsFindCallback());
+    }
+
+    private void makeIngredientAPICall(String query) {
+        CLIENT.get(INGREDIENT_AUTOCOMPLETE_API_CALL_WITH_KEY + query, new AutocompleteJsonHttpResponseHandler());
     }
 
     private void deletePantryIngredientFromParse(String objectId) {
@@ -145,6 +180,64 @@ public class IngredientFragment extends Fragment {
             }
             ingredient.deleteInBackground();
             Toast.makeText(getContext(), "Ingredient deleted", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private class AutocompleteJsonHttpResponseHandler extends JsonHttpResponseHandler {
+        @Override
+        public void onSuccess(int i, Headers headers, JSON json) {
+            final List<EasyChefParseObjectAbstract> autocompleteIngredients = new ArrayList<>();
+            try {
+                for (int j = 0; j < json.jsonArray.length(); j++) {
+                    final EasyChefParseObjectAbstract ingredient = new Ingredient();
+                    ingredient.setName(json.jsonArray.getJSONObject(j).getString(Ingredient.KEY_NAME));
+                    autocompleteIngredients.add(ingredient);
+                }
+            } catch (JSONException e) {
+                Log.e(TAG, "Hit json exception", e);
+            }
+            autoCompleteAdapter.setData(autocompleteIngredients);
+            autoCompleteAdapter.notifyDataSetChanged();
+        }
+
+        @Override
+        public void onFailure(int i, Headers headers, String s, Throwable throwable) {
+            Log.d(TAG, "onFailure ingredient autocomplete" + throwable.getMessage());
+        }
+    }
+
+    private class IngredientAutocompleteTextWatcher implements TextWatcher {
+        private Handler handler;
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int
+                count, int after) {
+            handler = new Handler(new IngredientHandlerCallback());
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before,
+                                  int count) {
+            handler.removeMessages(TRIGGER_AUTO_COMPLETE_CODE);
+            handler.sendEmptyMessageDelayed(TRIGGER_AUTO_COMPLETE_CODE,
+                    AUTO_COMPLETE_DELAY_CODE);
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+        }
+
+        private class IngredientHandlerCallback implements Handler.Callback {
+            @Override
+            public boolean handleMessage(@NonNull Message message) {
+                if (message.what != TRIGGER_AUTO_COMPLETE_CODE) {
+                    return false;
+                }
+                if (!TextUtils.isEmpty(binding.etAddIngredient.getText())) {
+                    makeIngredientAPICall(binding.etAddIngredient.getText().toString());
+                }
+                return true;
+            }
         }
     }
 }

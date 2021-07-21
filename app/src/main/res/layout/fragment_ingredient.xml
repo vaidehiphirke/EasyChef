@@ -21,7 +21,7 @@
         android:layout_alignParentEnd="true"
         android:text="@string/get_recipes" />
 
-    <EditText
+    <AutoCompleteTextView
         android:id="@+id/etAddIngredient"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -30,6 +30,7 @@
         android:layout_toStartOf="@+id/btnAdd"
         android:autofillHints="@string/ingredients"
         android:ems="@dimen/text_size"
+        android:maxLines="1"
         android:hint="@string/add_an_item_here"
         android:inputType="text" />
 
