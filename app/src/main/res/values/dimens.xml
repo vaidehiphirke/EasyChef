@@ -2,5 +2,6 @@
 <resources>
     <dimen name="border_margin">8dp</dimen>
     <dimen name="layout_margin">16dp</dimen>
+    <dimen name="recipe_text_size">18sp</dimen>
     <item name="text_size" format="integer" type="dimen">10</item>
 </resources>

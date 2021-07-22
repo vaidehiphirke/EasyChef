@@ -18,4 +18,5 @@
     <string name="favorites">Favorites</string>
     <string name="unsave_recipe">Unsave</string>
     <string name="search_for_a_recipe">Search for a recipe!</string>
+    <string name="empty" />
 </resources>

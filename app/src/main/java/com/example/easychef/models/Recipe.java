@@ -19,6 +19,7 @@ public class Recipe extends EasyChefParseObjectAbstract {
     public Recipe(JSONObject jsonObject) throws JSONException {
         setId(jsonObject.getInt(KEY_ID));
         setName(jsonObject.getString(KEY_NAME_RECIPE));
+        setImageUrl(jsonObject.getString(KEY_IMAGE_URL));
     }
 
     public int getId() {

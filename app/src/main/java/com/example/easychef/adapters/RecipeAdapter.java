@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -14,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.easychef.R;
 import com.example.easychef.databinding.ItemRecipeBinding;
 import com.example.easychef.fragments.RecipeDetailsFragment;
@@ -68,12 +70,14 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
     protected class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private final TextView tvRecipeName;
+        private final ImageView ivRecipeImage;
         private final ToggleButton btnSaveRecipe;
         private final Context context;
 
         public ViewHolder(@NonNull ItemRecipeBinding itemRecipeBinding, Context context) {
             super(itemRecipeBinding.getRoot());
             tvRecipeName = itemRecipeBinding.tvRecipeName;
+            ivRecipeImage = itemRecipeBinding.ivRecipeImage;
             this.context = context;
             btnSaveRecipe = itemRecipeBinding.btnSaveRecipe;
             btnSaveRecipe.setOnCheckedChangeListener(new SaveUnsaveButtonListener());
@@ -83,6 +87,8 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
 
         public void bind(Recipe recipe) {
             tvRecipeName.setText(recipe.getName());
+            Glide.with(context).load(recipe.getImageUrl()).into(ivRecipeImage);
+
             final ParseQuery<Recipe> query = ParseQuery.getQuery(Recipe.class);
             query.whereEqualTo(Recipe.KEY_RECIPE_ID, recipe.getId());
             query.whereEqualTo(Recipe.KEY_USER, ParseUser.getCurrentUser());
@@ -108,6 +114,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
                     query.whereEqualTo(Recipe.KEY_USER, ParseUser.getCurrentUser());
                     query.getFirstInBackground(new SaveIfNotAlreadySavedGetCallback());
                 } else {
+                    btnSaveRecipe.setBackgroundDrawable(RecipeAdapter.this.context.getDrawable(android.R.drawable.btn_star_big_off));
                     onUnsavedListener.onUnsavedChecked(getAdapterPosition());
                 }
             }
@@ -135,8 +142,10 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
                     final Recipe recipe = new Recipe();
                     recipe.setName(tvRecipeName.getText().toString());
                     recipe.setId(recipes.get(getAdapterPosition()).getId());
+                    recipe.setImageUrl(recipes.get(getAdapterPosition()).getImageUrl());
                     Log.i(TAG, "Saving " + recipe.getName());
                     recipe.setUser(ParseUser.getCurrentUser());
+                    btnSaveRecipe.setBackgroundDrawable(RecipeAdapter.this.context.getDrawable(android.R.drawable.btn_star_big_on));
                     recipe.saveInBackground(new SaveRecipeSaveCallback());
                 } else {
                     Log.e(TAG, "Other error with finding Recipe object", e);
@@ -148,6 +157,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
             @Override
             public void done(Recipe object, ParseException e) {
                 if (e == null) {
+                    btnSaveRecipe.setBackgroundDrawable(RecipeAdapter.this.context.getDrawable(android.R.drawable.btn_star_big_on));
                     btnSaveRecipe.toggle();
                     return;
                 }

@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 public abstract class EasyChefParseObjectAbstract extends ParseObject {
 
     public static final String KEY_USER = "user";
-    public static final String KEY_IMAGE_URL = "imageURL";
+    public static final String KEY_IMAGE_URL = "image";
     public static final String KEY_ID = "id";
     public static final String KEY_CREATED_AT = "createdAt";
     public static final String KEY_OBJECT_ID = "objectId";
