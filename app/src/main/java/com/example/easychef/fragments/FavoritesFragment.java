@@ -4,7 +4,6 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.example.easychef.adapters.RecipeAdapter;
-import com.example.easychef.models.Ingredient;
 import com.example.easychef.models.Recipe;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -13,6 +12,11 @@ import com.parse.ParseUser;
 
 import java.util.List;
 
+import static com.example.easychef.models.EasyChefParseObjectAbstract.KEY_CREATED_AT;
+import static com.example.easychef.models.EasyChefParseObjectAbstract.KEY_USER;
+import static com.example.easychef.models.Ingredient.KEY_NAME_INGREDIENT;
+import static com.example.easychef.models.Recipe.KEY_RECIPE_ID;
+
 public class FavoritesFragment extends RecipeListFragmentAbstract {
 
     private static final String TAG = "FavoritesFragment";
@@ -20,8 +24,8 @@ public class FavoritesFragment extends RecipeListFragmentAbstract {
     @Override
     protected void getRecipesToShowInList() {
         final ParseQuery<Recipe> query = ParseQuery.getQuery(Recipe.class);
-        query.include(Ingredient.KEY_NAME);
-        query.addDescendingOrder(Ingredient.KEY_CREATED_AT);
+        query.include(KEY_NAME_INGREDIENT);
+        query.addDescendingOrder(KEY_CREATED_AT);
         query.findInBackground(new RetrieveSavedRecipesFindCallback());
     }
 
@@ -34,8 +38,8 @@ public class FavoritesFragment extends RecipeListFragmentAbstract {
         @Override
         public void onUnsavedChecked(int position) {
             final ParseQuery<Recipe> query = ParseQuery.getQuery(Recipe.class);
-            query.whereEqualTo(Recipe.KEY_RECIPE_ID, recipes.get(position).getId());
-            query.whereEqualTo(Recipe.KEY_USER, ParseUser.getCurrentUser());
+            query.whereEqualTo(KEY_RECIPE_ID, recipes.get(position).getId());
+            query.whereEqualTo(KEY_USER, ParseUser.getCurrentUser());
             try {
                 final String objectIdToDelete = query.getFirst().getObjectId();
                 deleteSavedRecipeFromParse(objectIdToDelete);

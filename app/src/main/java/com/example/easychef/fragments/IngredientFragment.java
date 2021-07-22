@@ -32,6 +32,7 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +43,9 @@ import static com.example.easychef.AsyncClient.CLIENT;
 import static com.example.easychef.adapters.AutoCompleteAdapter.AUTO_COMPLETE_DELAY_CODE;
 import static com.example.easychef.adapters.AutoCompleteAdapter.THRESHOLD;
 import static com.example.easychef.adapters.AutoCompleteAdapter.TRIGGER_AUTO_COMPLETE_CODE;
+import static com.example.easychef.models.EasyChefParseObjectAbstract.KEY_ID;
+import static com.example.easychef.models.EasyChefParseObjectAbstract.KEY_IMAGE_URL;
+import static com.example.easychef.models.Ingredient.KEY_NAME_INGREDIENT;
 
 public class IngredientFragment extends Fragment {
 
@@ -98,13 +102,13 @@ public class IngredientFragment extends Fragment {
 
     private void queryPantryIngredients() {
         final ParseQuery<Ingredient> query = ParseQuery.getQuery(Ingredient.class);
-        query.include(Ingredient.KEY_NAME);
+        query.include(KEY_NAME_INGREDIENT);
         query.addDescendingOrder(Ingredient.KEY_CREATED_AT);
         query.findInBackground(new RetrievePantryIngredientsFindCallback());
     }
 
     private void makeIngredientAPICall(String query) {
-        CLIENT.get(INGREDIENT_AUTOCOMPLETE_API_CALL + query, new AutocompleteJsonHttpResponseHandler());
+        CLIENT.get(INGREDIENT_AUTOCOMPLETE_API_CALL.concat(query), new AutocompleteJsonHttpResponseHandler());
     }
 
     private void deletePantryIngredientFromParse(String objectId) {
@@ -180,8 +184,12 @@ public class IngredientFragment extends Fragment {
         public void onSuccess(int i, Headers headers, JSON json) {
             final List<EasyChefParseObjectAbstract> autocompleteIngredients = new ArrayList<>();
             try {
+                final Ingredient.Builder builder = new Ingredient.Builder().user(ParseUser.getCurrentUser());
                 for (int j = 0; j < json.jsonArray.length(); j++) {
-                    final EasyChefParseObjectAbstract ingredient = new Ingredient(json.jsonArray.getJSONObject(j));
+                    final JSONObject jsonObject = json.jsonArray.getJSONObject(j);
+                    final EasyChefParseObjectAbstract ingredient = builder.name(jsonObject.getString(KEY_NAME_INGREDIENT))
+                            .imageUrl(jsonObject.getString(KEY_IMAGE_URL))
+                            .build();
                     autocompleteIngredients.add(ingredient);
                 }
             } catch (JSONException e) {
@@ -236,8 +244,13 @@ public class IngredientFragment extends Fragment {
         @Override
         public void onSuccess(int i, Headers headers, JSON json) {
             try {
-                final Ingredient ingredient = new Ingredient(json.jsonObject.getJSONArray("results").getJSONObject(0));
-                ingredient.setUser(ParseUser.getCurrentUser());
+                final JSONObject jsonObject = json.jsonObject.getJSONArray("results").getJSONObject(0);
+                final Ingredient ingredient = new Ingredient.Builder().user(ParseUser.getCurrentUser())
+                        .name(jsonObject.getString(KEY_NAME_INGREDIENT))
+                        .id(jsonObject.getInt(KEY_ID))
+                        .imageUrl(jsonObject.getString(KEY_IMAGE_URL))
+                        .build();
+
                 ingredient.saveInBackground(new SaveIngredientSaveCallback());
 
                 userIngredients.add(0, ingredient);

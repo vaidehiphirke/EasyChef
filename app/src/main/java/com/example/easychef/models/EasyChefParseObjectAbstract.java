@@ -3,7 +3,6 @@ package com.example.easychef.models;
 import androidx.annotation.NonNull;
 
 import com.parse.ParseObject;
-import com.parse.ParseUser;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -13,27 +12,14 @@ public abstract class EasyChefParseObjectAbstract extends ParseObject {
     public static final String KEY_IMAGE_URL = "image";
     public static final String KEY_ID = "id";
     public static final String KEY_CREATED_AT = "createdAt";
-    public static final String KEY_OBJECT_ID = "objectId";
-
-    public ParseUser getUser() {
-        return getParseUser(KEY_USER);
-    }
-
-    public void setUser(ParseUser user) {
-        put(KEY_USER, user);
-    }
 
     public abstract String getName();
 
-    public abstract void setName(String name);
-
     public abstract int getId();
 
-    public abstract void setId(int id);
-
-    public abstract String getImageUrl();
-
-    public abstract void setImageUrl(String imageUrl);
+    public String getImageUrl() {
+        return getString(KEY_IMAGE_URL);
+    }
 
     @NonNull
     @NotNull

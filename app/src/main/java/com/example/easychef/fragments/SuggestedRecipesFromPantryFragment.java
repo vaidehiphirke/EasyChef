@@ -13,6 +13,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.easychef.AsyncClient.CLIENT;
+import static com.example.easychef.models.EasyChefParseObjectAbstract.KEY_CREATED_AT;
+import static com.example.easychef.models.EasyChefParseObjectAbstract.KEY_USER;
+import static com.example.easychef.models.Ingredient.KEY_NAME_INGREDIENT;
 
 public class SuggestedRecipesFromPantryFragment extends RecipeListFragmentAbstract {
 
@@ -35,9 +38,9 @@ public class SuggestedRecipesFromPantryFragment extends RecipeListFragmentAbstra
     private String getAPICall() {
         final List<Ingredient> userIngredientsFromParse = new ArrayList<>();
         final ParseQuery<Ingredient> query = ParseQuery.getQuery(Ingredient.class);
-        query.include(Ingredient.KEY_NAME);
-        query.addDescendingOrder(Ingredient.KEY_CREATED_AT);
-        query.whereEqualTo(Ingredient.KEY_USER, ParseUser.getCurrentUser());
+        query.include(KEY_NAME_INGREDIENT);
+        query.addDescendingOrder(KEY_CREATED_AT);
+        query.whereEqualTo(KEY_USER, ParseUser.getCurrentUser());
         try {
             userIngredientsFromParse.addAll(query.find());
         } catch (ParseException e) {

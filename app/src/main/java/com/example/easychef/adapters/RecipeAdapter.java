@@ -28,6 +28,9 @@ import com.parse.SaveCallback;
 
 import java.util.List;
 
+import static com.example.easychef.models.EasyChefParseObjectAbstract.KEY_USER;
+import static com.example.easychef.models.Recipe.KEY_RECIPE_ID;
+
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder> {
 
     private static final String TAG = "RecipeAdapter";
@@ -90,8 +93,8 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
             Glide.with(context).load(recipe.getImageUrl()).into(ivRecipeImage);
 
             final ParseQuery<Recipe> query = ParseQuery.getQuery(Recipe.class);
-            query.whereEqualTo(Recipe.KEY_RECIPE_ID, recipe.getId());
-            query.whereEqualTo(Recipe.KEY_USER, ParseUser.getCurrentUser());
+            query.whereEqualTo(KEY_RECIPE_ID, recipe.getId());
+            query.whereEqualTo(KEY_USER, ParseUser.getCurrentUser());
             query.getFirstInBackground(new SeeIfSavedAndToggleGetCallback());
         }
 
@@ -110,8 +113,8 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     final ParseQuery<Recipe> query = ParseQuery.getQuery(Recipe.class);
-                    query.whereEqualTo(Recipe.KEY_RECIPE_ID, recipes.get(getAdapterPosition()).getId());
-                    query.whereEqualTo(Recipe.KEY_USER, ParseUser.getCurrentUser());
+                    query.whereEqualTo(KEY_RECIPE_ID, recipes.get(getAdapterPosition()).getId());
+                    query.whereEqualTo(KEY_USER, ParseUser.getCurrentUser());
                     query.getFirstInBackground(new SaveIfNotAlreadySavedGetCallback());
                 } else {
                     btnSaveRecipe.setBackgroundDrawable(RecipeAdapter.this.context.getDrawable(android.R.drawable.btn_star_big_off));
@@ -139,12 +142,11 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
                     return;
                 }
                 if (e.getCode() == ParseException.OBJECT_NOT_FOUND) {
-                    final Recipe recipe = new Recipe();
-                    recipe.setName(tvRecipeName.getText().toString());
-                    recipe.setId(recipes.get(getAdapterPosition()).getId());
-                    recipe.setImageUrl(recipes.get(getAdapterPosition()).getImageUrl());
-                    Log.i(TAG, "Saving " + recipe.getName());
-                    recipe.setUser(ParseUser.getCurrentUser());
+                    final Recipe recipe = new Recipe.Builder().name(tvRecipeName.getText().toString())
+                            .id(recipes.get(getAdapterPosition()).getId())
+                            .imageUrl(recipes.get(getAdapterPosition()).getImageUrl())
+                            .user(ParseUser.getCurrentUser())
+                            .build();
                     btnSaveRecipe.setBackgroundDrawable(RecipeAdapter.this.context.getDrawable(android.R.drawable.btn_star_big_on));
                     recipe.saveInBackground(new SaveRecipeSaveCallback());
                 } else {

@@ -22,9 +22,11 @@ import com.example.easychef.adapters.RecipeAdapter;
 import com.example.easychef.databinding.FragmentSearchBinding;
 import com.example.easychef.models.EasyChefParseObjectAbstract;
 import com.example.easychef.models.Recipe;
+import com.parse.ParseUser;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +37,9 @@ import static com.example.easychef.AsyncClient.CLIENT;
 import static com.example.easychef.adapters.AutoCompleteAdapter.AUTO_COMPLETE_DELAY_CODE;
 import static com.example.easychef.adapters.AutoCompleteAdapter.THRESHOLD;
 import static com.example.easychef.adapters.AutoCompleteAdapter.TRIGGER_AUTO_COMPLETE_CODE;
+import static com.example.easychef.models.EasyChefParseObjectAbstract.KEY_ID;
+import static com.example.easychef.models.EasyChefParseObjectAbstract.KEY_IMAGE_URL;
+import static com.example.easychef.models.Recipe.KEY_NAME_RECIPE;
 
 public class SearchFragment extends RecipeListFragmentAbstract {
 
@@ -46,15 +51,14 @@ public class SearchFragment extends RecipeListFragmentAbstract {
             String.format(
                     "%s/random?apiKey=%s&number=10",
                     API_URL_ROOT, BuildConfig.SPOONACULAR_KEY);
-    private static final String TAG = "SearchFragment";
+    private static final String RECIPE_AUTOCOMPLETE_API_CALL =
+            String.format(
+                    "%s/autocomplete?apiKey=%s&query=",
+                    API_URL_ROOT, BuildConfig.SPOONACULAR_KEY);
 
+    private static final String TAG = "SearchFragment";
     private FragmentSearchBinding binding;
     private String searchQuery;
-
-    private static final String RECIPE_AUTOCOMPLETE_API_BASE_CALL = "https://api.spoonacular.com/recipes/autocomplete?apiKey=%s&query=";
-    private static final String RECIPE_AUTOCOMPLETE_API_CALL_WITH_KEY =
-            String.format(
-                    RECIPE_AUTOCOMPLETE_API_BASE_CALL, BuildConfig.SPOONACULAR_KEY);
     private AutoCompleteAdapter autoCompleteAdapter;
 
     @Override
@@ -94,7 +98,7 @@ public class SearchFragment extends RecipeListFragmentAbstract {
     }
 
     private void makeRecipeAPICall(String query) {
-        CLIENT.get(RECIPE_AUTOCOMPLETE_API_CALL_WITH_KEY + query, new AutocompleteJsonHttpResponseHandler());
+        CLIENT.get(RECIPE_AUTOCOMPLETE_API_CALL.concat(query), new AutocompleteJsonHttpResponseHandler());
     }
 
     private void getExploreRecipes() {
@@ -116,9 +120,15 @@ public class SearchFragment extends RecipeListFragmentAbstract {
             try {
                 adapter.clear();
                 recipes.clear();
+                final Recipe.Builder builder = new Recipe.Builder().user(ParseUser.getCurrentUser());
                 final JSONArray results = json.jsonObject.getJSONArray("results");
                 for (int j = 0; j < results.length(); j++) {
-                    recipes.add(new Recipe(results.getJSONObject(j)));
+                    final JSONObject jsonObject = results.getJSONObject(j);
+                    final Recipe recipe = builder.name(jsonObject.getString(KEY_NAME_RECIPE))
+                            .id(jsonObject.getInt(KEY_ID))
+                            .imageUrl(jsonObject.getString(KEY_IMAGE_URL))
+                            .build();
+                    recipes.add(recipe);
                 }
                 adapter.notifyDataSetChanged();
             } catch (JSONException e) {
@@ -138,9 +148,15 @@ public class SearchFragment extends RecipeListFragmentAbstract {
             try {
                 adapter.clear();
                 recipes.clear();
+                final Recipe.Builder builder = new Recipe.Builder().user(ParseUser.getCurrentUser());
                 final JSONArray results = json.jsonObject.getJSONArray("recipes");
                 for (int j = 0; j < results.length(); j++) {
-                    recipes.add(new Recipe(results.getJSONObject(j)));
+                    final JSONObject jsonObject = results.getJSONObject(j);
+                    final Recipe recipe = builder.name(jsonObject.getString(KEY_NAME_RECIPE))
+                            .id(jsonObject.getInt(KEY_ID))
+                            .imageUrl(jsonObject.getString(KEY_IMAGE_URL))
+                            .build();
+                    recipes.add(recipe);
                 }
                 adapter.notifyDataSetChanged();
             } catch (JSONException e) {
@@ -159,8 +175,10 @@ public class SearchFragment extends RecipeListFragmentAbstract {
         public void onSuccess(int i, Headers headers, JSON json) {
             final List<EasyChefParseObjectAbstract> autocompleteRecipes = new ArrayList<>();
             try {
+                final Recipe.Builder builder = new Recipe.Builder().user(ParseUser.getCurrentUser());
                 for (int j = 0; j < json.jsonArray.length(); j++) {
-                    final EasyChefParseObjectAbstract recipe = new Recipe(json.jsonArray.getJSONObject(j));
+                    final JSONObject jsonObject = json.jsonArray.getJSONObject(j);
+                    final EasyChefParseObjectAbstract recipe = builder.name(jsonObject.getString(KEY_NAME_RECIPE)).build();
                     autocompleteRecipes.add(recipe);
                 }
             } catch (JSONException e) {

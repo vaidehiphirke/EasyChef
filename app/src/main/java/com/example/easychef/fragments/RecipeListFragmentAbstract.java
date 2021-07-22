@@ -23,11 +23,16 @@ import com.parse.ParseUser;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.Headers;
+
+import static com.example.easychef.models.EasyChefParseObjectAbstract.KEY_ID;
+import static com.example.easychef.models.EasyChefParseObjectAbstract.KEY_IMAGE_URL;
+import static com.example.easychef.models.Recipe.KEY_NAME_RECIPE;
 
 public abstract class RecipeListFragmentAbstract extends Fragment {
 
@@ -90,8 +95,15 @@ public abstract class RecipeListFragmentAbstract extends Fragment {
             Log.d(TAG, "onSuccess");
             final JSONArray jsonArray = json.jsonArray;
             try {
+                final Recipe.Builder builder = new Recipe.Builder().user(ParseUser.getCurrentUser());
                 for (int j = 0; j < jsonArray.length(); j++) {
-                    recipes.add(new Recipe(jsonArray.getJSONObject(j)));
+                    final JSONObject jsonObject = jsonArray.getJSONObject(j);
+                    final Recipe recipe = builder.name(jsonObject.getString(KEY_NAME_RECIPE))
+                            .id(jsonObject.getInt(KEY_ID))
+                            .imageUrl(jsonObject.getString(KEY_IMAGE_URL))
+                            .build();
+
+                    recipes.add(recipe);
                 }
                 adapter.notifyDataSetChanged();
             } catch (JSONException e) {

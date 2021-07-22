@@ -1,36 +1,37 @@
 package com.example.easychef.models;
 
 import com.parse.ParseClassName;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.parse.ParseUser;
 
 @ParseClassName("Ingredient")
 public class Ingredient extends EasyChefParseObjectAbstract {
-    public static final String KEY_NAME = "name";
+
+    public static final String KEY_NAME_INGREDIENT = "name";
     private static final String IMAGE_URL_ROOT = "https://spoonacular.com/cdn/ingredients_100x100/%s";
     public static final String KEY_INGREDIENT_ID = "ingredientId";
 
     public Ingredient() {
-
+        // required empty constructor for Parse
     }
+//
+//    public Ingredient(JSONObject jsonObject) throws JSONException {
+//        if (jsonObject.has(KEY_ID)) {
+//            setId(jsonObject.getInt(KEY_ID));
+//        }
+//        setName(jsonObject.getString(KEY_NAME));
+//        setImageUrl(jsonObject.getString(KEY_IMAGE_URL));
+//    }
 
-    public Ingredient(JSONObject jsonObject) throws JSONException {
-        if (jsonObject.has(KEY_ID)) {
-            setId(jsonObject.getInt(KEY_ID));
-        }
-        setName(jsonObject.getString(KEY_NAME));
-        setImageUrl(jsonObject.getString(KEY_IMAGE_URL));
+    private Ingredient(Builder builder) {
+        put(KEY_NAME_INGREDIENT, builder.name);
+        put(KEY_USER, builder.user);
+        put(KEY_INGREDIENT_ID, builder.id);
+        put(KEY_IMAGE_URL, builder.imageUrl);
     }
 
     @Override
     public String getName() {
-        return getString(KEY_NAME);
-    }
-
-    @Override
-    public void setName(String name) {
-        put(KEY_NAME, name);
+        return getString(KEY_NAME_INGREDIENT);
     }
 
     @Override
@@ -38,20 +39,35 @@ public class Ingredient extends EasyChefParseObjectAbstract {
         return getInt(KEY_INGREDIENT_ID);
     }
 
-    @Override
-    public void setId(int id) {
-        put(KEY_INGREDIENT_ID, id);
-    }
+    public static class Builder {
+        private String name;
+        private ParseUser user;
+        private int id;
+        private String imageUrl;
 
-    @Override
-    public String getImageUrl() {
-        return String.format(IMAGE_URL_ROOT,
-                getString(KEY_IMAGE_URL));
-    }
+        public Builder name(String name) {
+            this.name = name;
+            return this;
+        }
 
-    @Override
-    public void setImageUrl(String imageUrl) {
-        put(KEY_IMAGE_URL, imageUrl);
+        public Builder user(ParseUser user) {
+            this.user = user;
+            return this;
+        }
+
+        public Builder id(int id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder imageUrl(String imageUrl) {
+            this.imageUrl = String.format(IMAGE_URL_ROOT, imageUrl);
+            return this;
+        }
+
+        public Ingredient build() {
+            return new Ingredient(this);
+        }
     }
 
 }
