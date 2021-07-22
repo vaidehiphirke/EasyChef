@@ -22,10 +22,12 @@ public class Recipe extends EasyChefParseObjectAbstract {
         setImageUrl(jsonObject.getString(KEY_IMAGE_URL));
     }
 
+    @Override
     public int getId() {
         return getInt(KEY_RECIPE_ID);
     }
 
+    @Override
     public void setId(int id) {
         put(KEY_RECIPE_ID, id);
     }

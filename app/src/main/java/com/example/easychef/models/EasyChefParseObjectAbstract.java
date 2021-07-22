@@ -27,6 +27,10 @@ public abstract class EasyChefParseObjectAbstract extends ParseObject {
 
     public abstract void setName(String name);
 
+    public abstract int getId();
+
+    public abstract void setId(int id);
+
     public abstract String getImageUrl();
 
     public abstract void setImageUrl(String imageUrl);

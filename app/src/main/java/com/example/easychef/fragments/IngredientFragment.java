@@ -50,10 +50,12 @@ public class IngredientFragment extends Fragment {
     private List<Ingredient> userIngredients;
     private IngredientAdapter adapter;
 
-    private static final String INGREDIENT_AUTOCOMPLETE_API_BASE_CALL = "https://api.spoonacular.com/food/ingredients/autocomplete?apiKey=%s&query=";
-    private static final String INGREDIENT_AUTOCOMPLETE_API_CALL_WITH_KEY =
+    private static final String API_BASE_CALL = "https://api.spoonacular.com/food/ingredients";
+
+    private static final String INGREDIENT_API_PARSE_CALL = String.format("%s/search?apiKey=%s&number=1&query=", API_BASE_CALL, BuildConfig.SPOONACULAR_KEY);
+    private static final String INGREDIENT_AUTOCOMPLETE_API_CALL =
             String.format(
-                    INGREDIENT_AUTOCOMPLETE_API_BASE_CALL, BuildConfig.SPOONACULAR_KEY);
+                    "%s/autocomplete?apiKey=%s&query=", API_BASE_CALL, BuildConfig.SPOONACULAR_KEY);
     private AutoCompleteAdapter autoCompleteAdapter;
 
     public IngredientFragment() {
@@ -84,7 +86,7 @@ public class IngredientFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        adapter = new IngredientAdapter(userIngredients, new IngredientOnLongClickListener());
+        adapter = new IngredientAdapter(getContext(), userIngredients, new IngredientOnLongClickListener());
         binding.rvRecipes.setAdapter(adapter);
         binding.rvRecipes.setLayoutManager(new LinearLayoutManager(getContext()));
 
@@ -102,7 +104,7 @@ public class IngredientFragment extends Fragment {
     }
 
     private void makeIngredientAPICall(String query) {
-        CLIENT.get(INGREDIENT_AUTOCOMPLETE_API_CALL_WITH_KEY + query, new AutocompleteJsonHttpResponseHandler());
+        CLIENT.get(INGREDIENT_AUTOCOMPLETE_API_CALL + query, new AutocompleteJsonHttpResponseHandler());
     }
 
     private void deletePantryIngredientFromParse(String objectId) {
@@ -124,17 +126,7 @@ public class IngredientFragment extends Fragment {
     private class AddIngredientOnClickListener implements View.OnClickListener {
         @Override
         public void onClick(View view) {
-            final Ingredient ingredient = new Ingredient();
-            ingredient.setName(binding.etAddIngredient.getText().toString());
-            ingredient.setUser(ParseUser.getCurrentUser());
-            ingredient.saveInBackground(new SaveIngredientSaveCallback());
-
-            userIngredients.add(0, ingredient);
-
-            adapter.notifyItemInserted(0);
-            binding.etAddIngredient.setText("");
-            binding.rvRecipes.smoothScrollToPosition(0);
-            Toast.makeText(getContext(), "Ingredient was added!", Toast.LENGTH_SHORT).show();
+            CLIENT.get(INGREDIENT_API_PARSE_CALL + binding.etAddIngredient.getText().toString(), new ParseIngredientJsonHttpResponseHandler());
         }
     }
 
@@ -189,8 +181,7 @@ public class IngredientFragment extends Fragment {
             final List<EasyChefParseObjectAbstract> autocompleteIngredients = new ArrayList<>();
             try {
                 for (int j = 0; j < json.jsonArray.length(); j++) {
-                    final EasyChefParseObjectAbstract ingredient = new Ingredient();
-                    ingredient.setName(json.jsonArray.getJSONObject(j).getString(Ingredient.KEY_NAME));
+                    final EasyChefParseObjectAbstract ingredient = new Ingredient(json.jsonArray.getJSONObject(j));
                     autocompleteIngredients.add(ingredient);
                 }
             } catch (JSONException e) {
@@ -238,6 +229,31 @@ public class IngredientFragment extends Fragment {
                 }
                 return true;
             }
+        }
+    }
+
+    private class ParseIngredientJsonHttpResponseHandler extends JsonHttpResponseHandler {
+        @Override
+        public void onSuccess(int i, Headers headers, JSON json) {
+            try {
+                final Ingredient ingredient = new Ingredient(json.jsonObject.getJSONArray("results").getJSONObject(0));
+                ingredient.setUser(ParseUser.getCurrentUser());
+                ingredient.saveInBackground(new SaveIngredientSaveCallback());
+
+                userIngredients.add(0, ingredient);
+
+                adapter.notifyItemInserted(0);
+                binding.etAddIngredient.setText("");
+                binding.rvRecipes.smoothScrollToPosition(0);
+                Toast.makeText(getContext(), "Ingredient was added!", Toast.LENGTH_SHORT).show();
+            } catch (JSONException e) {
+                Log.e(TAG, "Hit json exception", e);
+            }
+        }
+
+        @Override
+        public void onFailure(int i, Headers headers, String s, Throwable throwable) {
+            Log.d(TAG, "onFailure" + throwable.getMessage());
         }
     }
 }
