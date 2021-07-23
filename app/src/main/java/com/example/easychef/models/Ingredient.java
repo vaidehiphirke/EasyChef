@@ -13,14 +13,6 @@ public class Ingredient extends EasyChefParseObjectAbstract {
     public Ingredient() {
         // required empty constructor for Parse
     }
-//
-//    public Ingredient(JSONObject jsonObject) throws JSONException {
-//        if (jsonObject.has(KEY_ID)) {
-//            setId(jsonObject.getInt(KEY_ID));
-//        }
-//        setName(jsonObject.getString(KEY_NAME));
-//        setImageUrl(jsonObject.getString(KEY_IMAGE_URL));
-//    }
 
     private Ingredient(Builder builder) {
         put(KEY_NAME_INGREDIENT, builder.name);
