@@ -10,7 +10,6 @@ public abstract class EasyChefParseObjectAbstract extends ParseObject {
 
     public static final String KEY_USER = "user";
     public static final String KEY_IMAGE_URL = "image";
-    public static final String KEY_ID = "id";
     public static final String KEY_CREATED_AT = "createdAt";
 
     public abstract String getName();

@@ -61,5 +61,4 @@ public class Ingredient extends EasyChefParseObjectAbstract {
             return new Ingredient(this);
         }
     }
-
 }

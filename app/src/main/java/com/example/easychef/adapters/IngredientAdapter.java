@@ -2,24 +2,18 @@ package com.example.easychef.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.easychef.databinding.ItemIngredientBinding;
-import com.example.easychef.databinding.ItemRecipeBinding;
 import com.example.easychef.models.Ingredient;
 
 import java.util.List;
-
-import static android.R.id.*;
-import static android.R.layout.*;
 
 public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.ViewHolder> {
 

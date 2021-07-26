@@ -14,12 +14,17 @@ public class Recipe extends EasyChefParseObjectAbstract {
     }
 
     private Recipe(Builder builder) {
-        put(KEY_NAME_RECIPE, builder.name);
+        put(KEY_NAME_RECIPE, builder.title);
         put(KEY_USER, builder.user);
         put(KEY_RECIPE_ID, builder.id);
         if (builder.imageUrl != null) {
             put(KEY_IMAGE_URL, builder.imageUrl);
         }
+    }
+
+    public void setName(String title) {
+        put(KEY_NAME_RECIPE, title);
+
     }
 
     @Override
@@ -33,13 +38,13 @@ public class Recipe extends EasyChefParseObjectAbstract {
     }
 
     public static class Builder {
-        private String name;
+        private String title;
         private ParseUser user;
         private int id;
         private String imageUrl;
 
-        public Builder name(String name) {
-            this.name = name;
+        public Builder name(String title) {
+            this.title = title;
             return this;
         }
 

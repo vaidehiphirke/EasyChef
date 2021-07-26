@@ -11,17 +11,17 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
-import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
-import com.example.easychef.BuildConfig;
 import com.example.easychef.databinding.FragmentRecipeDetailsBinding;
+import com.example.easychef.models.RecipeDetailPOJO;
 
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONException;
-import org.json.JSONObject;
 
-import okhttp3.Headers;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
-import static com.example.easychef.AsyncClient.CLIENT;
+import static com.example.easychef.ServiceGenerator.getFoodAPI;
+
 
 public class RecipeDetailsFragment extends Fragment {
 
@@ -52,26 +52,23 @@ public class RecipeDetailsFragment extends Fragment {
     }
 
     private void getRecipeDetails() {
-        final String recipeDetailsAPICall = String.format(RecipeListFragmentAbstract.API_URL_ROOT + "/%d/card?apiKey=%s", id, BuildConfig.SPOONACULAR_KEY);
-        Log.i(TAG, recipeDetailsAPICall);
-        CLIENT.get(recipeDetailsAPICall, new RecipeDetailsJsonHttpResponseHandler());
+        getFoodAPI().getRecipeDetails(id)
+                .enqueue(new RecipeDetailsCallback());
+
     }
 
-    private class RecipeDetailsJsonHttpResponseHandler extends JsonHttpResponseHandler {
+    private class RecipeDetailsCallback implements Callback<RecipeDetailPOJO> {
         @Override
-        public void onSuccess(int i, Headers headers, JSON json) {
-            final JSONObject jsonObject = json.jsonObject;
-            try {
-                final String recipeDetailsURL = jsonObject.getString("url");
-                Glide.with(RecipeDetailsFragment.this).load(recipeDetailsURL).into(binding.ivRecipeDetails);
-            } catch (JSONException e) {
-                Log.e(TAG, "Hit json exception", e);
+        public void onResponse(@NotNull Call<RecipeDetailPOJO> call, Response<RecipeDetailPOJO> response) {
+            if (response.body() != null) {
+                Glide.with(RecipeDetailsFragment.this).load(response.body().getRecipeCardUrl()).into(binding.ivRecipeDetails);
             }
         }
 
         @Override
-        public void onFailure(int i, Headers headers, String s, Throwable throwable) {
-            Log.d(TAG, "onFailure" + throwable.getMessage());
+        public void onFailure(@NotNull Call<RecipeDetailPOJO> call, @NotNull Throwable t) {
+            Log.e(TAG, "hit exception", t);
+
         }
     }
 }

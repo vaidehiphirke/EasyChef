@@ -17,35 +17,35 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
-import com.example.easychef.BuildConfig;
 import com.example.easychef.R;
 import com.example.easychef.adapters.AutoCompleteAdapter;
 import com.example.easychef.adapters.IngredientAdapter;
 import com.example.easychef.databinding.FragmentIngredientBinding;
 import com.example.easychef.models.EasyChefParseObjectAbstract;
 import com.example.easychef.models.Ingredient;
+import com.example.easychef.models.IngredientPOJO;
+import com.example.easychef.models.IngredientResultsPOJO;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import okhttp3.Headers;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
-import static com.example.easychef.AsyncClient.CLIENT;
+import static com.example.easychef.ServiceGenerator.getFoodAPI;
 import static com.example.easychef.adapters.AutoCompleteAdapter.AUTO_COMPLETE_DELAY_CODE;
 import static com.example.easychef.adapters.AutoCompleteAdapter.THRESHOLD;
 import static com.example.easychef.adapters.AutoCompleteAdapter.TRIGGER_AUTO_COMPLETE_CODE;
-import static com.example.easychef.models.EasyChefParseObjectAbstract.KEY_ID;
-import static com.example.easychef.models.EasyChefParseObjectAbstract.KEY_IMAGE_URL;
 import static com.example.easychef.models.Ingredient.KEY_NAME_INGREDIENT;
+import static com.example.easychef.utils.ParsePOJOUtils.getIngredientsFromIngredientPOJOS;
 
 public class IngredientFragment extends Fragment {
 
@@ -54,12 +54,6 @@ public class IngredientFragment extends Fragment {
     private List<Ingredient> userIngredients;
     private IngredientAdapter adapter;
 
-    private static final String API_BASE_CALL = "https://api.spoonacular.com/food/ingredients";
-
-    private static final String INGREDIENT_API_PARSE_CALL = String.format("%s/search?apiKey=%s&number=1&query=", API_BASE_CALL, BuildConfig.SPOONACULAR_KEY);
-    private static final String INGREDIENT_AUTOCOMPLETE_API_CALL =
-            String.format(
-                    "%s/autocomplete?apiKey=%s&query=", API_BASE_CALL, BuildConfig.SPOONACULAR_KEY);
     private AutoCompleteAdapter autoCompleteAdapter;
 
     public IngredientFragment() {
@@ -108,7 +102,8 @@ public class IngredientFragment extends Fragment {
     }
 
     private void makeIngredientAPICall(String query) {
-        CLIENT.get(INGREDIENT_AUTOCOMPLETE_API_CALL.concat(query), new AutocompleteJsonHttpResponseHandler());
+        getFoodAPI().getAutocompleteIngredients(query)
+                .enqueue(new AutoCompleteCallback());
     }
 
     private void deletePantryIngredientFromParse(String objectId) {
@@ -123,14 +118,42 @@ public class IngredientFragment extends Fragment {
             final String objectIdToDelete = userIngredients.remove(position).getObjectId();
             deletePantryIngredientFromParse(objectIdToDelete);
             adapter.notifyItemRemoved(position);
-            Toast.makeText(getContext(), "Item was removed!", Toast.LENGTH_SHORT).show();
         }
     }
 
     private class AddIngredientOnClickListener implements View.OnClickListener {
         @Override
         public void onClick(View view) {
-            CLIENT.get(INGREDIENT_API_PARSE_CALL + binding.etAddIngredient.getText().toString(), new ParseIngredientJsonHttpResponseHandler());
+            getFoodAPI().getParsedIngredient(binding.etAddIngredient.getText().toString())
+                    .enqueue(new ParseIngredientCallback());
+        }
+
+        private class ParseIngredientCallback implements Callback<IngredientResultsPOJO> {
+            @Override
+            public void onResponse(@NotNull Call<IngredientResultsPOJO> call, @NonNull Response<IngredientResultsPOJO> response) {
+                final IngredientPOJO pojo = response.body().getSingleResult();
+                final Ingredient.Builder builder = new Ingredient.Builder()
+                        .id(pojo.getId())
+                        .name(pojo.getName())
+                        .user(ParseUser.getCurrentUser());
+                if (pojo.getImageUrl() != null) {
+                    builder.imageUrl(pojo.getImageUrl());
+                }
+                final Ingredient ingredient = builder.build();
+
+                ingredient.saveInBackground(new SaveIngredientSaveCallback());
+
+                userIngredients.add(0, ingredient);
+
+                adapter.notifyItemInserted(0);
+                binding.etAddIngredient.setText("");
+                binding.rvRecipes.smoothScrollToPosition(0);
+            }
+
+            @Override
+            public void onFailure(@NotNull Call<IngredientResultsPOJO> call, @NotNull Throwable t) {
+                Log.e(TAG, "hit exception", t);
+            }
         }
     }
 
@@ -142,7 +165,7 @@ public class IngredientFragment extends Fragment {
                 Toast.makeText(getContext(), "Error while saving", Toast.LENGTH_SHORT).show();
                 return;
             }
-            Toast.makeText(getContext(), "Ingredient saved", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Ingredient was added!", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -175,33 +198,7 @@ public class IngredientFragment extends Fragment {
                 return;
             }
             ingredient.deleteInBackground();
-            Toast.makeText(getContext(), "Ingredient deleted", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private class AutocompleteJsonHttpResponseHandler extends JsonHttpResponseHandler {
-        @Override
-        public void onSuccess(int i, Headers headers, JSON json) {
-            final List<EasyChefParseObjectAbstract> autocompleteIngredients = new ArrayList<>();
-            try {
-                final Ingredient.Builder builder = new Ingredient.Builder().user(ParseUser.getCurrentUser());
-                for (int j = 0; j < json.jsonArray.length(); j++) {
-                    final JSONObject jsonObject = json.jsonArray.getJSONObject(j);
-                    final EasyChefParseObjectAbstract ingredient = builder.name(jsonObject.getString(KEY_NAME_INGREDIENT))
-                            .imageUrl(jsonObject.getString(KEY_IMAGE_URL))
-                            .build();
-                    autocompleteIngredients.add(ingredient);
-                }
-            } catch (JSONException e) {
-                Log.e(TAG, "Hit json exception", e);
-            }
-            autoCompleteAdapter.setData(autocompleteIngredients);
-            autoCompleteAdapter.notifyDataSetChanged();
-        }
-
-        @Override
-        public void onFailure(int i, Headers headers, String s, Throwable throwable) {
-            Log.d(TAG, "onFailure ingredient autocomplete" + throwable.getMessage());
+            Toast.makeText(getContext(), "Ingredient deleted!", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -240,33 +237,17 @@ public class IngredientFragment extends Fragment {
         }
     }
 
-    private class ParseIngredientJsonHttpResponseHandler extends JsonHttpResponseHandler {
+    private class AutoCompleteCallback implements Callback<List<IngredientPOJO>> {
         @Override
-        public void onSuccess(int i, Headers headers, JSON json) {
-            try {
-                final JSONObject jsonObject = json.jsonObject.getJSONArray("results").getJSONObject(0);
-                final Ingredient ingredient = new Ingredient.Builder().user(ParseUser.getCurrentUser())
-                        .name(jsonObject.getString(KEY_NAME_INGREDIENT))
-                        .id(jsonObject.getInt(KEY_ID))
-                        .imageUrl(jsonObject.getString(KEY_IMAGE_URL))
-                        .build();
-
-                ingredient.saveInBackground(new SaveIngredientSaveCallback());
-
-                userIngredients.add(0, ingredient);
-
-                adapter.notifyItemInserted(0);
-                binding.etAddIngredient.setText("");
-                binding.rvRecipes.smoothScrollToPosition(0);
-                Toast.makeText(getContext(), "Ingredient was added!", Toast.LENGTH_SHORT).show();
-            } catch (JSONException e) {
-                Log.e(TAG, "Hit json exception", e);
-            }
+        public void onResponse(@NotNull Call<List<IngredientPOJO>> call, @NotNull Response<List<IngredientPOJO>> response) {
+            final List<EasyChefParseObjectAbstract> autocompleteIngredients = new ArrayList<>(getIngredientsFromIngredientPOJOS(response.body()));
+            autoCompleteAdapter.setData(autocompleteIngredients);
+            autoCompleteAdapter.notifyDataSetChanged();
         }
 
         @Override
-        public void onFailure(int i, Headers headers, String s, Throwable throwable) {
-            Log.d(TAG, "onFailure" + throwable.getMessage());
+        public void onFailure(@NotNull Call<List<IngredientPOJO>> call, @NotNull Throwable t) {
+            Log.e(TAG, "hit exception", t);
         }
     }
 }

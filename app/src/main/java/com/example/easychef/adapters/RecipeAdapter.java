@@ -131,7 +131,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
                     Toast.makeText(context, "Error while saving", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                Toast.makeText(context, "Recipe saved", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Recipe saved to favorites", Toast.LENGTH_SHORT).show();
             }
         }
 

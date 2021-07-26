@@ -15,46 +15,30 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
-import com.example.easychef.BuildConfig;
 import com.example.easychef.adapters.AutoCompleteAdapter;
 import com.example.easychef.adapters.RecipeAdapter;
 import com.example.easychef.databinding.FragmentSearchBinding;
 import com.example.easychef.models.EasyChefParseObjectAbstract;
-import com.example.easychef.models.Recipe;
-import com.parse.ParseUser;
+import com.example.easychef.models.RecipePOJO;
+import com.example.easychef.models.RecipesPOJO;
+import com.example.easychef.models.RecipeResultsPOJO;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import okhttp3.Headers;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
-import static com.example.easychef.AsyncClient.CLIENT;
+import static com.example.easychef.ServiceGenerator.getFoodAPI;
 import static com.example.easychef.adapters.AutoCompleteAdapter.AUTO_COMPLETE_DELAY_CODE;
 import static com.example.easychef.adapters.AutoCompleteAdapter.THRESHOLD;
 import static com.example.easychef.adapters.AutoCompleteAdapter.TRIGGER_AUTO_COMPLETE_CODE;
-import static com.example.easychef.models.EasyChefParseObjectAbstract.KEY_ID;
-import static com.example.easychef.models.EasyChefParseObjectAbstract.KEY_IMAGE_URL;
-import static com.example.easychef.models.Recipe.KEY_NAME_RECIPE;
+import static com.example.easychef.utils.ParsePOJOUtils.getRecipesFromRecipePOJOS;
 
 public class SearchFragment extends RecipeListFragmentAbstract {
-
-    private static final String RECIPE_SEARCH_API_CALL =
-            String.format(
-                    "%s/complexSearch?apiKey=%s&query=",
-                    API_URL_ROOT, BuildConfig.SPOONACULAR_KEY);
-    private static final String RECIPE_EXPLORE_API_CALL =
-            String.format(
-                    "%s/random?apiKey=%s&number=10",
-                    API_URL_ROOT, BuildConfig.SPOONACULAR_KEY);
-    private static final String RECIPE_AUTOCOMPLETE_API_CALL =
-            String.format(
-                    "%s/autocomplete?apiKey=%s&query=",
-                    API_URL_ROOT, BuildConfig.SPOONACULAR_KEY);
 
     private static final String TAG = "SearchFragment";
     private FragmentSearchBinding binding;
@@ -89,7 +73,8 @@ public class SearchFragment extends RecipeListFragmentAbstract {
 
     @Override
     protected void getRecipesToShowInList() {
-        CLIENT.get(RECIPE_SEARCH_API_CALL.concat(searchQuery), new SearchRecipeJsonHttpResponseHandler());
+        getFoodAPI().getSearchRecipes(searchQuery)
+                .enqueue(new SearchCallback());
     }
 
     @Override
@@ -98,12 +83,13 @@ public class SearchFragment extends RecipeListFragmentAbstract {
     }
 
     private void makeRecipeAPICall(String query) {
-        CLIENT.get(RECIPE_AUTOCOMPLETE_API_CALL.concat(query), new AutocompleteJsonHttpResponseHandler());
+        getFoodAPI().getAutocompleteRecipes(query)
+                .enqueue(new AutoCompleteCallback());
     }
 
     private void getExploreRecipes() {
-        CLIENT.get(RECIPE_EXPLORE_API_CALL, new ExploreRecipeJsonHttpResponseHandler());
-
+        getFoodAPI().getExploreRecipes()
+                .enqueue(new ExploreCallback());
     }
 
     private class GetRecipesOnClickListener implements View.OnClickListener {
@@ -111,86 +97,6 @@ public class SearchFragment extends RecipeListFragmentAbstract {
         public void onClick(View view) {
             searchQuery = binding.etSearchForRecipe.getText().toString();
             getRecipesToShowInList();
-        }
-    }
-
-    private class SearchRecipeJsonHttpResponseHandler extends JsonHttpResponseHandler {
-        @Override
-        public void onSuccess(int i, Headers headers, JSON json) {
-            try {
-                adapter.clear();
-                recipes.clear();
-                final Recipe.Builder builder = new Recipe.Builder().user(ParseUser.getCurrentUser());
-                final JSONArray results = json.jsonObject.getJSONArray("results");
-                for (int j = 0; j < results.length(); j++) {
-                    final JSONObject jsonObject = results.getJSONObject(j);
-                    final Recipe recipe = builder.name(jsonObject.getString(KEY_NAME_RECIPE))
-                            .id(jsonObject.getInt(KEY_ID))
-                            .imageUrl(jsonObject.getString(KEY_IMAGE_URL))
-                            .build();
-                    recipes.add(recipe);
-                }
-                adapter.notifyDataSetChanged();
-            } catch (JSONException e) {
-                Log.e(TAG, "Hit json exception", e);
-            }
-        }
-
-        @Override
-        public void onFailure(int i, Headers headers, String s, Throwable throwable) {
-            Log.d(TAG, "onFailure" + throwable.getMessage());
-        }
-    }
-
-    private class ExploreRecipeJsonHttpResponseHandler extends JsonHttpResponseHandler {
-        @Override
-        public void onSuccess(int i, Headers headers, JSON json) {
-            try {
-                adapter.clear();
-                recipes.clear();
-                final Recipe.Builder builder = new Recipe.Builder().user(ParseUser.getCurrentUser());
-                final JSONArray results = json.jsonObject.getJSONArray("recipes");
-                for (int j = 0; j < results.length(); j++) {
-                    final JSONObject jsonObject = results.getJSONObject(j);
-                    final Recipe recipe = builder.name(jsonObject.getString(KEY_NAME_RECIPE))
-                            .id(jsonObject.getInt(KEY_ID))
-                            .imageUrl(jsonObject.getString(KEY_IMAGE_URL))
-                            .build();
-                    recipes.add(recipe);
-                }
-                adapter.notifyDataSetChanged();
-            } catch (JSONException e) {
-                Log.e(TAG, "Hit json exception", e);
-            }
-        }
-
-        @Override
-        public void onFailure(int i, Headers headers, String s, Throwable throwable) {
-            Log.d(TAG, "onFailure" + throwable.getMessage());
-        }
-    }
-
-    private class AutocompleteJsonHttpResponseHandler extends JsonHttpResponseHandler {
-        @Override
-        public void onSuccess(int i, Headers headers, JSON json) {
-            final List<EasyChefParseObjectAbstract> autocompleteRecipes = new ArrayList<>();
-            try {
-                final Recipe.Builder builder = new Recipe.Builder().user(ParseUser.getCurrentUser());
-                for (int j = 0; j < json.jsonArray.length(); j++) {
-                    final JSONObject jsonObject = json.jsonArray.getJSONObject(j);
-                    final EasyChefParseObjectAbstract recipe = builder.name(jsonObject.getString(KEY_NAME_RECIPE)).build();
-                    autocompleteRecipes.add(recipe);
-                }
-            } catch (JSONException e) {
-                Log.e(TAG, "Hit json exception", e);
-            }
-            autoCompleteAdapter.setData(autocompleteRecipes);
-            autoCompleteAdapter.notifyDataSetChanged();
-        }
-
-        @Override
-        public void onFailure(int i, Headers headers, String s, Throwable throwable) {
-            Log.d(TAG, "onFailure ingredient autocomplete" + throwable.getMessage());
         }
     }
 
@@ -213,6 +119,7 @@ public class SearchFragment extends RecipeListFragmentAbstract {
 
         @Override
         public void afterTextChanged(Editable s) {
+
         }
 
         private class RecipeHandlerCallback implements Handler.Callback {
@@ -226,6 +133,50 @@ public class SearchFragment extends RecipeListFragmentAbstract {
                 }
                 return true;
             }
+        }
+    }
+
+    private class SearchCallback implements Callback<RecipeResultsPOJO> {
+        @Override
+        public void onResponse(@NotNull Call<RecipeResultsPOJO> call, @NotNull Response<RecipeResultsPOJO> response) {
+            adapter.clear();
+            recipes.clear();
+            recipes.addAll(getRecipesFromRecipePOJOS(response.body().getResults()));
+            adapter.notifyDataSetChanged();
+        }
+
+        @Override
+        public void onFailure(@NotNull Call<RecipeResultsPOJO> call, @NotNull Throwable t) {
+            Log.e(TAG, "hit exception", t);
+        }
+    }
+
+    private class AutoCompleteCallback implements Callback<List<RecipePOJO>> {
+        @Override
+        public void onResponse(@NotNull Call<List<RecipePOJO>> call, @NotNull Response<List<RecipePOJO>> response) {
+            final List<EasyChefParseObjectAbstract> autocompleteRecipes = new ArrayList<>(getRecipesFromRecipePOJOS(response.body()));
+            autoCompleteAdapter.setData(autocompleteRecipes);
+            autoCompleteAdapter.notifyDataSetChanged();
+        }
+
+        @Override
+        public void onFailure(@NotNull Call<List<RecipePOJO>> call, @NotNull Throwable t) {
+            Log.e(TAG, "hit exception", t);
+        }
+    }
+
+    private class ExploreCallback implements Callback<RecipesPOJO> {
+        @Override
+        public void onResponse(@NotNull Call<RecipesPOJO> call, @NotNull Response<RecipesPOJO> response) {
+            adapter.clear();
+            recipes.clear();
+            recipes.addAll(getRecipesFromRecipePOJOS(response.body().getRecipes()));
+            adapter.notifyDataSetChanged();
+        }
+
+        @Override
+        public void onFailure(@NotNull Call<RecipesPOJO> call, @NotNull Throwable t) {
+            Log.e(TAG, "hit exception", t);
         }
     }
 }
