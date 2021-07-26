@@ -20,7 +20,6 @@ import com.example.easychef.adapters.RecipeAdapter;
 import com.example.easychef.databinding.FragmentSearchBinding;
 import com.example.easychef.models.EasyChefParseObjectAbstract;
 import com.example.easychef.models.RecipePOJO;
-import com.example.easychef.models.RecipesPOJO;
 import com.example.easychef.models.RecipeResultsPOJO;
 
 import org.jetbrains.annotations.NotNull;
@@ -89,7 +88,7 @@ public class SearchFragment extends RecipeListFragmentAbstract {
 
     private void getExploreRecipes() {
         getFoodAPI().getExploreRecipes()
-                .enqueue(new ExploreCallback());
+                .enqueue(new SearchCallback());
     }
 
     private class GetRecipesOnClickListener implements View.OnClickListener {
@@ -161,21 +160,6 @@ public class SearchFragment extends RecipeListFragmentAbstract {
 
         @Override
         public void onFailure(@NotNull Call<List<RecipePOJO>> call, @NotNull Throwable t) {
-            Log.e(TAG, "hit exception", t);
-        }
-    }
-
-    private class ExploreCallback implements Callback<RecipesPOJO> {
-        @Override
-        public void onResponse(@NotNull Call<RecipesPOJO> call, @NotNull Response<RecipesPOJO> response) {
-            adapter.clear();
-            recipes.clear();
-            recipes.addAll(getRecipesFromRecipePOJOS(response.body().getRecipes()));
-            adapter.notifyDataSetChanged();
-        }
-
-        @Override
-        public void onFailure(@NotNull Call<RecipesPOJO> call, @NotNull Throwable t) {
             Log.e(TAG, "hit exception", t);
         }
     }

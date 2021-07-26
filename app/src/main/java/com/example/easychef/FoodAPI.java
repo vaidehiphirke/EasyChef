@@ -1,11 +1,9 @@
 package com.example.easychef;
 
 import com.example.easychef.models.IngredientPOJO;
-import com.example.easychef.models.IngredientResultsPOJO;
 import com.example.easychef.models.RecipeDetailPOJO;
 import com.example.easychef.models.RecipePOJO;
 import com.example.easychef.models.RecipeResultsPOJO;
-import com.example.easychef.models.RecipesPOJO;
 
 import java.util.List;
 
@@ -17,7 +15,6 @@ import retrofit2.http.Query;
 import static com.example.easychef.utils.Constants.AUTOCOMPLETE_INGREDIENTS_ENDPOINT;
 import static com.example.easychef.utils.Constants.AUTOCOMPLETE_RECIPES_ENDPOINT;
 import static com.example.easychef.utils.Constants.EXPLORE_RECIPES_ENDPOINT;
-import static com.example.easychef.utils.Constants.PARSE_INGREDIENT_ENDPOINT;
 import static com.example.easychef.utils.Constants.RECIPE_DETAILS_ENDPOINT;
 import static com.example.easychef.utils.Constants.RECIPE_SEARCH_ENDPOINT;
 import static com.example.easychef.utils.Constants.SUGGESTED_RECIPES_BY_INGREDIENTS_ENDPOINT;
@@ -40,17 +37,12 @@ public interface FoodAPI {
     );
 
     @GET(EXPLORE_RECIPES_ENDPOINT)
-    Call<RecipesPOJO> getExploreRecipes(
+    Call<RecipeResultsPOJO> getExploreRecipes(
     );
 
     @GET(RECIPE_DETAILS_ENDPOINT)
     Call<RecipeDetailPOJO> getRecipeDetails(
             @Path("id") int id
-    );
-
-    @GET(PARSE_INGREDIENT_ENDPOINT)
-    Call<IngredientResultsPOJO> getParsedIngredient(
-            @Query("query") String query
     );
 
     @GET(AUTOCOMPLETE_INGREDIENTS_ENDPOINT)
