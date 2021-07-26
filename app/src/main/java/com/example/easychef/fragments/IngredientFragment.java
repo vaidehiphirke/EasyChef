@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -24,11 +25,9 @@ import com.example.easychef.databinding.FragmentIngredientBinding;
 import com.example.easychef.models.EasyChefParseObjectAbstract;
 import com.example.easychef.models.Ingredient;
 import com.example.easychef.models.IngredientPOJO;
-import com.example.easychef.models.IngredientResultsPOJO;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
-import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import org.jetbrains.annotations.NotNull;
@@ -76,6 +75,7 @@ public class IngredientFragment extends Fragment {
         binding.etAddIngredient.setThreshold(THRESHOLD);
         binding.etAddIngredient.setAdapter(autoCompleteAdapter);
         binding.etAddIngredient.addTextChangedListener(new IngredientAutocompleteTextWatcher());
+        binding.etAddIngredient.setOnItemClickListener(new AddIngredientOnItemClickListener());
 
         return binding.getRoot();
     }
@@ -88,7 +88,6 @@ public class IngredientFragment extends Fragment {
         binding.rvRecipes.setAdapter(adapter);
         binding.rvRecipes.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        binding.btnAdd.setOnClickListener(new AddIngredientOnClickListener());
         binding.btnGetRecipes.setOnClickListener(new GetRecipesOnClickListener());
 
         queryPantryIngredients();
@@ -121,54 +120,6 @@ public class IngredientFragment extends Fragment {
         }
     }
 
-    private class AddIngredientOnClickListener implements View.OnClickListener {
-        @Override
-        public void onClick(View view) {
-            getFoodAPI().getParsedIngredient(binding.etAddIngredient.getText().toString())
-                    .enqueue(new ParseIngredientCallback());
-        }
-
-        private class ParseIngredientCallback implements Callback<IngredientResultsPOJO> {
-            @Override
-            public void onResponse(@NotNull Call<IngredientResultsPOJO> call, @NonNull Response<IngredientResultsPOJO> response) {
-                final IngredientPOJO pojo = response.body().getSingleResult();
-                final Ingredient.Builder builder = new Ingredient.Builder()
-                        .id(pojo.getId())
-                        .name(pojo.getName())
-                        .user(ParseUser.getCurrentUser());
-                if (pojo.getImageUrl() != null) {
-                    builder.imageUrl(pojo.getImageUrl());
-                }
-                final Ingredient ingredient = builder.build();
-
-                ingredient.saveInBackground(new SaveIngredientSaveCallback());
-
-                userIngredients.add(0, ingredient);
-
-                adapter.notifyItemInserted(0);
-                binding.etAddIngredient.setText("");
-                binding.rvRecipes.smoothScrollToPosition(0);
-            }
-
-            @Override
-            public void onFailure(@NotNull Call<IngredientResultsPOJO> call, @NotNull Throwable t) {
-                Log.e(TAG, "hit exception", t);
-            }
-        }
-    }
-
-    private class SaveIngredientSaveCallback implements SaveCallback {
-        @Override
-        public void done(ParseException e) {
-            if (e != null) {
-                Log.e(TAG, "Error while saving", e);
-                Toast.makeText(getContext(), "Error while saving", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            Toast.makeText(getContext(), "Ingredient was added!", Toast.LENGTH_SHORT).show();
-        }
-    }
-
     private class GetRecipesOnClickListener implements View.OnClickListener {
         @Override
         public void onClick(View view) {
@@ -198,7 +149,7 @@ public class IngredientFragment extends Fragment {
                 return;
             }
             ingredient.deleteInBackground();
-            Toast.makeText(getContext(), "Ingredient deleted!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Ingredient deleted", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -248,6 +199,33 @@ public class IngredientFragment extends Fragment {
         @Override
         public void onFailure(@NotNull Call<List<IngredientPOJO>> call, @NotNull Throwable t) {
             Log.e(TAG, "hit exception", t);
+        }
+    }
+
+    private class AddIngredientOnItemClickListener implements AdapterView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+            final Ingredient ingredient = (Ingredient) autoCompleteAdapter.getItem(position);
+
+            ingredient.saveInBackground(new SaveIngredientSaveCallback());
+
+            userIngredients.add(0, ingredient);
+
+            adapter.notifyItemInserted(0);
+            binding.etAddIngredient.setText("");
+            binding.rvRecipes.smoothScrollToPosition(0);
+        }
+
+        private class SaveIngredientSaveCallback implements SaveCallback {
+            @Override
+            public void done(ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, "Error while saving", e);
+                    Toast.makeText(getContext(), "Error while saving", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                Toast.makeText(getContext(), "Ingredient was added!", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }

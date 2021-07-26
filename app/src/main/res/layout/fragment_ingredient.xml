@@ -6,19 +6,11 @@
     tools:context=".activities.MainActivity">
 
     <Button
-        android:id="@+id/btnAdd"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:text="@string/add" />
-
-    <Button
         android:id="@+id/btnGetRecipes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
         android:text="@string/get_recipes" />
 
     <AutoCompleteTextView
@@ -27,18 +19,17 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_toStartOf="@+id/btnAdd"
         android:autofillHints="@string/ingredients"
         android:ems="@dimen/text_size"
-        android:maxLines="1"
-        android:hint="@string/add_an_item_here"
-        android:inputType="text" />
+        android:hint="@string/start_typing_an_ingredient_here"
+        android:inputType="text"
+        android:maxLines="1" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_recipes"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/btnAdd"
+        android:layout_below="@+id/etAddIngredient"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="false"
         android:layout_alignParentEnd="true"
