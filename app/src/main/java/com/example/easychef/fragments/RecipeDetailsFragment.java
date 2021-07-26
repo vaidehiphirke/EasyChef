@@ -61,7 +61,7 @@ public class RecipeDetailsFragment extends Fragment {
         @Override
         public void onResponse(@NotNull Call<RecipeDetailPOJO> call, Response<RecipeDetailPOJO> response) {
             if (response.body() != null) {
-                Glide.with(RecipeDetailsFragment.this).load(response.body().getRecipeCardUrl()).into(binding.ivRecipeDetails);
+                Glide.with(RecipeDetailsFragment.this).load(response.body().getImage()).into(binding.ivRecipeDetails);
             }
         }
 

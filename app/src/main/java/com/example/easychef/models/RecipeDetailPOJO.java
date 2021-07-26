@@ -32,6 +32,10 @@ public class RecipeDetailPOJO {
     @SerializedName("image")
     private String image;
 
+    public String getImage() {
+        return image;
+    }
+
     @SerializedName("analyzedInstructions")
     private List<AnalyzedInstructionPOJO> analyzedInstructions;
 }
