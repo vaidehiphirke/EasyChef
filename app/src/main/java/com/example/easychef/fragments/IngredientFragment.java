@@ -1,5 +1,6 @@
 package com.example.easychef.fragments;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -10,6 +11,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Toast;
 
@@ -25,6 +28,7 @@ import com.example.easychef.databinding.FragmentIngredientBinding;
 import com.example.easychef.models.EasyChefParseObjectAbstract;
 import com.example.easychef.models.Ingredient;
 import com.example.easychef.models.IngredientPOJO;
+import com.example.easychef.utils.UXUtils;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -205,8 +209,9 @@ public class IngredientFragment extends Fragment {
     private class AddIngredientOnItemClickListener implements AdapterView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-            final Ingredient ingredient = (Ingredient) autoCompleteAdapter.getItem(position);
+            UXUtils.hideKeyboard((Activity) getActivity());
 
+            final Ingredient ingredient = (Ingredient) autoCompleteAdapter.getItem(position);
             ingredient.saveInBackground(new SaveIngredientSaveCallback());
 
             userIngredients.add(0, ingredient);
