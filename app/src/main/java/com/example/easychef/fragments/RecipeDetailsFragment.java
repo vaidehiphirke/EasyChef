@@ -54,21 +54,20 @@ public class RecipeDetailsFragment extends Fragment {
     private void getRecipeDetails() {
         getFoodAPI().getRecipeDetails(id)
                 .enqueue(new RecipeDetailsCallback());
-
     }
 
     private class RecipeDetailsCallback implements Callback<RecipeDetailPOJO> {
         @Override
         public void onResponse(@NotNull Call<RecipeDetailPOJO> call, Response<RecipeDetailPOJO> response) {
-            if (response.body() != null) {
-                Glide.with(RecipeDetailsFragment.this).load(response.body().getImage()).into(binding.ivRecipeDetails);
-            }
+            binding.tvRecipeTitle.setText(response.body().getTitle());
+            binding.tvReadyInMinutes.setText(String.format("Ready in %d minutes", response.body().getReadyInMinutes()));
+            binding.tvServings.setText(String.format("Makes %d servings", response.body().getServings()));
+            Glide.with(RecipeDetailsFragment.this).load(response.body().getImage()).into(binding.ivRecipeDetails);
         }
 
         @Override
         public void onFailure(@NotNull Call<RecipeDetailPOJO> call, @NotNull Throwable t) {
             Log.e(TAG, "hit exception", t);
-
         }
     }
 }

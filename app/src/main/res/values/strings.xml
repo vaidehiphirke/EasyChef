@@ -20,4 +20,6 @@
     <string name="search_for_a_recipe">Search for a recipe!</string>
     <string name="empty" />
     <string name="start_typing_an_ingredient_here">Start typing an ingredient here!</string>
+    <string name="ready_in_minutes">Ready in # minutes</string>
+    <string name="servings">Makes # servings</string>
 </resources>
