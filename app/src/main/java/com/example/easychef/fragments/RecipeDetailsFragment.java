@@ -63,6 +63,11 @@ public class RecipeDetailsFragment extends Fragment {
             binding.tvReadyInMinutes.setText(String.format("Ready in %d minutes", response.body().getReadyInMinutes()));
             binding.tvServings.setText(String.format("Makes %d servings", response.body().getServings()));
             Glide.with(RecipeDetailsFragment.this).load(response.body().getImage()).into(binding.ivRecipeDetails);
+
+            binding.switchVegetarian.setChecked(response.body().isVegetarian());
+            binding.switchVegan.setChecked(response.body().isVegan());
+            binding.switchDairyFree.setChecked(response.body().isDairyFree());
+            binding.switchGlutenFree.setChecked(response.body().isGlutenFree());
         }
 
         @Override

@@ -22,7 +22,7 @@
         android:layout_alignParentStart="true"
         android:layout_marginTop="@dimen/border_margin"
         android:layout_marginBottom="4dp"
-        android:text="TextView"
+        android:text="Recipe Title"
         android:textSize="@dimen/recipe_text_size" />
 
     <ToggleButton
@@ -54,4 +54,64 @@
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="@dimen/end_servings_margin"
         android:text="@string/servings" />
+
+    <TextView
+        android:id="@+id/tvDietaryRestrictionTitleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvReadyInMinutes"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="3dp"
+        android:layout_marginTop="17dp"
+        android:text="Dietary Restriction Information"
+        android:textSize="@dimen/recipe_subtext_size" />
+
+    <CheckBox
+        android:id="@+id/switchVegetarian"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvDietaryRestrictionTitleText"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="2dp"
+        android:clickable="false"
+        android:showText="false"
+        android:text="Vegetarian"
+        android:textSize="12sp" />
+
+    <CheckBox
+        android:id="@+id/switchVegan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvDietaryRestrictionTitleText"
+        android:layout_marginStart="@dimen/border_margin"
+        android:layout_toEndOf="@+id/switchVegetarian"
+        android:clickable="false"
+        android:showText="false"
+        android:text="Vegan"
+        android:textSize="12sp" />
+
+    <CheckBox
+        android:id="@+id/switchGlutenFree"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvDietaryRestrictionTitleText"
+        android:layout_marginStart="@dimen/border_margin"
+        android:layout_toEndOf="@+id/switchVegan"
+        android:clickable="false"
+        android:showText="false"
+        android:text="Gluten-free"
+        android:textSize="12sp" />
+
+    <CheckBox
+        android:id="@+id/switchDairyFree"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvDietaryRestrictionTitleText"
+        android:layout_marginStart="@dimen/border_margin"
+        android:layout_toEndOf="@+id/switchGlutenFree"
+        android:clickable="false"
+        android:showText="false"
+        android:text="Dairy-free"
+        android:textSize="12sp" />
+
 </RelativeLayout>

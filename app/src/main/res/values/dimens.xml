@@ -4,5 +4,6 @@
     <dimen name="layout_margin">16dp</dimen>
     <dimen name="recipe_text_size">18sp</dimen>
     <dimen name="end_servings_margin">86dp</dimen>
+    <dimen name="recipe_subtext_size">16sp</dimen>
     <item name="text_size" format="integer" type="dimen">10</item>
 </resources>

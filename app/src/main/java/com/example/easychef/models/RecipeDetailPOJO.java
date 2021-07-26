@@ -50,4 +50,20 @@ public class RecipeDetailPOJO {
     public String getImage() {
         return image;
     }
+
+    public boolean isVegetarian() {
+        return vegetarian;
+    }
+
+    public boolean isVegan() {
+        return vegan;
+    }
+
+    public boolean isDairyFree() {
+        return dairyFree;
+    }
+
+    public boolean isGlutenFree() {
+        return glutenFree;
+    }
 }
