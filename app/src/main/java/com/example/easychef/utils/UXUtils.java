@@ -10,14 +10,14 @@ public class UXUtils {
     private static final String TAG = "UXUtils";
 
     public static void hideKeyboard(Activity activity) {
-        try{
+        try {
             final InputMethodManager inputManager = (InputMethodManager) activity
                     .getSystemService(Context.INPUT_METHOD_SERVICE);
             if (activity.getCurrentFocus() != null) {
                 inputManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(),
                         InputMethodManager.HIDE_NOT_ALWAYS);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             Log.e(TAG, "error in hiding keyboard (view issue)", e);
         }
     }
