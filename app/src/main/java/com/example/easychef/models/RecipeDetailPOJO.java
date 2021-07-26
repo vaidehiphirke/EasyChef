@@ -2,12 +2,36 @@ package com.example.easychef.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class RecipeDetailPOJO {
 
-    @SerializedName("url")
-    private String url;
+    @SerializedName("vegetarian")
+    private boolean vegetarian;
+    @SerializedName("vegan")
+    private boolean vegan;
+    @SerializedName("glutenFree")
+    private boolean glutenFree;
+    @SerializedName("dairyFree")
+    private boolean dairyFree;
 
-    public String getRecipeCardUrl() {
-        return url;
-    }
+    @SerializedName("preparationMinutes")
+    private int preparationMinutes;
+    @SerializedName("cookingMinutes")
+    private int cookingMinutes;
+
+    @SerializedName("extendedIngredients")
+    private List<ExtendedIngredientPOJO> extendedIngredients;
+
+    @SerializedName("title")
+    private String title;
+    @SerializedName("readyInMinutes")
+    private int readyInMinutes;
+    @SerializedName("servings")
+    private int servings;
+    @SerializedName("image")
+    private String image;
+
+    @SerializedName("analyzedInstructions")
+    private List<AnalyzedInstructionPOJO> analyzedInstructions;
 }
