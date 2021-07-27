@@ -14,7 +14,13 @@ public class Recipe extends EasyChefParseObjectAbstract {
     }
 
     private Recipe(Builder builder) {
+        if (builder.title == null) {
+            throw new IllegalStateException("Recipe title cannot be null");
+        }
         put(KEY_NAME_RECIPE, builder.title);
+        if (builder.user == null) {
+            throw new IllegalStateException("User cannot be null");
+        }
         put(KEY_USER, builder.user);
         put(KEY_RECIPE_ID, builder.id);
         if (builder.imageUrl != null) {

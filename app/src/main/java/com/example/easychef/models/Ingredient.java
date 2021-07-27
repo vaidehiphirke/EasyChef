@@ -15,7 +15,13 @@ public class Ingredient extends EasyChefParseObjectAbstract {
     }
 
     private Ingredient(Builder builder) {
+        if (builder.name == null) {
+            throw new IllegalStateException("Ingredient name cannot be null");
+        }
         put(KEY_NAME_INGREDIENT, builder.name);
+        if (builder.user == null) {
+            throw new IllegalStateException("User cannot be null");
+        }
         put(KEY_USER, builder.user);
         put(KEY_INGREDIENT_ID, builder.id);
         put(KEY_IMAGE_URL, builder.imageUrl);
