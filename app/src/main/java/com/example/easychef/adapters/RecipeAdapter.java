@@ -111,15 +111,15 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
         private class SaveUnsaveButtonListener implements CompoundButton.OnCheckedChangeListener {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    final ParseQuery<Recipe> query = ParseQuery.getQuery(Recipe.class);
-                    query.whereEqualTo(KEY_RECIPE_ID, recipes.get(getAdapterPosition()).getId());
-                    query.whereEqualTo(KEY_USER, ParseUser.getCurrentUser());
-                    query.getFirstInBackground(new SaveIfNotAlreadySavedGetCallback());
-                } else {
+                if (!isChecked) {
                     btnSaveRecipe.setBackgroundDrawable(RecipeAdapter.this.context.getDrawable(android.R.drawable.btn_star_big_off));
                     onUnsavedListener.onUnsavedChecked(getAdapterPosition());
+                    return;
                 }
+                final ParseQuery<Recipe> query = ParseQuery.getQuery(Recipe.class);
+                query.whereEqualTo(KEY_RECIPE_ID, recipes.get(getAdapterPosition()).getId());
+                query.whereEqualTo(KEY_USER, ParseUser.getCurrentUser());
+                query.getFirstInBackground(new SaveIfNotAlreadySavedGetCallback());
             }
         }
 
