@@ -15,11 +15,6 @@ public class RecipeDetailPOJO {
     @SerializedName("dairyFree")
     private boolean dairyFree;
 
-    @SerializedName("preparationMinutes")
-    private int preparationMinutes;
-    @SerializedName("cookingMinutes")
-    private int cookingMinutes;
-
     @SerializedName("extendedIngredients")
     private List<ExtendedIngredientPOJO> extendedIngredients;
 
@@ -66,4 +61,5 @@ public class RecipeDetailPOJO {
     public boolean isGlutenFree() {
         return glutenFree;
     }
+
 }
