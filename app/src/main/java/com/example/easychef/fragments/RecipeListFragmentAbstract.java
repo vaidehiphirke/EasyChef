@@ -1,5 +1,6 @@
 package com.example.easychef.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.easychef.adapters.RecipeAdapter;
 import com.example.easychef.databinding.FragmentRecipeListBinding;
 import com.example.easychef.models.Recipe;
+import com.example.easychef.utils.SaveRecipeToFavoritesUtils;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -36,7 +38,7 @@ public abstract class RecipeListFragmentAbstract extends Fragment {
 
     protected abstract void getRecipesToShowInList();
 
-    protected abstract RecipeAdapter.OnUnsavedListener getOnUnsavedListener();
+    protected abstract SaveRecipeToFavoritesUtils.OnUnsavedListener getOnUnsavedListener();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -77,11 +79,23 @@ public abstract class RecipeListFragmentAbstract extends Fragment {
         }
     }
 
-    protected class UnsaveButPersistOnClickListener implements RecipeAdapter.OnUnsavedListener {
+    public class UnsaveButPersistOnClickListener implements SaveRecipeToFavoritesUtils.OnUnsavedListener {
+        private List<Recipe> recipesToLookIn = recipes;
+        private Context context = getContext();
+
+        @Override
+        public void setContext(Context context) {
+            this.context = context;
+        }
+
+        public void setRecipes(List<Recipe> recipesToLookIn) {
+            this.recipesToLookIn = recipesToLookIn;
+        }
+
         @Override
         public void onUnsavedChecked(int position) {
             final ParseQuery<Recipe> query = ParseQuery.getQuery(Recipe.class);
-            query.whereEqualTo(Recipe.KEY_RECIPE_ID, recipes.get(position).getId());
+            query.whereEqualTo(Recipe.KEY_RECIPE_ID, recipesToLookIn.get(position).getId());
             query.whereEqualTo(Recipe.KEY_USER, ParseUser.getCurrentUser());
             try {
                 final String objectIdToDelete = query.getFirst().getObjectId();
@@ -89,7 +103,7 @@ public abstract class RecipeListFragmentAbstract extends Fragment {
             } catch (ParseException e) {
                 Log.e(TAG, "Recipe id not found", e);
             }
-            Toast.makeText(getContext(), "Recipe removed from favorites", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Recipe removed from favorites", Toast.LENGTH_SHORT).show();
         }
     }
 }

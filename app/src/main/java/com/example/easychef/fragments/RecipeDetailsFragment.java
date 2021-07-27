@@ -12,15 +12,25 @@ import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.example.easychef.databinding.FragmentRecipeDetailsBinding;
+import com.example.easychef.models.Recipe;
 import com.example.easychef.models.RecipeDetailPOJO;
+import com.example.easychef.utils.SaveRecipeToFavoritesUtils;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 import static com.example.easychef.ServiceGenerator.getFoodAPI;
+import static com.example.easychef.models.EasyChefParseObjectAbstract.KEY_USER;
+import static com.example.easychef.models.Recipe.KEY_RECIPE_ID;
+import static com.example.easychef.utils.ParsePOJOUtils.getRecipesFromRecipeDetailPOJOS;
 
 
 public class RecipeDetailsFragment extends Fragment {
@@ -28,9 +38,11 @@ public class RecipeDetailsFragment extends Fragment {
     private static final String TAG = "RecipeDetailsFragment";
     private FragmentRecipeDetailsBinding binding;
     private final int id;
+    private final SaveRecipeToFavoritesUtils.OnUnsavedListener onUnsavedListener;
 
-    public RecipeDetailsFragment(int id) {
+    public RecipeDetailsFragment(int id, SaveRecipeToFavoritesUtils.OnUnsavedListener onUnsavedListener) {
         this.id = id;
+        this.onUnsavedListener = onUnsavedListener;
     }
 
     @Override
@@ -68,6 +80,18 @@ public class RecipeDetailsFragment extends Fragment {
             binding.switchVegan.setChecked(response.body().isVegan());
             binding.switchDairyFree.setChecked(response.body().isDairyFree());
             binding.switchGlutenFree.setChecked(response.body().isGlutenFree());
+
+            final List<RecipeDetailPOJO> pojos = new ArrayList<>();
+            pojos.add(response.body());
+            final SaveRecipeToFavoritesUtils saveRecipeToFavoritesUtils = new SaveRecipeToFavoritesUtils(binding.btnSaveRecipe,
+                    null, onUnsavedListener, getContext(), getRecipesFromRecipeDetailPOJOS(pojos, id));
+
+            final ParseQuery<Recipe> query = ParseQuery.getQuery(Recipe.class);
+            query.whereEqualTo(KEY_RECIPE_ID, id);
+            query.whereEqualTo(KEY_USER, ParseUser.getCurrentUser());
+            query.getFirstInBackground(saveRecipeToFavoritesUtils.getSeeIfSavedAndToggleGetCallback());
+
+            binding.btnSaveRecipe.setOnCheckedChangeListener(saveRecipeToFavoritesUtils.getSaveUnsaveButtonListener());
         }
 
         @Override

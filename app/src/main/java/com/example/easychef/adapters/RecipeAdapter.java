@@ -1,15 +1,11 @@
 package com.example.easychef.adapters;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,11 +16,9 @@ import com.example.easychef.R;
 import com.example.easychef.databinding.ItemRecipeBinding;
 import com.example.easychef.fragments.RecipeDetailsFragment;
 import com.example.easychef.models.Recipe;
-import com.parse.GetCallback;
-import com.parse.ParseException;
+import com.example.easychef.utils.SaveRecipeToFavoritesUtils;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
-import com.parse.SaveCallback;
 
 import java.util.List;
 
@@ -33,12 +27,11 @@ import static com.example.easychef.models.Recipe.KEY_RECIPE_ID;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder> {
 
-    private static final String TAG = "RecipeAdapter";
     private final Context context;
     private final List<Recipe> recipes;
-    private final OnUnsavedListener onUnsavedListener;
+    private final SaveRecipeToFavoritesUtils.OnUnsavedListener onUnsavedListener;
 
-    public RecipeAdapter(Context context, List<Recipe> recipes, OnUnsavedListener onUnsavedListener) {
+    public RecipeAdapter(Context context, List<Recipe> recipes, SaveRecipeToFavoritesUtils.OnUnsavedListener onUnsavedListener) {
         this.context = context;
         this.recipes = recipes;
         this.onUnsavedListener = onUnsavedListener;
@@ -66,24 +59,21 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
         notifyDataSetChanged();
     }
 
-    public interface OnUnsavedListener {
-        void onUnsavedChecked(int position);
-    }
-
     protected class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private final TextView tvRecipeName;
         private final ImageView ivRecipeImage;
-        private final ToggleButton btnSaveRecipe;
         private final Context context;
+        private final SaveRecipeToFavoritesUtils saveRecipeToFavoritesUtils;
 
-        public ViewHolder(@NonNull ItemRecipeBinding itemRecipeBinding, Context context) {
-            super(itemRecipeBinding.getRoot());
-            tvRecipeName = itemRecipeBinding.tvRecipeName;
-            ivRecipeImage = itemRecipeBinding.ivRecipeImage;
+        public ViewHolder(@NonNull ItemRecipeBinding binding, Context context) {
+            super(binding.getRoot());
+            tvRecipeName = binding.tvRecipeName;
+            ivRecipeImage = binding.ivRecipeImage;
             this.context = context;
-            btnSaveRecipe = itemRecipeBinding.btnSaveRecipe;
-            btnSaveRecipe.setOnCheckedChangeListener(new SaveUnsaveButtonListener());
+            saveRecipeToFavoritesUtils = new SaveRecipeToFavoritesUtils(binding.btnSaveRecipe,
+                    this, onUnsavedListener, context, recipes);
+            binding.btnSaveRecipe.setOnCheckedChangeListener(saveRecipeToFavoritesUtils.getSaveUnsaveButtonListener());
 
             itemView.setOnClickListener(this);
         }
@@ -95,7 +85,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
             final ParseQuery<Recipe> query = ParseQuery.getQuery(Recipe.class);
             query.whereEqualTo(KEY_RECIPE_ID, recipe.getId());
             query.whereEqualTo(KEY_USER, ParseUser.getCurrentUser());
-            query.getFirstInBackground(new SeeIfSavedAndToggleGetCallback());
+            query.getFirstInBackground(saveRecipeToFavoritesUtils.getSeeIfSavedAndToggleGetCallback());
         }
 
         @Override
@@ -104,71 +94,9 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
                 return;
             }
             final AppCompatActivity activity = (AppCompatActivity) view.getContext();
-            final RecipeDetailsFragment fragment = new RecipeDetailsFragment(recipes.get(getAdapterPosition()).getId());
+            final RecipeDetailsFragment fragment = new RecipeDetailsFragment(
+                    recipes.get(getAdapterPosition()).getId(), onUnsavedListener);
             activity.getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, fragment).commit();
-        }
-
-        private class SaveUnsaveButtonListener implements CompoundButton.OnCheckedChangeListener {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (!isChecked) {
-                    btnSaveRecipe.setBackgroundDrawable(RecipeAdapter.this.context.getDrawable(android.R.drawable.btn_star_big_off));
-                    onUnsavedListener.onUnsavedChecked(getAdapterPosition());
-                    return;
-                }
-                final ParseQuery<Recipe> query = ParseQuery.getQuery(Recipe.class);
-                query.whereEqualTo(KEY_RECIPE_ID, recipes.get(getAdapterPosition()).getId());
-                query.whereEqualTo(KEY_USER, ParseUser.getCurrentUser());
-                query.getFirstInBackground(new SaveIfNotAlreadySavedGetCallback());
-            }
-        }
-
-        private class SaveRecipeSaveCallback implements SaveCallback {
-            @Override
-            public void done(ParseException e) {
-                if (e != null) {
-                    Log.e("Saving Recipe", "Error while saving", e);
-                    Toast.makeText(context, "Error while saving", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                Toast.makeText(context, "Recipe saved to favorites", Toast.LENGTH_SHORT).show();
-            }
-        }
-
-        private class SaveIfNotAlreadySavedGetCallback implements GetCallback<Recipe> {
-            @Override
-            public void done(Recipe object, ParseException e) {
-                if (e == null) {
-                    return;
-                }
-                if (e.getCode() == ParseException.OBJECT_NOT_FOUND) {
-                    final Recipe recipe = new Recipe.Builder().name(tvRecipeName.getText().toString())
-                            .id(recipes.get(getAdapterPosition()).getId())
-                            .imageUrl(recipes.get(getAdapterPosition()).getImageUrl())
-                            .user(ParseUser.getCurrentUser())
-                            .build();
-                    btnSaveRecipe.setBackgroundDrawable(RecipeAdapter.this.context.getDrawable(android.R.drawable.btn_star_big_on));
-                    recipe.saveInBackground(new SaveRecipeSaveCallback());
-                } else {
-                    Log.e(TAG, "Other error with finding Recipe object", e);
-                }
-            }
-        }
-
-        private class SeeIfSavedAndToggleGetCallback implements GetCallback<Recipe> {
-            @Override
-            public void done(Recipe object, ParseException e) {
-                if (e == null) {
-                    btnSaveRecipe.setBackgroundDrawable(RecipeAdapter.this.context.getDrawable(android.R.drawable.btn_star_big_on));
-                    btnSaveRecipe.toggle();
-                    return;
-                }
-                if (e.getCode() == ParseException.OBJECT_NOT_FOUND) {
-                    Log.i(TAG, "Recipe not already saved");
-                } else {
-                    Log.e(TAG, "Other error with finding Recipe object", e);
-                }
-            }
         }
     }
 }

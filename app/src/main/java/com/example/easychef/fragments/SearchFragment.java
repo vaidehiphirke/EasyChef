@@ -1,7 +1,6 @@
 package com.example.easychef.fragments;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -12,8 +11,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,6 +22,7 @@ import com.example.easychef.databinding.FragmentSearchBinding;
 import com.example.easychef.models.EasyChefParseObjectAbstract;
 import com.example.easychef.models.RecipePOJO;
 import com.example.easychef.models.RecipeResultsPOJO;
+import com.example.easychef.utils.SaveRecipeToFavoritesUtils;
 import com.example.easychef.utils.UXUtils;
 
 import org.jetbrains.annotations.NotNull;
@@ -82,7 +80,7 @@ public class SearchFragment extends RecipeListFragmentAbstract {
     }
 
     @Override
-    protected RecipeAdapter.OnUnsavedListener getOnUnsavedListener() {
+    protected SaveRecipeToFavoritesUtils.OnUnsavedListener getOnUnsavedListener() {
         return new UnsaveButPersistOnClickListener();
     }
 

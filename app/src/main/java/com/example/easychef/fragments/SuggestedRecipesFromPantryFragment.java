@@ -2,9 +2,9 @@ package com.example.easychef.fragments;
 
 import android.util.Log;
 
-import com.example.easychef.adapters.RecipeAdapter;
 import com.example.easychef.models.Ingredient;
 import com.example.easychef.models.RecipePOJO;
+import com.example.easychef.utils.SaveRecipeToFavoritesUtils;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -35,7 +35,7 @@ public class SuggestedRecipesFromPantryFragment extends RecipeListFragmentAbstra
     }
 
     @Override
-    protected RecipeAdapter.OnUnsavedListener getOnUnsavedListener() {
+    protected SaveRecipeToFavoritesUtils.OnUnsavedListener getOnUnsavedListener() {
         return new UnsaveButPersistOnClickListener();
     }
 

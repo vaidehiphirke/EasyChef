@@ -1,10 +1,11 @@
 package com.example.easychef.fragments;
 
+import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.example.easychef.adapters.RecipeAdapter;
 import com.example.easychef.models.Recipe;
+import com.example.easychef.utils.SaveRecipeToFavoritesUtils;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -30,25 +31,37 @@ public class FavoritesFragment extends RecipeListFragmentAbstract {
     }
 
     @Override
-    protected RecipeAdapter.OnUnsavedListener getOnUnsavedListener() {
+    protected SaveRecipeToFavoritesUtils.OnUnsavedListener getOnUnsavedListener() {
         return new UnsaveOnClickListener();
     }
 
-    private class UnsaveOnClickListener implements RecipeAdapter.OnUnsavedListener {
+    private class UnsaveOnClickListener implements SaveRecipeToFavoritesUtils.OnUnsavedListener {
+        private List<Recipe> recipesToLookIn = recipes;
+        private Context context = getContext();
+
+        @Override
+        public void setContext(Context context) {
+            this.context = context;
+        }
+
+        public void setRecipes(List<Recipe> recipesToLookIn) {
+            this.recipesToLookIn = recipesToLookIn;
+        }
+
         @Override
         public void onUnsavedChecked(int position) {
             final ParseQuery<Recipe> query = ParseQuery.getQuery(Recipe.class);
-            query.whereEqualTo(KEY_RECIPE_ID, recipes.get(position).getId());
+            query.whereEqualTo(KEY_RECIPE_ID, recipesToLookIn.get(position).getId());
             query.whereEqualTo(KEY_USER, ParseUser.getCurrentUser());
             try {
                 final String objectIdToDelete = query.getFirst().getObjectId();
                 deleteSavedRecipeFromParse(objectIdToDelete);
-                recipes.remove(position);
+                recipesToLookIn.remove(position);
                 adapter.notifyItemRemoved(position);
             } catch (ParseException e) {
                 Log.e(TAG, "Recipe id not found", e);
             }
-            Toast.makeText(getContext(), "Recipe removed from favorites!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Recipe removed from favorites!", Toast.LENGTH_SHORT).show();
         }
     }
 
