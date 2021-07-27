@@ -13,10 +13,7 @@ import java.util.List;
 
 public class AutoCompleteAdapter extends ArrayAdapter<EasyChefParseObjectAbstract> {
 
-    public static final int TRIGGER_AUTO_COMPLETE_CODE = 27;
-    public static final long AUTO_COMPLETE_DELAY_CODE = 47;
     public static final int THRESHOLD = 1;
-
     private final List<EasyChefParseObjectAbstract> suggestions;
 
     public AutoCompleteAdapter(@NonNull Context context, int resource) {
