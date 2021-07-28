@@ -43,6 +43,7 @@ public class ProfileFragment extends Fragment {
     private void goToLoginActivity() {
         startActivity(new Intent(getContext(), LoginActivity.class));
         getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
+        getActivity().finish();
     }
 
     public class LogoutButtonViewOnClickListener implements View.OnClickListener {

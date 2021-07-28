@@ -16,13 +16,19 @@ import com.example.easychef.fragments.ProfileFragment;
 import com.example.easychef.fragments.SearchFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import static com.example.easychef.ServiceGenerator.NANOSECONDS_IN_A_SECOND;
+
 public class MainActivity extends AppCompatActivity {
 
     private final FragmentManager fragmentManager = getSupportFragmentManager();
+    private static long oldestCacheTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        oldestCacheTime = System.nanoTime() / NANOSECONDS_IN_A_SECOND;
+
         final ActivityMainBinding mainBinding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(mainBinding.getRoot());
 
@@ -52,5 +58,9 @@ public class MainActivity extends AppCompatActivity {
             fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
             return true;
         }
+    }
+
+    public static int getOldestCacheTime() {
+        return (int) oldestCacheTime;
     }
 }

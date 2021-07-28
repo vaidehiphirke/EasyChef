@@ -17,6 +17,8 @@ import okhttp3.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static com.example.easychef.activities.MainActivity.getOldestCacheTime;
+
 public class ServiceGenerator {
 
     private static final String TAG = "ServiceGenerator";
@@ -25,7 +27,7 @@ public class ServiceGenerator {
     private static final String HEADER_PRAGMA = "Pragma";
     private static final long CACHE_SIZE_5_MB = 5 * 1024 * 1024;
 
-    private static final int MAX_AGE_NETWORK_CALL_MIN = 7;
+    public static final int NANOSECONDS_IN_A_SECOND = 1000000000;
     private static final int MAX_STALE_OFFLINE_CALL_DAYS = 7;
 
 
@@ -62,8 +64,11 @@ public class ServiceGenerator {
         public Response intercept(Chain chain) throws IOException {
             Log.d(TAG, "network interceptor called");
             final Response response = chain.proceed(chain.request());
+
+            final int currentTime = (int) (System.nanoTime() / NANOSECONDS_IN_A_SECOND);
+
             final CacheControl cacheControl = new CacheControl.Builder()
-                    .maxAge(MAX_AGE_NETWORK_CALL_MIN, TimeUnit.MINUTES)
+                    .maxAge(currentTime - getOldestCacheTime(), TimeUnit.SECONDS)
                     .build();
 
             return response.newBuilder()
