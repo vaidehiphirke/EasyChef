@@ -20,6 +20,7 @@ import java.util.List;
 
 import static com.example.easychef.models.EasyChefParseObjectAbstract.KEY_USER;
 import static com.example.easychef.models.Recipe.KEY_RECIPE_ID;
+import static com.example.easychef.utils.ParseCacheUtils.setQueryCacheControl;
 
 public class SaveRecipeToFavoritesUtils extends Fragment {
 
@@ -75,6 +76,7 @@ public class SaveRecipeToFavoritesUtils extends Fragment {
             final ParseQuery<Recipe> query = ParseQuery.getQuery(Recipe.class);
             query.whereEqualTo(KEY_RECIPE_ID, recipes.get(getPosition()).getId());
             query.whereEqualTo(KEY_USER, ParseUser.getCurrentUser());
+            setQueryCacheControl(query);
             query.getFirstInBackground(new SaveIfNotAlreadySavedGetCallback());
         }
     }

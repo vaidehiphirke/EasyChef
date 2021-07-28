@@ -30,6 +30,7 @@ import retrofit2.Response;
 import static com.example.easychef.ServiceGenerator.getFoodAPI;
 import static com.example.easychef.models.EasyChefParseObjectAbstract.KEY_USER;
 import static com.example.easychef.models.Recipe.KEY_RECIPE_ID;
+import static com.example.easychef.utils.ParseCacheUtils.setQueryCacheControl;
 import static com.example.easychef.utils.ParsePOJOUtils.getRecipesFromRecipeDetailPOJOS;
 
 
@@ -89,6 +90,7 @@ public class RecipeDetailsFragment extends Fragment {
             final ParseQuery<Recipe> query = ParseQuery.getQuery(Recipe.class);
             query.whereEqualTo(KEY_RECIPE_ID, id);
             query.whereEqualTo(KEY_USER, ParseUser.getCurrentUser());
+            setQueryCacheControl(query);
             query.getFirstInBackground(saveRecipeToFavoritesUtils.getSeeIfSavedAndToggleGetCallback());
 
             binding.btnSaveRecipe.setOnCheckedChangeListener(saveRecipeToFavoritesUtils.getSaveUnsaveButtonListener());

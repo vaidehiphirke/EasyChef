@@ -17,6 +17,7 @@ import static com.example.easychef.models.EasyChefParseObjectAbstract.KEY_CREATE
 import static com.example.easychef.models.EasyChefParseObjectAbstract.KEY_USER;
 import static com.example.easychef.models.Ingredient.KEY_NAME_INGREDIENT;
 import static com.example.easychef.models.Recipe.KEY_RECIPE_ID;
+import static com.example.easychef.utils.ParseCacheUtils.setQueryCacheControl;
 
 public class FavoritesFragment extends RecipeListFragmentAbstract {
 
@@ -27,6 +28,7 @@ public class FavoritesFragment extends RecipeListFragmentAbstract {
         final ParseQuery<Recipe> query = ParseQuery.getQuery(Recipe.class);
         query.include(KEY_NAME_INGREDIENT);
         query.addDescendingOrder(KEY_CREATED_AT);
+        setQueryCacheControl(query);
         query.findInBackground(new RetrieveSavedRecipesFindCallback());
     }
 
@@ -44,6 +46,7 @@ public class FavoritesFragment extends RecipeListFragmentAbstract {
             this.context = context;
         }
 
+        @Override
         public void setRecipes(List<Recipe> recipesToLookIn) {
             this.recipesToLookIn = recipesToLookIn;
         }

@@ -25,6 +25,8 @@ import com.parse.ParseUser;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.easychef.utils.ParseCacheUtils.setQueryCacheControl;
+
 public abstract class RecipeListFragmentAbstract extends Fragment {
 
     private static final String TAG = "RecipeListFragmentAbstract";

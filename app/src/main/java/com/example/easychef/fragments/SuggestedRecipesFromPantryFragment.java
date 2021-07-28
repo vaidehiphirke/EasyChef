@@ -44,6 +44,7 @@ public class SuggestedRecipesFromPantryFragment extends RecipeListFragmentAbstra
         final ParseQuery<Ingredient> query = ParseQuery.getQuery(Ingredient.class);
         query.include(KEY_NAME_INGREDIENT);
         query.addDescendingOrder(KEY_CREATED_AT);
+        query.setCachePolicy(ParseQuery.CachePolicy.NETWORK_ELSE_CACHE);
         query.whereEqualTo(KEY_USER, ParseUser.getCurrentUser());
         try {
             userIngredientsFromParse.addAll(query.find());

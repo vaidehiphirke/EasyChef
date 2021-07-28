@@ -24,6 +24,7 @@ import java.util.List;
 
 import static com.example.easychef.models.EasyChefParseObjectAbstract.KEY_USER;
 import static com.example.easychef.models.Recipe.KEY_RECIPE_ID;
+import static com.example.easychef.utils.ParseCacheUtils.setQueryCacheControl;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder> {
 
@@ -85,6 +86,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
             final ParseQuery<Recipe> query = ParseQuery.getQuery(Recipe.class);
             query.whereEqualTo(KEY_RECIPE_ID, recipe.getId());
             query.whereEqualTo(KEY_USER, ParseUser.getCurrentUser());
+            setQueryCacheControl(query);
             query.getFirstInBackground(saveRecipeToFavoritesUtils.getSeeIfSavedAndToggleGetCallback());
         }
 

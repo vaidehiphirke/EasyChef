@@ -31,6 +31,7 @@ import java.util.List;
 
 import static com.example.easychef.adapters.AutoCompleteAdapter.THRESHOLD;
 import static com.example.easychef.models.Ingredient.KEY_NAME_INGREDIENT;
+import static com.example.easychef.utils.ParseCacheUtils.setQueryCacheControl;
 
 public class IngredientFragment extends Fragment {
 
@@ -84,6 +85,7 @@ public class IngredientFragment extends Fragment {
         final ParseQuery<Ingredient> query = ParseQuery.getQuery(Ingredient.class);
         query.include(KEY_NAME_INGREDIENT);
         query.addDescendingOrder(Ingredient.KEY_CREATED_AT);
+        setQueryCacheControl(query);
         query.findInBackground(new RetrievePantryIngredientsFindCallback());
     }
 
@@ -127,11 +129,16 @@ public class IngredientFragment extends Fragment {
         @Override
         public void done(Ingredient ingredient, ParseException e) {
             if (e != null) {
-                Log.e(TAG, "Issue with deleting ingredient", e);
+                Log.e(TAG, "Issue with retrieving ingredient to delete", e);
                 return;
             }
-            ingredient.deleteInBackground();
-            Toast.makeText(getContext(), "Ingredient deleted", Toast.LENGTH_SHORT).show();
+            try {
+                ingredient.delete();
+                Toast.makeText(getContext(), "Ingredient deleted", Toast.LENGTH_SHORT).show();
+            } catch (ParseException parseException) {
+                Log.e(TAG, "Issue with deleting ingredient", parseException);
+            }
+            queryPantryIngredients();
         }
     }
 
@@ -148,6 +155,7 @@ public class IngredientFragment extends Fragment {
             adapter.notifyItemInserted(0);
             binding.etAddIngredient.setText("");
             binding.rvRecipes.smoothScrollToPosition(0);
+            queryPantryIngredients();
         }
 
         private class SaveIngredientSaveCallback implements SaveCallback {
