@@ -22,4 +22,12 @@
     <string name="start_typing_an_ingredient_here">Start typing an ingredient here!</string>
     <string name="ready_in_minutes">Ready in # minutes</string>
     <string name="servings">Makes # servings</string>
+    <string name="recipe_title">Recipe Title</string>
+    <string name="dietary_restriction_information">Dietary Restriction Information</string>
+    <string name="ingredients">Ingredients</string>
+    <string name="vegetarian">Vegetarian</string>
+    <string name="vegan">Vegan</string>
+    <string name="gluten_free">Gluten-free</string>
+    <string name="dairy_free">Dairy-free</string>
+    <string name="steps">Steps</string>
 </resources>
