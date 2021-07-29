@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:layout_margin="4dp"
     tools:context=".activities.MainActivity">
 
     <Button
@@ -11,6 +12,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/rounded_rectangle"
         android:text="@string/get_recipes" />
 
     <AutoCompleteTextView
@@ -19,7 +22,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
+        android:layout_margin="4dp"
         android:autofillHints="@string/ingredients"
+        android:background="@drawable/rounded_rectangle"
         android:ems="@dimen/text_size"
         android:hint="@string/start_typing_an_ingredient_here"
         android:inputType="text"

@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/border_margin"
+    android:layout_margin="4dp"
+    android:background="@drawable/rounded_rectangle"
     android:scrollHorizontally="false">
 
     <TextView
@@ -12,8 +13,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerVertical="true"
-        android:layout_marginStart="@dimen/layout_margin"
-        android:layout_marginTop="@dimen/border_margin"
+        android:layout_marginStart="@dimen/border_margin"
+        android:layout_marginTop="4dp"
         android:layout_toEndOf="@+id/ivIngredientImage"
         android:autoSizeTextType="uniform"
         android:text="@string/ingredients"
@@ -21,10 +22,12 @@
 
     <ImageView
         android:id="@+id/ivIngredientImage"
-        android:layout_width="47dp"
-        android:layout_height="47dp"
+        android:layout_width="37dp"
+        android:layout_height="37dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
+        android:layout_marginStart="@dimen/border_margin"
         android:adjustViewBounds="true"
+        android:contentDescription="@string/ingredients"
         tools:srcCompat="@tools:sample/avatars" />
 </RelativeLayout>
