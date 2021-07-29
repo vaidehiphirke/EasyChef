@@ -15,6 +15,7 @@
         android:layout_marginStart="@dimen/layout_margin"
         android:layout_marginTop="@dimen/border_margin"
         android:layout_toEndOf="@+id/ivIngredientImage"
+        android:autoSizeTextType="uniform"
         android:text="@string/ingredients"
         android:textSize="@dimen/recipe_text_size" />
 
@@ -25,6 +26,5 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:adjustViewBounds="true"
-
         tools:srcCompat="@tools:sample/avatars" />
 </RelativeLayout>

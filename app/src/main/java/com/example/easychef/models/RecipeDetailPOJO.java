@@ -62,4 +62,7 @@ public class RecipeDetailPOJO {
         return glutenFree;
     }
 
+    public List<ExtendedIngredientPOJO> getExtendedIngredients() {
+        return extendedIngredients;
+    }
 }

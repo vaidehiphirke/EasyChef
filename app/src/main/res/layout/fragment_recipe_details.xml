@@ -65,12 +65,24 @@
         android:text="Dietary Restriction Information"
         android:textSize="@dimen/recipe_subtext_size" />
 
+    <TextView
+        android:id="@+id/tvIngredientTitleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/switchVegetarian"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="0dp"
+        android:text="Ingredients"
+        android:textSize="@dimen/recipe_subtext_size" />
+
+
     <CheckBox
         android:id="@+id/switchVegetarian"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvDietaryRestrictionTitleText"
         android:layout_alignParentStart="true"
+        android:layout_marginStart="0dp"
         android:clickable="false"
         android:showText="false"
         android:text="Vegetarian"
@@ -111,4 +123,22 @@
         android:showText="false"
         android:text="Dairy-free"
         android:textSize="12sp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvIngredients"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvIngredientTitleText"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="false"
+        android:layout_marginTop="4dp" />
+
+    <TextView
+        android:id="@+id/tvStepsTitleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rvIngredients"
+        android:layout_alignParentStart="true"
+        android:text="Steps"
+        android:textSize="@dimen/recipe_subtext_size" />
 </RelativeLayout>

@@ -24,7 +24,9 @@ public class Ingredient extends EasyChefParseObjectAbstract {
         }
         put(KEY_USER, builder.user);
         put(KEY_INGREDIENT_ID, builder.id);
-        put(KEY_IMAGE_URL, builder.imageUrl);
+        if (builder.imageUrl != null) {
+            put(KEY_IMAGE_URL, builder.imageUrl);
+        }
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.example.easychef.utils;
 
+import com.example.easychef.models.ExtendedIngredientPOJO;
 import com.example.easychef.models.Ingredient;
 import com.example.easychef.models.IngredientPOJO;
 import com.example.easychef.models.Recipe;
@@ -55,5 +56,19 @@ public class ParsePOJOUtils {
             recipes.add(builder.build());
         }
         return recipes;
+    }
+
+    public static List<Ingredient> getIngredientsFromExtendedIngredientPOJOS(List<ExtendedIngredientPOJO> ingredientPOJOs) {
+        final List<Ingredient> ingredients = new ArrayList<>();
+        for (ExtendedIngredientPOJO pojo : ingredientPOJOs) {
+            final Ingredient.Builder builder = new Ingredient.Builder()
+                    .name(pojo.getOriginalString())
+                    .user(ParseUser.getCurrentUser());
+            if (pojo.getImage() != null) {
+                builder.imageUrl(pojo.getImage());
+            }
+            ingredients.add(builder.build());
+        }
+        return ingredients;
     }
 }

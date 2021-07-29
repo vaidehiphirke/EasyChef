@@ -8,4 +8,12 @@ public class ExtendedIngredientPOJO {
     private String image;
     @SerializedName("originalString")
     private String originalString;
+
+    public String getImage() {
+        return image;
+    }
+
+    public String getOriginalString() {
+        return originalString;
+    }
 }
