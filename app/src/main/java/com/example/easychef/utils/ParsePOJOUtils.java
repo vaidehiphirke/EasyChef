@@ -1,5 +1,6 @@
 package com.example.easychef.utils;
 
+import com.example.easychef.models.EquipmentPOJO;
 import com.example.easychef.models.ExtendedIngredientPOJO;
 import com.example.easychef.models.Ingredient;
 import com.example.easychef.models.IngredientPOJO;
@@ -12,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ParsePOJOUtils {
+
+    private static final String EQUIPMENT_IMAGE_ROOT = "https://spoonacular.com/cdn/equipment_100x100/%s";
 
     public static List<Recipe> getRecipesFromRecipePOJOS(List<RecipePOJO> recipePOJOs) {
         final List<Recipe> recipes = new ArrayList<>();
@@ -66,6 +69,20 @@ public class ParsePOJOUtils {
                     .user(ParseUser.getCurrentUser());
             if (pojo.getImage() != null) {
                 builder.imageUrl(pojo.getImage());
+            }
+            ingredients.add(builder.build());
+        }
+        return ingredients;
+    }
+
+    public static List<Ingredient> getIngredientModelsForEquipment(List<EquipmentPOJO> equipmentPOJOS) {
+        final List<Ingredient> ingredients = new ArrayList<>();
+        for (EquipmentPOJO pojo : equipmentPOJOS) {
+            final Ingredient.Builder builder = new Ingredient.Builder()
+                    .name(pojo.getName())
+                    .user(ParseUser.getCurrentUser());
+            if (pojo.getImageUrl() != null) {
+                builder.imageUrl(pojo.getImageUrl(), EQUIPMENT_IMAGE_ROOT);
             }
             ingredients.add(builder.build());
         }

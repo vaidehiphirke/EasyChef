@@ -8,4 +8,12 @@ public class LengthPOJO {
     private int number;
     @SerializedName("unit")
     private String unit;
+
+    public String getUnit() {
+        return unit;
+    }
+
+    public int getNumber() {
+        return number;
+    }
 }

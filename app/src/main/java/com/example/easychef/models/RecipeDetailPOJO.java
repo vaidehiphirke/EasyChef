@@ -65,4 +65,8 @@ public class RecipeDetailPOJO {
     public List<ExtendedIngredientPOJO> getExtendedIngredients() {
         return extendedIngredients;
     }
+
+    public List<AnalyzedInstructionPOJO> getAnalyzedInstructions() {
+        return analyzedInstructions;
+    }
 }

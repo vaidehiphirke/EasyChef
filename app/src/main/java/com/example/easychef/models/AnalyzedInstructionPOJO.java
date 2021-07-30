@@ -8,4 +8,8 @@ public class AnalyzedInstructionPOJO {
 
     @SerializedName("steps")
     private List<StepPOJO> steps;
+
+    public List<StepPOJO> getSteps() {
+        return steps;
+    }
 }

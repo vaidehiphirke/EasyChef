@@ -65,6 +65,11 @@ public class Ingredient extends EasyChefParseObjectAbstract {
             return this;
         }
 
+        public Builder imageUrl(String imageUrl, String customRoot) {
+            this.imageUrl = String.format(customRoot, imageUrl);
+            return this;
+        }
+
         public Ingredient build() {
             return new Ingredient(this);
         }

@@ -31,7 +31,7 @@ public class RecipeDetailsTabAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         if (position == INDEX_OF_STEPS_TAB) {
-            return new RecipeStepsFragment();
+            return new RecipeStepsFragment(id);
         }
         return new RecipeOverviewFragment(id, listener);
     }

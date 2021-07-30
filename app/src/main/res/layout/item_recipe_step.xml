@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="4dp"
+    android:background="@drawable/rounded_rectangle">
+
+    <TextView
+        android:id="@+id/tvStepNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="@dimen/border_margin"
+        android:layout_marginTop="4dp"
+        android:autoSizeTextType="uniform"
+        android:text="@string/step"
+        android:textSize="@dimen/recipe_text_size" />
+
+    <TextView
+        android:id="@+id/tvLengthTimeTaken"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="false"
+        android:layout_centerVertical="false"
+        android:layout_marginStart="200dp"
+        android:layout_marginTop="6dp" />
+
+    <TextView
+        android:id="@+id/tvStepText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvStepNumber"
+        android:layout_alignParentStart="false"
+        android:layout_alignParentBottom="false"
+        android:layout_marginStart="@dimen/border_margin"
+        android:layout_marginTop="4dp"
+        android:text="@string/step_text_here" />
+
+    <TextView
+        android:id="@+id/tvIngredientTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvStepText"
+        android:layout_alignParentStart="false"
+        android:layout_alignParentBottom="false"
+        android:layout_marginStart="@dimen/border_margin"
+        android:layout_marginTop="4dp"
+        android:text="@string/ingredients_needed" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvIngredientsNeeded"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvIngredientTitle"
+        android:layout_marginStart="@dimen/border_margin"
+        android:layout_marginTop="4dp" />
+
+    <TextView
+        android:id="@+id/tvEquipmentTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rvIngredientsNeeded"
+        android:layout_alignParentStart="false"
+        android:layout_alignParentBottom="false"
+        android:layout_marginStart="@dimen/border_margin"
+        android:layout_marginTop="4dp"
+        android:text="@string/equipment_needed" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvEquipmentNeeded"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvEquipmentTitle"
+        android:layout_marginStart="@dimen/border_margin"
+        android:layout_marginTop="4dp" />
+
+</RelativeLayout>

@@ -41,7 +41,7 @@ import static com.example.easychef.utils.ParsePOJOUtils.getRecipesFromRecipeDeta
 public class RecipeOverviewFragment extends Fragment {
 
     private static final String TAG = "RecipeDetailsFragment";
-    private static final int NUMBER_OF_COLUMNS = 2;
+    public static final int NUMBER_OF_COLUMNS = 2;
     private FragmentRecipeOverviewBinding binding;
     private final int id;
     private final SaveRecipeToFavoritesUtils.OnUnsavedListener onUnsavedListener;
