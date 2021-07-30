@@ -39,4 +39,5 @@
     <string name="next_level">Next Level</string>
     <string name="level_text">Level %1$d</string>
     <string name="recipe_steps">Recipe Steps</string>
+    <string name="explore">Explore</string>
 </resources>

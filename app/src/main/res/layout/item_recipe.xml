@@ -28,7 +28,7 @@
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
         android:layout_marginTop="220dp"
-        android:background="@android:drawable/btn_star_big_off"
+        android:background="@drawable/heart_icon_blue"
         android:checked="false"
         android:textOff="@string/empty"
         android:textOn="@string/empty" />

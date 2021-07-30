@@ -9,6 +9,7 @@ import android.widget.ToggleButton;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.easychef.R;
 import com.example.easychef.models.Recipe;
 import com.parse.GetCallback;
 import com.parse.ParseException;
@@ -67,7 +68,7 @@ public class SaveRecipeToFavoritesUtils extends Fragment {
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
             if (!isChecked) {
-                btnSaveRecipe.setBackgroundDrawable(context.getDrawable(android.R.drawable.btn_star_big_off));
+                btnSaveRecipe.setBackgroundResource(R.drawable.heart_icon_blue);
                 onUnsavedListener.setRecipes(recipes);
                 onUnsavedListener.setContext(context);
                 onUnsavedListener.onUnsavedChecked(getPosition());
@@ -105,7 +106,7 @@ public class SaveRecipeToFavoritesUtils extends Fragment {
                         .imageUrl(recipes.get(getPosition()).getImageUrl())
                         .user(ParseUser.getCurrentUser())
                         .build();
-                btnSaveRecipe.setBackgroundDrawable(context.getDrawable(android.R.drawable.btn_star_big_on));
+                btnSaveRecipe.setBackgroundResource(R.drawable.heart_icon_filled_blue);
                 recipe.saveInBackground(new SaveRecipeSaveCallback());
             } else {
                 Log.e(TAG, "Other error with finding Recipe object", e);
@@ -117,7 +118,7 @@ public class SaveRecipeToFavoritesUtils extends Fragment {
         @Override
         public void done(Recipe recipe, ParseException e) {
             if (e == null) {
-                btnSaveRecipe.setBackgroundDrawable(context.getDrawable(android.R.drawable.btn_star_big_on));
+                btnSaveRecipe.setBackgroundResource(R.drawable.heart_icon_filled_blue);
                 btnSaveRecipe.toggle();
                 return;
             }

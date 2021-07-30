@@ -5,12 +5,26 @@
     android:layout_height="match_parent"
     tools:context=".activities.LoginActivity">
 
+    <ImageView
+        android:id="@+id/ivLogo"
+        android:layout_width="wrap_content"
+        android:layout_height="200dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/ic_easychef_logo"
+        android:backgroundTint="#032B43" />
+
     <EditText
         android:id="@+id/etUsername"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/layout_margin"
+        android:layout_below="@id/ivLogo"
+        android:layout_marginStart="@dimen/layout_margin"
+        android:layout_marginEnd="@dimen/layout_margin"
+        android:layout_marginBottom="@dimen/layout_margin"
         android:autofillHints="username"
+        android:background="@drawable/rounded_rectangle"
         android:ems="@dimen/text_size"
         android:hint="@string/username"
         android:inputType="text" />
@@ -20,14 +34,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/etUsername"
+        android:layout_alignBaseline="@dimen/layout_margin"
         android:layout_marginStart="@dimen/layout_margin"
         android:layout_marginEnd="@dimen/layout_margin"
         android:autofillHints="password"
+        android:background="@drawable/rounded_rectangle"
         android:ems="@dimen/text_size"
         android:hint="@string/password"
         android:inputType="textPassword" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -35,20 +51,26 @@
         android:layout_marginStart="@dimen/layout_margin"
         android:layout_marginTop="@dimen/layout_margin"
         android:layout_marginEnd="@dimen/layout_margin"
-        android:layout_marginBottom="@dimen/layout_margin"
-        android:backgroundTint="@android:color/holo_blue_light"
-        android:text="@string/button_text_login" />
+        android:background="@drawable/rounded_rectangle"
+        android:backgroundTint="#51CB20"
+        android:backgroundTintMode="src_over"
+        android:text="@string/button_text_login"
+        android:textColor="@color/white" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnRegister"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/btnLogin"
+        android:layout_centerHorizontal="true"
         android:layout_marginStart="@dimen/layout_margin"
-        android:layout_marginTop="@dimen/layout_margin"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="@dimen/layout_margin"
         android:layout_marginBottom="@dimen/layout_margin"
-        android:backgroundTint="@android:color/holo_green_light"
-        android:text="@string/button_text_register" />
+        android:background="@drawable/rounded_rectangle"
+        android:backgroundTint="#188C7C"
+        android:backgroundTintMode="src_over"
+        android:text="@string/button_text_register"
+        android:textColor="@color/white" />
 
 </RelativeLayout>

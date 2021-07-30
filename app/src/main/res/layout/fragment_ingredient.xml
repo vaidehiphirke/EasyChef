@@ -6,15 +6,16 @@
     android:layout_margin="4dp"
     tools:context=".activities.MainActivity">
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnGetRecipes"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="84dp"
+        android:layout_height="84dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="16dp"
-        android:background="@drawable/rounded_rectangle"
-        android:text="@string/get_recipes" />
+        android:background="@drawable/ic_suggested_recipes_icon"
+        android:backgroundTint="#188C7C"
+        android:backgroundTintMode="src_atop" />
 
     <AutoCompleteTextView
         android:id="@+id/etAddIngredient"

@@ -5,13 +5,26 @@
     android:layout_height="match_parent"
     tools:context=".fragments.ProfileFragment">
 
-    <Button
+    <ImageView
+        android:id="@+id/ivLogo"
+        android:layout_width="220dp"
+        android:layout_height="100dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="200dp"
+        android:background="@drawable/ic_easychef_logo"
+        android:backgroundTint="#032B43" />
+
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnLogout"
-        android:layout_width="match_parent"
+        android:layout_width="147dp"
         android:layout_height="wrap_content"
+        android:layout_below="@id/ivLogo"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:layout_marginEnd="@dimen/layout_margin"
-        android:backgroundTint="@android:color/holo_blue_light"
-        android:text="@string/button_text_logout" />
+        android:background="@drawable/rounded_rectangle"
+        android:backgroundTint="#188C7C"
+        android:backgroundTintMode="src_over"
+        android:text="@string/button_text_logout"
+        android:textColor="@color/white" />
 </RelativeLayout>

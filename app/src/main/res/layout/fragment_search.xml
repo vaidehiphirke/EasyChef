@@ -5,16 +5,18 @@
     android:layout_height="match_parent"
     tools:context=".activities.MainActivity">
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnSearch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="60dp"
+        android:layout_height="30dp"
         android:layout_alignTop="@id/etSearchForRecipe"
         android:layout_alignBottom="@id/etSearchForRecipe"
         android:layout_alignParentEnd="true"
+        android:layout_marginTop="1dp"
         android:layout_marginEnd="8dp"
-        android:background="@drawable/rounded_rectangle"
-        android:text="@string/search" />
+        android:background="@drawable/ic_search_icon"
+        android:backgroundTint="#188C7C"
+        android:backgroundTintMode="src_atop" />
 
     <AutoCompleteTextView
         android:id="@+id/etSearchForRecipe"
