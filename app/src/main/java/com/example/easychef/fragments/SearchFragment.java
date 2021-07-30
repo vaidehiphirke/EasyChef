@@ -83,9 +83,9 @@ public class SearchFragment extends RecipeListFragmentAbstract {
     private class GetRecipesOnClickListener implements View.OnClickListener {
         @Override
         public void onClick(View view) {
+            binding.rvRecipes.smoothScrollToPosition(0);
             UXUtils.hideKeyboard((Activity) getActivity());
             searchQuery = binding.etSearchForRecipe.getText().toString();
-            binding.rvRecipes.smoothScrollToPosition(0);
             getRecipesToShowInList();
         }
     }

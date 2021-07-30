@@ -4,17 +4,19 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/border_margin"
+    android:background="@drawable/rounded_rectangle"
     android:scrollHorizontally="false">
 
     <TextView
         android:id="@+id/tvRecipeName"
-        android:layout_width="wrap_content"
+        android:layout_width="272dp"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerVertical="true"
-        android:layout_marginStart="@dimen/layout_margin"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="257dp"
+        android:layout_marginEnd="4dp"
         android:layout_toStartOf="@+id/btnSaveRecipe"
-        android:layout_toEndOf="@+id/ivRecipeImage"
         android:text="@string/recipe_name"
         android:textSize="@dimen/recipe_text_size" />
 
@@ -24,6 +26,8 @@
         android:layout_height="74dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="220dp"
         android:background="@android:drawable/btn_star_big_off"
         android:checked="false"
         android:textOff="@string/empty"
@@ -31,11 +35,10 @@
 
     <ImageView
         android:id="@+id/ivRecipeImage"
-        android:layout_width="wrap_content"
-        android:layout_height="100dp"
+        android:layout_width="372dp"
+        android:layout_height="247dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:adjustViewBounds="true"
-
         tools:srcCompat="@tools:sample/avatars" />
 </RelativeLayout>
