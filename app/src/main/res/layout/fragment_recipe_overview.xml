@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/border_margin"
+        android:descendantFocusability="blocksDescendants"
+        tools:context=".fragments.RecipeOverviewFragment">
+
+        <ImageView
+            android:id="@+id/ivRecipeDetails"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:contentDescription="@string/recipe_title"
+            tools:src="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/tvRecipeTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ivRecipeDetails"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="@dimen/border_margin"
+            android:layout_marginBottom="4dp"
+            android:text="@string/recipe_title"
+            android:textSize="@dimen/recipe_text_size" />
+
+        <ToggleButton
+            android:id="@+id/btnSaveRecipe"
+            android:layout_width="74dp"
+            android:layout_height="74dp"
+            android:layout_below="@+id/ivRecipeDetails"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="-76dp"
+            android:layout_marginEnd="3dp"
+            android:background="@android:drawable/btn_star_big_off"
+            android:checked="false"
+            android:textOff="@string/empty"
+            android:textOn="@string/empty" />
+
+        <TextView
+            android:id="@+id/tvReadyInMinutes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvRecipeTitle"
+            android:layout_alignParentStart="true"
+            android:text="@string/ready_in_minutes" />
+
+        <TextView
+            android:id="@+id/tvServings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvRecipeTitle"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="@dimen/end_servings_margin"
+            android:text="@string/servings" />
+
+        <TextView
+            android:id="@+id/tvDietaryRestrictionTitleText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvReadyInMinutes"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="16dp"
+            android:text="@string/dietary_restriction_information"
+            android:textSize="@dimen/recipe_subtext_size" />
+
+        <CheckBox
+            android:id="@+id/switchVegetarian"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvDietaryRestrictionTitleText"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="0dp"
+            android:clickable="false"
+            android:showText="false"
+            android:text="@string/vegetarian"
+            android:textSize="12sp" />
+
+        <CheckBox
+            android:id="@+id/switchVegan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvDietaryRestrictionTitleText"
+            android:layout_marginStart="@dimen/border_margin"
+            android:layout_toEndOf="@+id/switchVegetarian"
+            android:clickable="false"
+            android:showText="false"
+            android:text="@string/vegan"
+            android:textSize="12sp" />
+
+        <CheckBox
+            android:id="@+id/switchGlutenFree"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvDietaryRestrictionTitleText"
+            android:layout_marginStart="@dimen/border_margin"
+            android:layout_toEndOf="@+id/switchVegan"
+            android:clickable="false"
+            android:showText="false"
+            android:text="@string/gluten_free"
+            android:textSize="12sp" />
+
+        <CheckBox
+            android:id="@+id/switchDairyFree"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvDietaryRestrictionTitleText"
+            android:layout_marginStart="@dimen/border_margin"
+            android:layout_toEndOf="@+id/switchGlutenFree"
+            android:clickable="false"
+            android:showText="false"
+            android:text="@string/dairy_free"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tvIngredientTitleText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/switchVegetarian"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="0dp"
+            android:text="@string/ingredients"
+            android:textSize="@dimen/recipe_subtext_size" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvIngredients"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvIngredientTitleText"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="false"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="30dp" />
+    </RelativeLayout>
+</ScrollView>
