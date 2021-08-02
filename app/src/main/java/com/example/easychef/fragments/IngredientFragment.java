@@ -112,7 +112,12 @@ public class IngredientFragment extends Fragment {
         @Override
         public void onClick(View view) {
             final SuggestedRecipesFromPantryFragment fragment = new SuggestedRecipesFromPantryFragment();
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, fragment).commit();
+
+            getActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .setCustomAnimations(R.anim.slide_in, R.anim.fade_out)
+                    .replace(R.id.flContainer, fragment)
+                    .commit();
         }
     }
 
