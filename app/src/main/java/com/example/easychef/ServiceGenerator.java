@@ -27,9 +27,8 @@ public class ServiceGenerator {
     private static final String HEADER_PRAGMA = "Pragma";
     private static final long CACHE_SIZE_5_MB = 5 * 1024 * 1024;
 
-    public static final int NANOSECONDS_IN_A_SECOND = 1000000000;
+    public static final int NANOSECONDS_IN_A_SECOND = 1000 * 1000 * 1000;
     private static final int MAX_STALE_OFFLINE_CALL_DAYS = 7;
-
 
     private static final Cache API_CACHE = new Cache(new File(EasyChefApplication.getInstance().getCacheDir(), "apiCache"),
             CACHE_SIZE_5_MB);

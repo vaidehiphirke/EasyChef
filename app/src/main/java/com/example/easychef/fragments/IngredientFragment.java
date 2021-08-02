@@ -57,12 +57,16 @@ public class IngredientFragment extends Fragment {
         binding = FragmentIngredientBinding.inflate(inflater, container, false);
         userIngredients = new ArrayList<>();
 
-        autoCompleteAdapter = new AutoCompleteAdapter(getContext(),
+        autoCompleteAdapter = new AutoCompleteAdapter(
+                getContext(),
                 android.R.layout.simple_dropdown_item_1line);
         binding.etAddIngredient.setThreshold(THRESHOLD);
         binding.etAddIngredient.setAdapter(autoCompleteAdapter);
-        binding.etAddIngredient.addTextChangedListener(new AutoCompleteTextWatcher(binding.etAddIngredient,
-                autoCompleteAdapter, "ingredient"));
+        binding.etAddIngredient.addTextChangedListener(
+                new AutoCompleteTextWatcher(
+                        binding.etAddIngredient,
+                        autoCompleteAdapter,
+                        "ingredient"));
         binding.etAddIngredient.setOnItemClickListener(new AddIngredientOnItemClickListener());
 
         return binding.getRoot();

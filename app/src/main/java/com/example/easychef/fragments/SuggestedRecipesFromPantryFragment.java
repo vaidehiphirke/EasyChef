@@ -30,7 +30,8 @@ public class SuggestedRecipesFromPantryFragment extends RecipeListFragmentAbstra
 
     @Override
     protected void getRecipesToShowInList() {
-        getFoodAPI().getPantryRecipes(getAPICall())
+        getFoodAPI()
+                .getPantryRecipes(getAPICall())
                 .enqueue(new SuggestedRecipesCallback());
     }
 

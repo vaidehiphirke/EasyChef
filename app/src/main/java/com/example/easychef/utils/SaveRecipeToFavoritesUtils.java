@@ -100,17 +100,18 @@ public class SaveRecipeToFavoritesUtils extends Fragment {
             if (e == null) {
                 return;
             }
-            if (e.getCode() == ParseException.OBJECT_NOT_FOUND) {
-                final Recipe recipe = new Recipe.Builder().name(recipes.get(getPosition()).getName())
-                        .id(recipes.get(getPosition()).getId())
-                        .imageUrl(recipes.get(getPosition()).getImageUrl())
-                        .user(ParseUser.getCurrentUser())
-                        .build();
-                btnSaveRecipe.setBackgroundResource(R.drawable.heart_icon_filled_blue);
-                recipe.saveInBackground(new SaveRecipeSaveCallback());
-            } else {
+            if (e.getCode() != ParseException.OBJECT_NOT_FOUND) {
                 Log.e(TAG, "Other error with finding Recipe object", e);
+                return;
             }
+            final Recipe recipe = new Recipe.Builder()
+                    .name(recipes.get(getPosition()).getName())
+                    .id(recipes.get(getPosition()).getId())
+                    .imageUrl(recipes.get(getPosition()).getImageUrl())
+                    .user(ParseUser.getCurrentUser())
+                    .build();
+            btnSaveRecipe.setBackgroundResource(R.drawable.heart_icon_filled_blue);
+            recipe.saveInBackground(new SaveRecipeSaveCallback());
         }
     }
 

@@ -46,8 +46,11 @@ public class SearchFragment extends RecipeListFragmentAbstract {
                 android.R.layout.simple_dropdown_item_1line);
         binding.etSearchForRecipe.setThreshold(THRESHOLD);
         binding.etSearchForRecipe.setAdapter(autoCompleteAdapter);
-        binding.etSearchForRecipe.addTextChangedListener(new AutoCompleteTextWatcher(binding.etSearchForRecipe,
-                autoCompleteAdapter, "recipe"));
+        binding.etSearchForRecipe.addTextChangedListener(
+                new AutoCompleteTextWatcher(
+                        binding.etSearchForRecipe,
+                        autoCompleteAdapter,
+                        "recipe"));
 
         return binding.getRoot();
     }
@@ -66,7 +69,8 @@ public class SearchFragment extends RecipeListFragmentAbstract {
 
     @Override
     protected void getRecipesToShowInList() {
-        getFoodAPI().getSearchRecipes(searchQuery)
+        getFoodAPI()
+                .getSearchRecipes(searchQuery)
                 .enqueue(new SearchCallback());
     }
 
@@ -76,7 +80,8 @@ public class SearchFragment extends RecipeListFragmentAbstract {
     }
 
     private void getExploreRecipes() {
-        getFoodAPI().getExploreRecipes()
+        getFoodAPI()
+                .getExploreRecipes()
                 .enqueue(new SearchCallback());
     }
 

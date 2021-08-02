@@ -31,8 +31,10 @@ public class RecipeDetailsFragment extends Fragment {
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final FragmentRecipeDetailsBinding binding = FragmentRecipeDetailsBinding.inflate(inflater,
-                container, false);
+        final FragmentRecipeDetailsBinding binding = FragmentRecipeDetailsBinding.inflate(
+                inflater,
+                container,
+                false);
         binding.viewpager.setAdapter(new RecipeDetailsTabAdapter(getChildFragmentManager(), id, onUnsavedListener));
         binding.tlTabs.setupWithViewPager(binding.viewpager);
         return binding.getRoot();

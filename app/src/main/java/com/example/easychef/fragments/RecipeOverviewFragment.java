@@ -70,7 +70,8 @@ public class RecipeOverviewFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         final IngredientAdapter ingredientAdapter = new IngredientAdapter(getContext(), ingredients, new OnLongClickListener());
         binding.rvIngredients.setAdapter(ingredientAdapter);
-        final StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(NUMBER_OF_COLUMNS,
+        final StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(
+                NUMBER_OF_COLUMNS,
                 StaggeredGridLayoutManager.VERTICAL);
         staggeredGridLayoutManager.setAutoMeasureEnabled(true);
         binding.rvIngredients.setLayoutManager(staggeredGridLayoutManager);
@@ -80,7 +81,8 @@ public class RecipeOverviewFragment extends Fragment {
     }
 
     private void getRecipeDetails() {
-        getFoodAPI().getRecipeDetails(id)
+        getFoodAPI()
+                .getRecipeDetails(id)
                 .enqueue(new RecipeDetailsCallback());
     }
 
@@ -102,8 +104,12 @@ public class RecipeOverviewFragment extends Fragment {
     private void setFavoriteButtonStatus(FragmentRecipeOverviewBinding binding, RecipeDetailPOJO pojo) {
         final List<RecipeDetailPOJO> pojos = new ArrayList<>();
         pojos.add(pojo);
-        final SaveRecipeToFavoritesUtils saveRecipeToFavoritesUtils = new SaveRecipeToFavoritesUtils(binding.btnSaveRecipe,
-                null, onUnsavedListener, getContext(), getRecipesFromRecipeDetailPOJOS(pojos, id));
+        final SaveRecipeToFavoritesUtils saveRecipeToFavoritesUtils = new SaveRecipeToFavoritesUtils(
+                binding.btnSaveRecipe,
+                null,
+                onUnsavedListener,
+                getContext(),
+                getRecipesFromRecipeDetailPOJOS(pojos, id));
 
         final ParseQuery<Recipe> query = ParseQuery.getQuery(Recipe.class);
         query.whereEqualTo(KEY_RECIPE_ID, id);

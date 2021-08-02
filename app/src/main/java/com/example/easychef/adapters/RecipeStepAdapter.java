@@ -88,11 +88,14 @@ public class RecipeStepAdapter extends RecyclerView.Adapter<RecipeStepAdapter.Vi
             if (ingredients.size() == 0) {
                 title.setHeight(0);
             }
-            final IngredientAdapter ingredientAdapter = new IngredientAdapter(context, ingredients,
+            final IngredientAdapter ingredientAdapter = new IngredientAdapter(
+                    context,
+                    ingredients,
                     new RecipeOverviewFragment.OnLongClickListener());
 
             recyclerView.setAdapter(ingredientAdapter);
-            recyclerView.setLayoutManager(new StaggeredGridLayoutManager(NUMBER_OF_COLUMNS,
+            recyclerView.setLayoutManager(new StaggeredGridLayoutManager(
+                    NUMBER_OF_COLUMNS,
                     StaggeredGridLayoutManager.VERTICAL));
             recyclerView.setNestedScrollingEnabled(false);
         }

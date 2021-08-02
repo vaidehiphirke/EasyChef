@@ -48,8 +48,10 @@ public class RecipeStepsFragment extends Fragment {
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentRecipeStepsBinding.inflate(inflater,
-                container, false);
+        binding = FragmentRecipeStepsBinding.inflate(
+                inflater,
+                container,
+                false);
         return binding.getRoot();
     }
 
@@ -65,7 +67,8 @@ public class RecipeStepsFragment extends Fragment {
     }
 
     private void getRecipeDetails() {
-        getFoodAPI().getRecipeDetails(id)
+        getFoodAPI()
+                .getRecipeDetails(id)
                 .enqueue(new RecipeDetailsCallback());
     }
 
