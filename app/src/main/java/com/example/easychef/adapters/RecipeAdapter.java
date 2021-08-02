@@ -97,8 +97,13 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
             }
             final AppCompatActivity activity = (AppCompatActivity) view.getContext();
             final RecipeDetailsFragment fragment = new RecipeDetailsFragment(
-                    recipes.get(getAdapterPosition()).getId(), onUnsavedListener);
-            activity.getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, fragment).commit();
+                    recipes.get(getAdapterPosition()).getId(),
+                    onUnsavedListener);
+            activity.getSupportFragmentManager()
+                    .beginTransaction()
+                    .setCustomAnimations(R.anim.slide_in, R.anim.fade_out)
+                    .replace(R.id.flContainer, fragment)
+                    .commit();
         }
     }
 }
