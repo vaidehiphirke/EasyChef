@@ -7,8 +7,18 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.load.resource.gif.GifDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
+import com.example.easychef.R;
 import com.example.easychef.databinding.ActivityLoginBinding;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
@@ -18,6 +28,7 @@ import com.parse.SignUpCallback;
 public class LoginActivity extends AppCompatActivity {
 
     public static final String TAG = "LoginActivity";
+    private static final int NUMBER_OF_TIMES_TO_LOOP_LOGO_GIF = 1;
     private EditText etUsername;
     private EditText etPassword;
 
@@ -34,6 +45,13 @@ public class LoginActivity extends AppCompatActivity {
 
         etUsername = loginBinding.etUsername;
         etPassword = loginBinding.etPassword;
+
+        Glide.with(this)
+                .asGif()
+                .load(R.drawable.logo_gif)
+                .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
+                .listener(new LogoGifRequestListener())
+                .into(loginBinding.ivLogo);
 
         loginBinding.btnLogin.setOnClickListener(new LoginButtonViewOnClickListener());
         loginBinding.btnRegister.setOnClickListener(new RegisterButtonViewOnClickListener());
@@ -99,6 +117,19 @@ public class LoginActivity extends AppCompatActivity {
                 return;
             }
             goToMainActivity();
+        }
+    }
+
+    private class LogoGifRequestListener implements RequestListener<GifDrawable> {
+        @Override
+        public boolean onLoadFailed(@Nullable @org.jetbrains.annotations.Nullable GlideException e, Object model, Target<GifDrawable> target, boolean isFirstResource) {
+            return false;
+        }
+
+        @Override
+        public boolean onResourceReady(GifDrawable resource, Object model, Target<GifDrawable> target, DataSource dataSource, boolean isFirstResource) {
+            resource.setLoopCount(NUMBER_OF_TIMES_TO_LOOP_LOGO_GIF);
+            return false;
         }
     }
 }

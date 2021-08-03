@@ -11,9 +11,7 @@
         android:layout_height="200dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="40dp"
-        android:background="@drawable/ic_easychef_logo"
-        android:backgroundTint="#032B43" />
+        android:layout_marginTop="40dp" />
 
     <EditText
         android:id="@+id/etUsername"
