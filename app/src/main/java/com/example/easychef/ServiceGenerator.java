@@ -90,6 +90,7 @@ public class ServiceGenerator {
         public Response intercept(@NotNull Chain chain) throws IOException {
             Log.d(TAG, "offline interceptor called");
             if (userRefreshedExplore) {
+                userRefreshedExplore = false;
                 Log.d(TAG, "explore page refreshed - network call forced");
                 final CacheControl cacheControl = CacheControl.FORCE_NETWORK;
                 return chain.proceed(chain.request().newBuilder().addHeader(HEADER_CACHE_CONTROL, cacheControl.toString()).build());

@@ -120,7 +120,6 @@ public class SearchFragment extends RecipeListFragmentAbstract {
             recipes.clear();
             recipes.addAll(getRecipesFromRecipePOJOS(response.body().getResults()));
             adapter.notifyDataSetChanged();
-            setUserRefreshedExplore(false);
             swipeContainer.setRefreshing(false);
         }
 
