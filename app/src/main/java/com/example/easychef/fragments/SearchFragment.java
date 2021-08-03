@@ -113,22 +113,6 @@ public class SearchFragment extends RecipeListFragmentAbstract {
         }
     }
 
-    private class SearchCallback0 implements Callback<RecipeResultsPOJO> {
-        @Override
-        public void onResponse(@NotNull Call<RecipeResultsPOJO> call, @NotNull Response<RecipeResultsPOJO> response) {
-            adapter.clear();
-            recipes.clear();
-            recipes.addAll(getRecipesFromRecipePOJOS(response.body().getResults()));
-            adapter.notifyDataSetChanged();
-//
-        }
-
-        @Override
-        public void onFailure(@NotNull Call<RecipeResultsPOJO> call, @NotNull Throwable t) {
-            Log.e(TAG, "hit exception", t);
-        }
-    }
-
     private class SearchCallback implements Callback<RecipeResultsPOJO> {
         @Override
         public void onResponse(@NotNull Call<RecipeResultsPOJO> call, @NotNull Response<RecipeResultsPOJO> response) {
