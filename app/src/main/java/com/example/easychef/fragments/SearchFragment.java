@@ -10,7 +10,9 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.example.easychef.R;
 import com.example.easychef.adapters.AutoCompleteAdapter;
 import com.example.easychef.adapters.RecipeAdapter;
 import com.example.easychef.databinding.FragmentSearchBinding;
@@ -28,6 +30,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static com.example.easychef.ServiceGenerator.getFoodAPI;
+import static com.example.easychef.ServiceGenerator.setUserRefreshedExplore;
 import static com.example.easychef.adapters.AutoCompleteAdapter.THRESHOLD;
 import static com.example.easychef.utils.ParsePOJOUtils.getRecipesFromRecipePOJOS;
 
@@ -36,6 +39,7 @@ public class SearchFragment extends RecipeListFragmentAbstract {
     private static final String TAG = "SearchFragment";
     private FragmentSearchBinding binding;
     private String searchQuery;
+    private SwipeRefreshLayout swipeContainer;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -51,6 +55,20 @@ public class SearchFragment extends RecipeListFragmentAbstract {
                         binding.etSearchForRecipe,
                         autoCompleteAdapter,
                         "recipe"));
+
+        swipeContainer = binding.swipeContainer;
+        swipeContainer.setOnRefreshListener(() -> {
+            if (binding.etSearchForRecipe.getText().toString().equals("")) {
+                setUserRefreshedExplore(true);
+                getExploreRecipes();
+            }
+            swipeContainer.setRefreshing(false);
+        });
+        swipeContainer.setColorSchemeResources(
+                R.color.pine_green,
+                R.color.sky_blue,
+                R.color.lime_green,
+                R.color.light_coral);
 
         return binding.getRoot();
     }
@@ -95,6 +113,22 @@ public class SearchFragment extends RecipeListFragmentAbstract {
         }
     }
 
+    private class SearchCallback0 implements Callback<RecipeResultsPOJO> {
+        @Override
+        public void onResponse(@NotNull Call<RecipeResultsPOJO> call, @NotNull Response<RecipeResultsPOJO> response) {
+            adapter.clear();
+            recipes.clear();
+            recipes.addAll(getRecipesFromRecipePOJOS(response.body().getResults()));
+            adapter.notifyDataSetChanged();
+//
+        }
+
+        @Override
+        public void onFailure(@NotNull Call<RecipeResultsPOJO> call, @NotNull Throwable t) {
+            Log.e(TAG, "hit exception", t);
+        }
+    }
+
     private class SearchCallback implements Callback<RecipeResultsPOJO> {
         @Override
         public void onResponse(@NotNull Call<RecipeResultsPOJO> call, @NotNull Response<RecipeResultsPOJO> response) {
@@ -102,6 +136,8 @@ public class SearchFragment extends RecipeListFragmentAbstract {
             recipes.clear();
             recipes.addAll(getRecipesFromRecipePOJOS(response.body().getResults()));
             adapter.notifyDataSetChanged();
+            setUserRefreshedExplore(false);
+            swipeContainer.setRefreshing(false);
         }
 
         @Override

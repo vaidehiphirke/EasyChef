@@ -30,6 +30,8 @@ public class ServiceGenerator {
     public static final int NANOSECONDS_IN_A_SECOND = 1000 * 1000 * 1000;
     private static final int MAX_STALE_OFFLINE_CALL_DAYS = 7;
 
+    private static boolean userRefreshedExplore = false;
+
     private static final Cache API_CACHE = new Cache(new File(EasyChefApplication.getInstance().getCacheDir(), "apiCache"),
             CACHE_SIZE_5_MB);
 
@@ -55,6 +57,10 @@ public class ServiceGenerator {
 
     public static FoodAPI getFoodAPI() {
         return RETROFIT.create(FoodAPI.class);
+    }
+
+    public static void setUserRefreshedExplore(boolean userRefreshedExplore) {
+        ServiceGenerator.userRefreshedExplore = userRefreshedExplore;
     }
 
     private static class NetworkInterceptor implements Interceptor {
@@ -83,9 +89,16 @@ public class ServiceGenerator {
         @Override
         public Response intercept(@NotNull Chain chain) throws IOException {
             Log.d(TAG, "offline interceptor called");
+            if (userRefreshedExplore) {
+                Log.d(TAG, "explore page refreshed - network call forced");
+                final CacheControl cacheControl = CacheControl.FORCE_NETWORK;
+                return chain.proceed(chain.request().newBuilder().addHeader(HEADER_CACHE_CONTROL, cacheControl.toString()).build());
+            }
+
             if (EasyChefApplication.hasNetwork()) {
                 return chain.proceed(chain.request());
             }
+
             final CacheControl cacheControl = new CacheControl.Builder()
                     .maxStale(MAX_STALE_OFFLINE_CALL_DAYS, TimeUnit.DAYS)
                     .build();
