@@ -4,6 +4,7 @@ import com.example.easychef.models.IngredientPOJO;
 import com.example.easychef.models.RecipeDetailPOJO;
 import com.example.easychef.models.RecipePOJO;
 import com.example.easychef.models.RecipeResultsPOJO;
+import com.example.easychef.models.SimilarRecipePOJO;
 
 import java.util.List;
 
@@ -18,6 +19,7 @@ import static com.example.easychef.utils.APIEndpointConstants.DETAILS_AND_KEY;
 import static com.example.easychef.utils.APIEndpointConstants.FIND_BY_INGREDIENTS_AND_KEY;
 import static com.example.easychef.utils.APIEndpointConstants.INGREDIENT_BASE;
 import static com.example.easychef.utils.APIEndpointConstants.RECIPE_BASE;
+import static com.example.easychef.utils.APIEndpointConstants.SIMILAR_AND_KEY;
 
 public interface FoodAPI {
 
@@ -41,6 +43,11 @@ public interface FoodAPI {
     @GET(RECIPE_BASE + COMPLEX_SEARCH_AND_KEY
             + "&sort=random&popularity")
     Call<RecipeResultsPOJO> getExploreRecipes(
+    );
+
+    @GET(RECIPE_BASE + SIMILAR_AND_KEY)
+    Call<List<SimilarRecipePOJO>> getSimilarRecipes(
+            @Path("id") int id
     );
 
     @GET(RECIPE_BASE + DETAILS_AND_KEY)

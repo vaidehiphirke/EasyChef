@@ -75,6 +75,9 @@ public class RecipeStepsFragment extends Fragment {
     private class RecipeDetailsCallback implements Callback<RecipeDetailPOJO> {
         @Override
         public void onResponse(@NotNull Call<RecipeDetailPOJO> call, Response<RecipeDetailPOJO> response) {
+            if (response.body().getAnalyzedInstructions().isEmpty()) {
+                return;
+            }
             steps.addAll(response.body().getAnalyzedInstructions().get(0).getSteps());
             adapter.notifyDataSetChanged();
         }

@@ -12,5 +12,5 @@ public class APIEndpointConstants {
 
     public static final String FIND_BY_INGREDIENTS_AND_KEY = "findByIngredients" + BuildConfig.SPOONACULAR_KEY;
     public static final String DETAILS_AND_KEY = "{id}/information" + BuildConfig.SPOONACULAR_KEY;
+    public static final String SIMILAR_AND_KEY = "{id}/similar" + BuildConfig.SPOONACULAR_KEY + "&number=100";
 }
-

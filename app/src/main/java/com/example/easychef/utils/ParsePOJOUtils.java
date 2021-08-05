@@ -7,6 +7,7 @@ import com.example.easychef.models.IngredientPOJO;
 import com.example.easychef.models.Recipe;
 import com.example.easychef.models.RecipeDetailPOJO;
 import com.example.easychef.models.RecipePOJO;
+import com.example.easychef.models.SimilarRecipePOJO;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
@@ -19,6 +20,21 @@ public class ParsePOJOUtils {
     public static List<Recipe> getRecipesFromRecipePOJOS(List<RecipePOJO> recipePOJOs) {
         final List<Recipe> recipes = new ArrayList<>();
         for (RecipePOJO pojo : recipePOJOs) {
+            final Recipe.Builder builder = new Recipe.Builder()
+                    .id(pojo.getId())
+                    .name(pojo.getTitle())
+                    .user(ParseUser.getCurrentUser());
+            if (pojo.getImageUrl() != null) {
+                builder.imageUrl(pojo.getImageUrl());
+            }
+            recipes.add(builder.build());
+        }
+        return recipes;
+    }
+
+    public static List<Recipe> getRecipesFromSimilarRecipePOJOS(List<SimilarRecipePOJO> recipePOJOs) {
+        final List<Recipe> recipes = new ArrayList<>();
+        for (SimilarRecipePOJO pojo : recipePOJOs) {
             final Recipe.Builder builder = new Recipe.Builder()
                     .id(pojo.getId())
                     .name(pojo.getTitle())
