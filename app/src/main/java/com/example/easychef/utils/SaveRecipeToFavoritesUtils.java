@@ -87,7 +87,7 @@ public class SaveRecipeToFavoritesUtils extends Fragment {
         public void done(ParseException e) {
             if (e != null) {
                 Log.e("Saving Recipe", "Error while saving", e);
-                Toast.makeText(context, "Error while saving", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Error while saving recipe", Toast.LENGTH_SHORT).show();
                 return;
             }
             Toast.makeText(context, "Recipe saved to favorites", Toast.LENGTH_SHORT).show();

@@ -147,7 +147,6 @@ public class IngredientFragment extends Fragment {
             }
             try {
                 ingredient.delete();
-                Toast.makeText(getContext(), "Ingredient deleted", Toast.LENGTH_SHORT).show();
             } catch (ParseException parseException) {
                 Log.e(TAG, "Issue with deleting ingredient", parseException);
             }
@@ -176,10 +175,8 @@ public class IngredientFragment extends Fragment {
             public void done(ParseException e) {
                 if (e != null) {
                     Log.e(TAG, "Error while saving", e);
-                    Toast.makeText(getContext(), "Error while saving", Toast.LENGTH_SHORT).show();
-                    return;
+                    Toast.makeText(getContext(), "Ingredient could not be added", Toast.LENGTH_SHORT).show();
                 }
-                Toast.makeText(getContext(), "Ingredient was added!", Toast.LENGTH_SHORT).show();
             }
         }
     }

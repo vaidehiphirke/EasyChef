@@ -2,7 +2,6 @@ package com.example.easychef.fragments;
 
 import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.example.easychef.models.Recipe;
 import com.example.easychef.utils.SaveRecipeToFavoritesUtils;
@@ -40,11 +39,9 @@ public class FavoritesFragment extends RecipeListFragmentAbstract {
 
     private class UnsaveOnClickListener implements SaveRecipeToFavoritesUtils.OnUnsavedListener {
         private List<Recipe> recipesToLookIn = recipes;
-        private Context context = getContext();
 
         @Override
         public void setContext(Context context) {
-            this.context = context;
         }
 
         @Override
@@ -65,7 +62,6 @@ public class FavoritesFragment extends RecipeListFragmentAbstract {
             } catch (ParseException e) {
                 Log.e(TAG, "Recipe id not found", e);
             }
-            Toast.makeText(context, "Recipe removed from favorites!", Toast.LENGTH_SHORT).show();
         }
     }
 

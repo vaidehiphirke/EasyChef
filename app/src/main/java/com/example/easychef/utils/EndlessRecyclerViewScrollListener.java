@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 public abstract class EndlessRecyclerViewScrollListener extends RecyclerView.OnScrollListener {
+
     private static final int VISIBLE_THRESHOLD = 2;
     private int currentOffsetIndex = 0;
     private int previousTotalItemCount = 0;
