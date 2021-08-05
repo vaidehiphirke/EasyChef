@@ -1,7 +1,9 @@
 package com.example.easychef.fragments;
 
 import android.util.Log;
+import android.widget.Toast;
 
+import com.example.easychef.R;
 import com.example.easychef.models.Ingredient;
 import com.example.easychef.models.RecipePOJO;
 import com.example.easychef.utils.SaveRecipeToFavoritesUtils;
@@ -53,7 +55,13 @@ public class SuggestedRecipesFromPantryFragment extends RecipeListFragmentAbstra
             Log.e(TAG, "Error with finding Parse ingredients", e);
         }
 
-        final StringBuilder response = new StringBuilder(String.format("&ingredients=%s", userIngredientsFromParse.get(0).getName()));
+        if (userIngredientsFromParse.isEmpty()) {
+            Toast.makeText(getContext(), "Add some ingredients to your list first in order to get recipe suggestions!", Toast.LENGTH_SHORT).show();
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new IngredientFragment()).commit();
+            return "";
+        }
+
+        final StringBuilder response = new StringBuilder(userIngredientsFromParse.get(0).getName());
         for (int i = 1; i < userIngredientsFromParse.size(); i++) {
             response.append(String.format(",+%s", userIngredientsFromParse.get(i).getName()));
         }
