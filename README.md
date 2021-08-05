@@ -44,7 +44,8 @@ EasyChef is a cooking app that finds recipes using ingredients a user already ha
 - [X] RecipeDetails displays ingredients and equipments needed each step
 - [ ] User can add ingredients to purchase to a Grocery list
 - [ ] User can swipe to remove an ingredient from their Pantry
-- [ ] Explore tab has infinite scroll
+- [X] Explore tab is personalized to a user (based on liked recipes)
+- [X] Explore tab has infinite scroll
 - [X] Recipe and Ingredient representations have images and nice UI
 - [X] App has a cute logo and UI is consistent and coherent
 
