@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.easychef.R;
@@ -20,6 +21,7 @@ import com.example.easychef.models.Recipe;
 import com.example.easychef.models.RecipeResultsPOJO;
 import com.example.easychef.models.SimilarRecipePOJO;
 import com.example.easychef.utils.AutoCompleteTextWatcher;
+import com.example.easychef.utils.EndlessRecyclerViewScrollListener;
 import com.example.easychef.utils.SaveRecipeToFavoritesUtils;
 import com.example.easychef.utils.UXUtils;
 import com.parse.ParseException;
@@ -94,9 +96,17 @@ public class SearchFragment extends RecipeListFragmentAbstract {
         recipes = new ArrayList<>();
         adapter = new RecipeAdapter(getContext(), recipes, getOnUnsavedListener());
         binding.rvRecipes.setAdapter(adapter);
-        binding.rvRecipes.setLayoutManager(new LinearLayoutManager(getContext()));
-
+        final LinearLayoutManager recipesLayoutManager = new LinearLayoutManager(getContext());
+        binding.rvRecipes.setLayoutManager(recipesLayoutManager);
         binding.btnSearch.setOnClickListener(new GetRecipesOnClickListener());
+
+        final EndlessRecyclerViewScrollListener scrollListener = new EndlessRecyclerViewScrollListener(recipesLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                preparePersonalizedExplorePage();
+            }
+        };
+        binding.rvRecipes.addOnScrollListener(scrollListener);
 
         if (sessionCacheWithUserRecs.isEmpty()) {
             preparePersonalizedExplorePage();
