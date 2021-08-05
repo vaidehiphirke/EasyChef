@@ -24,12 +24,14 @@ import com.example.easychef.utils.UXUtils;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.easychef.adapters.AutoCompleteAdapter.THRESHOLD;
+import static com.example.easychef.models.EasyChefParseObjectAbstract.KEY_USER;
 import static com.example.easychef.models.Ingredient.KEY_NAME_INGREDIENT;
 import static com.example.easychef.utils.ParseCacheUtils.setQueryCacheControl;
 
@@ -88,6 +90,7 @@ public class IngredientFragment extends Fragment {
     private void queryPantryIngredients() {
         final ParseQuery<Ingredient> query = ParseQuery.getQuery(Ingredient.class);
         query.include(KEY_NAME_INGREDIENT);
+        query.whereEqualTo(KEY_USER, ParseUser.getCurrentUser());
         query.addDescendingOrder(Ingredient.KEY_CREATED_AT);
         setQueryCacheControl(query);
         query.findInBackground(new RetrievePantryIngredientsFindCallback());
@@ -96,6 +99,7 @@ public class IngredientFragment extends Fragment {
     private void deletePantryIngredientFromParse(String objectId) {
         Log.i(TAG, "Ingredient objectId for deletion: " + objectId);
         final ParseQuery<Ingredient> query = ParseQuery.getQuery(Ingredient.class);
+        query.whereEqualTo(KEY_USER, ParseUser.getCurrentUser());
         query.getInBackground(objectId, new DeletePantryIngredientsGetCallback());
     }
 

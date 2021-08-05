@@ -15,7 +15,7 @@ import java.util.List;
 
 import static com.example.easychef.models.EasyChefParseObjectAbstract.KEY_CREATED_AT;
 import static com.example.easychef.models.EasyChefParseObjectAbstract.KEY_USER;
-import static com.example.easychef.models.Ingredient.KEY_NAME_INGREDIENT;
+import static com.example.easychef.models.Recipe.KEY_NAME_RECIPE;
 import static com.example.easychef.models.Recipe.KEY_RECIPE_ID;
 import static com.example.easychef.utils.ParseCacheUtils.setQueryCacheControl;
 
@@ -26,7 +26,8 @@ public class FavoritesFragment extends RecipeListFragmentAbstract {
     @Override
     protected void getRecipesToShowInList() {
         final ParseQuery<Recipe> query = ParseQuery.getQuery(Recipe.class);
-        query.include(KEY_NAME_INGREDIENT);
+        query.include(KEY_NAME_RECIPE);
+        query.whereEqualTo(KEY_USER, ParseUser.getCurrentUser());
         query.addDescendingOrder(KEY_CREATED_AT);
         setQueryCacheControl(query);
         query.findInBackground(new RetrieveSavedRecipesFindCallback());

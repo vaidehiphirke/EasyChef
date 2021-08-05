@@ -25,7 +25,7 @@ import com.parse.ParseUser;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.easychef.utils.ParseCacheUtils.setQueryCacheControl;
+import static com.example.easychef.models.EasyChefParseObjectAbstract.KEY_USER;
 
 public abstract class RecipeListFragmentAbstract extends Fragment {
 
@@ -67,6 +67,7 @@ public abstract class RecipeListFragmentAbstract extends Fragment {
 
     protected void deleteSavedRecipeFromParse(String objectIdToDelete) {
         final ParseQuery<Recipe> query = ParseQuery.getQuery(Recipe.class);
+        query.whereEqualTo(KEY_USER, ParseUser.getCurrentUser());
         query.getInBackground(objectIdToDelete, new DeleteSavedRecipeGetCallback());
     }
 
