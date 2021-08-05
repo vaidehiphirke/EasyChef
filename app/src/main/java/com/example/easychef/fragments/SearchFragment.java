@@ -177,9 +177,10 @@ public class SearchFragment extends RecipeListFragmentAbstract {
     private class GetRecipesOnClickListener implements View.OnClickListener {
         @Override
         public void onClick(View view) {
-            binding.rvRecipes.smoothScrollToPosition(0);
             UXUtils.hideKeyboard((Activity) getActivity());
             searchQuery = binding.etSearchForRecipe.getText().toString();
+            adapter.clear();
+            recipes.clear();
             getRecipesToShowInList();
         }
     }
@@ -187,8 +188,6 @@ public class SearchFragment extends RecipeListFragmentAbstract {
     private class SearchCallback implements Callback<RecipeResultsPOJO> {
         @Override
         public void onResponse(@NotNull Call<RecipeResultsPOJO> call, @NotNull Response<RecipeResultsPOJO> response) {
-            adapter.clear();
-            recipes.clear();
             recipes.addAll(getRecipesFromRecipePOJOS(response.body().getResults()));
             adapter.notifyDataSetChanged();
             swipeContainer.setRefreshing(false);
