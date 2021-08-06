@@ -7,23 +7,24 @@
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnSearch"
-        android:layout_width="60dp"
-        android:layout_height="30dp"
+        android:layout_width="55dp"
+        android:layout_height="17dp"
         android:layout_alignTop="@id/etSearchForRecipe"
         android:layout_alignBottom="@id/etSearchForRecipe"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="1dp"
+        android:layout_marginTop="6dp"
         android:layout_marginEnd="8dp"
         android:background="@drawable/ic_search_icon"
-        android:backgroundTint="#188C7C"
-        android:backgroundTintMode="src_atop" />
+        android:backgroundTint="@color/pine_green"
+        android:backgroundTintMode="src_atop"
+        android:padding="@dimen/border_margin" />
 
     <AutoCompleteTextView
         android:id="@+id/etSearchForRecipe"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_margin="8dp"
+        android:layout_margin="@dimen/border_margin"
         android:autofillHints="@string/search_for_a_recipe"
         android:background="@drawable/rounded_rectangle"
         android:ems="@dimen/text_size"
