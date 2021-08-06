@@ -12,7 +12,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.easychef.R;
 import com.example.easychef.adapters.AutoCompleteAdapter;
@@ -26,6 +28,8 @@ import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,9 +82,10 @@ public class IngredientFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        adapter = new IngredientAdapter(getContext(), userIngredients, new IngredientOnLongClickListener());
+        adapter = new IngredientAdapter(getContext(), userIngredients);
         binding.rvRecipes.setAdapter(adapter);
         binding.rvRecipes.setLayoutManager(new LinearLayoutManager(getContext()));
+        new ItemTouchHelper(new SwipeToDeleteTouchHelper(0, ItemTouchHelper.RIGHT)).attachToRecyclerView(binding.rvRecipes);
 
         binding.btnGetRecipes.setOnClickListener(new GetRecipesOnClickListener());
 
@@ -101,15 +106,6 @@ public class IngredientFragment extends Fragment {
         final ParseQuery<Ingredient> query = ParseQuery.getQuery(Ingredient.class);
         query.whereEqualTo(KEY_USER, ParseUser.getCurrentUser());
         query.getInBackground(objectId, new DeletePantryIngredientsGetCallback());
-    }
-
-    private class IngredientOnLongClickListener implements IngredientAdapter.OnLongClickListener {
-        @Override
-        public void onItemLongClicked(int position) {
-            final String objectIdToDelete = userIngredients.remove(position).getObjectId();
-            deletePantryIngredientFromParse(objectIdToDelete);
-            adapter.notifyItemRemoved(position);
-        }
     }
 
     private class GetRecipesOnClickListener implements View.OnClickListener {
@@ -178,6 +174,25 @@ public class IngredientFragment extends Fragment {
                     Toast.makeText(getContext(), "Ingredient could not be added", Toast.LENGTH_SHORT).show();
                 }
             }
+        }
+    }
+
+    private class SwipeToDeleteTouchHelper extends ItemTouchHelper.SimpleCallback {
+
+        public SwipeToDeleteTouchHelper(int dragDirs, int swipeDirs) {
+            super(dragDirs, swipeDirs);
+        }
+
+        @Override
+        public boolean onMove(@NonNull @NotNull RecyclerView recyclerView, @NonNull @NotNull RecyclerView.ViewHolder viewHolder, @NonNull @NotNull RecyclerView.ViewHolder target) {
+            return false;
+        }
+
+        @Override
+        public void onSwiped(@NonNull @NotNull RecyclerView.ViewHolder viewHolder, int direction) {
+            final String objectIdToDelete = userIngredients.remove(viewHolder.getAdapterPosition()).getObjectId();
+            deletePantryIngredientFromParse(objectIdToDelete);
+            adapter.notifyItemRemoved(viewHolder.getAdapterPosition());
         }
     }
 }

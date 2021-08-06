@@ -18,13 +18,11 @@ import java.util.List;
 public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.ViewHolder> {
 
     private final List<Ingredient> ingredients;
-    private final OnLongClickListener longClickListener;
     private final Context context;
 
-    public IngredientAdapter(Context context, List<Ingredient> ingredients, OnLongClickListener longClickListener) {
+    public IngredientAdapter(Context context, List<Ingredient> ingredients) {
         this.context = context;
         this.ingredients = ingredients;
-        this.longClickListener = longClickListener;
     }
 
     @NonNull
@@ -49,11 +47,7 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.Vi
         notifyDataSetChanged();
     }
 
-    public interface OnLongClickListener {
-        void onItemLongClicked(int position);
-    }
-
-    protected class ViewHolder extends RecyclerView.ViewHolder {
+    protected static class ViewHolder extends RecyclerView.ViewHolder {
 
         private final TextView tvIngredientName;
         private final ImageView ivIngredientImage;
@@ -68,10 +62,6 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.Vi
 
         public void bind(Ingredient ingredient) {
             tvIngredientName.setText(ingredient.getName());
-            tvIngredientName.setOnLongClickListener(view -> {
-                longClickListener.onItemLongClicked(getAdapterPosition());
-                return true;
-            });
 
             Glide.with(context).load(ingredient.getImageUrl()).into(ivIngredientImage);
         }

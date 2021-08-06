@@ -68,7 +68,7 @@ public class RecipeOverviewFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        final IngredientAdapter ingredientAdapter = new IngredientAdapter(getContext(), ingredients, new OnLongClickListener());
+        final IngredientAdapter ingredientAdapter = new IngredientAdapter(getContext(), ingredients);
         binding.rvIngredients.setAdapter(ingredientAdapter);
         final StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(
                 NUMBER_OF_COLUMNS,
@@ -130,11 +130,5 @@ public class RecipeOverviewFragment extends Fragment {
         binding.switchVegan.setChecked(pojo.isVegan());
         binding.switchDairyFree.setChecked(pojo.isDairyFree());
         binding.switchGlutenFree.setChecked(pojo.isGlutenFree());
-    }
-
-    public static class OnLongClickListener implements IngredientAdapter.OnLongClickListener {
-        @Override
-        public void onItemLongClicked(int position) {
-        }
     }
 }

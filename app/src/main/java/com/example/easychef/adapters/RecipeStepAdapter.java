@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.example.easychef.databinding.ItemRecipeStepBinding;
-import com.example.easychef.fragments.RecipeOverviewFragment;
 import com.example.easychef.models.Ingredient;
 import com.example.easychef.models.StepPOJO;
 
@@ -88,10 +87,7 @@ public class RecipeStepAdapter extends RecyclerView.Adapter<RecipeStepAdapter.Vi
             if (ingredients.size() == 0) {
                 title.setHeight(0);
             }
-            final IngredientAdapter ingredientAdapter = new IngredientAdapter(
-                    context,
-                    ingredients,
-                    new RecipeOverviewFragment.OnLongClickListener());
+            final IngredientAdapter ingredientAdapter = new IngredientAdapter(context, ingredients);
 
             recyclerView.setAdapter(ingredientAdapter);
             recyclerView.setLayoutManager(new StaggeredGridLayoutManager(
