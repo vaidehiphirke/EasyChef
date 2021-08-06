@@ -24,7 +24,8 @@
         android:layout_centerVertical="true"
         android:layout_marginEnd="@dimen/layout_margin"
         android:layout_marginBottom="@dimen/layout_margin"
-        android:background="@drawable/rounded_rectangle" />
+        android:background="@drawable/rounded_rectangle"
+        android:textSize="@dimen/recipe_text_size" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnEditUsername"
@@ -39,7 +40,9 @@
         android:backgroundTint="@color/pine_green"
         android:backgroundTintMode="src_over"
         android:text="@string/edit_username"
-        android:textColor="@color/white" />
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="@dimen/recipe_text_size" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnEditPassword"
@@ -54,7 +57,9 @@
         android:backgroundTint="@color/pine_green"
         android:backgroundTintMode="src_over"
         android:text="@string/edit_password"
-        android:textColor="@color/white" />
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="@dimen/recipe_text_size" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnDeleteAccount"
@@ -69,7 +74,9 @@
         android:backgroundTint="@color/lime_green"
         android:backgroundTintMode="src_over"
         android:text="@string/delete_account"
-        android:textColor="@color/white" />
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="@dimen/recipe_text_size" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnLogout"
@@ -84,5 +91,7 @@
         android:backgroundTint="@color/light_coral"
         android:backgroundTintMode="src_over"
         android:text="@string/button_text_logout"
-        android:textColor="@color/white" />
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="@dimen/recipe_text_size" />
 </RelativeLayout>

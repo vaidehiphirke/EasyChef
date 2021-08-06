@@ -50,10 +50,12 @@
         android:layout_marginTop="@dimen/layout_margin"
         android:layout_marginEnd="@dimen/layout_margin"
         android:background="@drawable/rounded_rectangle"
-        android:backgroundTint="#51CB20"
+        android:backgroundTint="@color/lime_green"
         android:backgroundTintMode="src_over"
         android:text="@string/button_text_login"
-        android:textColor="@color/white" />
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="@dimen/recipe_text_size" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnRegister"
@@ -66,9 +68,11 @@
         android:layout_marginEnd="@dimen/layout_margin"
         android:layout_marginBottom="@dimen/layout_margin"
         android:background="@drawable/rounded_rectangle"
-        android:backgroundTint="#188C7C"
+        android:backgroundTint="@color/pine_green"
         android:backgroundTintMode="src_over"
         android:text="@string/button_text_register"
-        android:textColor="@color/white" />
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="@dimen/recipe_text_size" />
 
 </RelativeLayout>
