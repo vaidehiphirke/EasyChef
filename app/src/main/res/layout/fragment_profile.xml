@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,23 +8,80 @@
 
     <ImageView
         android:id="@+id/ivLogo"
-        android:layout_width="220dp"
-        android:layout_height="100dp"
+        android:layout_width="wrap_content"
+        android:layout_height="170dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="200dp"
-        android:background="@drawable/ic_easychef_logo"
-        android:backgroundTint="#032B43" />
+        android:layout_marginTop="17dp"
+        android:contentDescription="@string/easychef"
+        app:srcCompat="@drawable/logo_gif" />
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btnLogout"
-        android:layout_width="147dp"
+    <TextView
+        android:id="@+id/currentUser"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/ivLogo"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:layout_marginEnd="@dimen/layout_margin"
+        android:layout_marginBottom="@dimen/layout_margin"
+        android:background="@drawable/rounded_rectangle" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnEditUsername"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/currentUser"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="@dimen/layout_margin"
+        android:layout_marginBottom="@dimen/layout_margin"
         android:background="@drawable/rounded_rectangle"
-        android:backgroundTint="#188C7C"
+        android:backgroundTint="@color/pine_green"
+        android:backgroundTintMode="src_over"
+        android:text="@string/edit_username"
+        android:textColor="@color/white" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnEditPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnEditUsername"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="@dimen/layout_margin"
+        android:layout_marginBottom="@dimen/layout_margin"
+        android:background="@drawable/rounded_rectangle"
+        android:backgroundTint="@color/pine_green"
+        android:backgroundTintMode="src_over"
+        android:text="@string/edit_password"
+        android:textColor="@color/white" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnDeleteAccount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnEditPassword"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="@dimen/layout_margin"
+        android:layout_marginBottom="@dimen/layout_margin"
+        android:background="@drawable/rounded_rectangle"
+        android:backgroundTint="@color/lime_green"
+        android:backgroundTintMode="src_over"
+        android:text="@string/delete_account"
+        android:textColor="@color/white" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnLogout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnDeleteAccount"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="@dimen/layout_margin"
+        android:layout_marginBottom="@dimen/layout_margin"
+        android:background="@drawable/rounded_rectangle"
+        android:backgroundTint="@color/light_coral"
         android:backgroundTintMode="src_over"
         android:text="@string/button_text_logout"
         android:textColor="@color/white" />
