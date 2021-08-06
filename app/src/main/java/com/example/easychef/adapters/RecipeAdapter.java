@@ -22,12 +22,15 @@ import com.parse.ParseUser;
 
 import java.util.List;
 
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+
 import static com.example.easychef.models.EasyChefParseObjectAbstract.KEY_USER;
 import static com.example.easychef.models.Recipe.KEY_RECIPE_ID;
 import static com.example.easychef.utils.ParseCacheUtils.setQueryCacheControl;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder> {
 
+    private static final int ROUNDING_RADIUS = 84;
     private final Context context;
     private final List<Recipe> recipes;
     private final SaveRecipeToFavoritesUtils.OnUnsavedListener onUnsavedListener;
@@ -81,7 +84,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
 
         public void bind(Recipe recipe) {
             tvRecipeName.setText(recipe.getName());
-            Glide.with(context).load(recipe.getImageUrl()).into(ivRecipeImage);
+            Glide.with(context).load(recipe.getImageUrl()).transform(new RoundedCornersTransformation(ROUNDING_RADIUS, 0)).into(ivRecipeImage);
 
             final ParseQuery<Recipe> query = ParseQuery.getQuery(Recipe.class);
             query.whereEqualTo(KEY_RECIPE_ID, recipe.getId());
