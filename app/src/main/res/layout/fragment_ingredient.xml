@@ -1,21 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:layout_margin="4dp"
     tools:context=".activities.MainActivity">
 
-    <androidx.appcompat.widget.AppCompatButton
+    <ImageButton
         android:id="@+id/btnGetRecipes"
-        android:layout_width="84dp"
-        android:layout_height="84dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/ic_suggested_recipes_icon"
-        android:backgroundTint="#188C7C"
-        android:backgroundTintMode="src_atop" />
+        android:layout_marginEnd="4dp"
+        android:layout_marginBottom="@dimen/border_margin"
+        android:background="@drawable/suggested_recipes_icon_circle" />
 
     <AutoCompleteTextView
         android:id="@+id/etAddIngredient"
