@@ -34,6 +34,10 @@ public class LoginActivity extends AppCompatActivity {
             goToMainActivity();
         }
 
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setLogo(R.drawable.easychef_logo_navy_blue);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
+
         final ActivityLoginBinding loginBinding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(loginBinding.getRoot());
 

@@ -33,6 +33,10 @@ public class MainActivity extends AppCompatActivity {
 
         oldestCacheTime = System.nanoTime() / NANOSECONDS_IN_A_SECOND;
 
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setLogo(R.drawable.easychef_logo_navy_blue);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
+
         final ActivityMainBinding mainBinding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(mainBinding.getRoot());
 
