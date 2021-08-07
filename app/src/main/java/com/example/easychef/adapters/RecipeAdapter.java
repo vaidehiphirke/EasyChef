@@ -30,7 +30,7 @@ import static com.example.easychef.utils.ParseCacheUtils.setQueryCacheControl;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder> {
 
-    private static final int ROUNDING_RADIUS = 84;
+    public static final int ROUNDING_RADIUS = 84;
     private final Context context;
     private final List<Recipe> recipes;
     private final SaveRecipeToFavoritesUtils.OnUnsavedListener onUnsavedListener;

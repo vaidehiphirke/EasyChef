@@ -1,10 +1,12 @@
 package com.example.easychef.fragments;
 
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -12,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.bumptech.glide.Glide;
+import com.example.easychef.R;
 import com.example.easychef.adapters.IngredientAdapter;
 import com.example.easychef.databinding.FragmentRecipeOverviewBinding;
 import com.example.easychef.models.Ingredient;
@@ -26,11 +29,13 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 import static com.example.easychef.ServiceGenerator.getFoodAPI;
+import static com.example.easychef.adapters.RecipeAdapter.ROUNDING_RADIUS;
 import static com.example.easychef.models.EasyChefParseObjectAbstract.KEY_USER;
 import static com.example.easychef.models.Recipe.KEY_RECIPE_ID;
 import static com.example.easychef.utils.ParseCacheUtils.setQueryCacheControl;
@@ -124,11 +129,20 @@ public class RecipeOverviewFragment extends Fragment {
         binding.tvRecipeTitle.setText(pojo.getTitle());
         binding.tvReadyInMinutes.setText(String.format("Ready in %d minutes", pojo.getReadyInMinutes()));
         binding.tvServings.setText(String.format("Makes %d servings", pojo.getServings()));
-        Glide.with(RecipeOverviewFragment.this).load(pojo.getImage()).into(binding.ivRecipeDetails);
+        Glide.with(RecipeOverviewFragment.this).load(pojo.getImage()).transform(new RoundedCornersTransformation(ROUNDING_RADIUS, 0)).into(binding.ivRecipeDetails);
 
-        binding.switchVegetarian.setChecked(pojo.isVegetarian());
-        binding.switchVegan.setChecked(pojo.isVegan());
-        binding.switchDairyFree.setChecked(pojo.isDairyFree());
-        binding.switchGlutenFree.setChecked(pojo.isGlutenFree());
+        setDietaryRestrictionIndicator(binding.tvVegetarian, pojo.isVegetarian());
+        setDietaryRestrictionIndicator(binding.tvVegan, pojo.isVegan());
+        setDietaryRestrictionIndicator(binding.tvDairyFree, pojo.isDairyFree());
+        setDietaryRestrictionIndicator(binding.tvGlutenFree, pojo.isGlutenFree());
+    }
+
+    private void setDietaryRestrictionIndicator(TextView textView, boolean meetsRestriction) {
+        if (!meetsRestriction) {
+            textView.setTextColor(getResources().getColor(R.color.soft_gray));
+            return;
+        }
+        textView.setTextColor(getResources().getColor(R.color.pine_green));
+        textView.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.soft_lime_green)));
     }
 }

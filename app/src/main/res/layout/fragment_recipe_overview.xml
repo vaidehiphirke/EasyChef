@@ -17,6 +17,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
+            android:adjustViewBounds="true"
             android:contentDescription="@string/recipe_title"
             tools:src="@tools:sample/avatars" />
 
@@ -29,16 +30,17 @@
             android:layout_marginTop="@dimen/border_margin"
             android:layout_marginBottom="4dp"
             android:text="@string/recipe_title"
-            android:textSize="@dimen/recipe_text_size" />
+            android:textColor="@color/navy_blue"
+            android:textSize="19sp"
+            android:textStyle="bold" />
 
         <ToggleButton
             android:id="@+id/btnSaveRecipe"
-            android:layout_width="74dp"
-            android:layout_height="74dp"
-            android:layout_below="@+id/ivRecipeDetails"
+            android:layout_width="87dp"
+            android:layout_height="87dp"
+            android:layout_alignBottom="@id/ivRecipeDetails"
             android:layout_alignParentEnd="true"
-            android:layout_marginTop="-76dp"
-            android:layout_marginEnd="3dp"
+            android:layout_centerVertical="true"
             android:background="@drawable/heart_icon_blue"
             android:checked="false"
             android:textOff="@string/empty"
@@ -50,84 +52,90 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/tvRecipeTitle"
             android:layout_alignParentStart="true"
-            android:text="@string/ready_in_minutes" />
+            android:text="@string/ready_in_minutes"
+            android:textSize="@dimen/recipe_subtext_size"
+            android:textStyle="italic" />
 
         <TextView
             android:id="@+id/tvServings"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tvRecipeTitle"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="@dimen/end_servings_margin"
-            android:text="@string/servings" />
+            android:layout_below="@+id/tvReadyInMinutes"
+            android:layout_alignParentStart="true"
+            android:text="@string/servings"
+            android:textSize="@dimen/recipe_subtext_size"
+            android:textStyle="italic" />
 
         <TextView
             android:id="@+id/tvDietaryRestrictionTitleText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tvReadyInMinutes"
+            android:layout_below="@+id/tvServings"
             android:layout_alignParentStart="true"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
             android:text="@string/dietary_restriction_information"
-            android:textSize="@dimen/recipe_subtext_size" />
+            android:textColor="@color/navy_blue"
+            android:textSize="17sp" />
 
-        <CheckBox
-            android:id="@+id/switchVegetarian"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tvDietaryRestrictionTitleText"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="0dp"
-            android:clickable="false"
-            android:showText="false"
+        <TextView
+            android:id="@+id/tvVegetarian"
+            android:layout_width="190dp"
+            android:layout_height="37dp"
+            android:layout_below="@id/tvDietaryRestrictionTitleText"
+            android:layout_marginEnd="@dimen/layout_margin"
+            android:layout_marginBottom="@dimen/border_margin"
+            android:background="@drawable/rounded_rectangle_dietary_restr"
             android:text="@string/vegetarian"
-            android:textSize="12sp" />
+            android:textAlignment="center"
+            android:textSize="16sp" />
 
-        <CheckBox
-            android:id="@+id/switchVegan"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tvDietaryRestrictionTitleText"
-            android:layout_marginStart="@dimen/border_margin"
-            android:layout_toEndOf="@+id/switchVegetarian"
-            android:clickable="false"
-            android:showText="false"
+        <TextView
+            android:id="@+id/tvVegan"
+            android:layout_width="190dp"
+            android:layout_height="37dp"
+            android:layout_below="@id/tvDietaryRestrictionTitleText"
+            android:layout_marginBottom="@dimen/border_margin"
+            android:layout_toEndOf="@id/tvVegetarian"
+            android:background="@drawable/rounded_rectangle_dietary_restr"
             android:text="@string/vegan"
-            android:textSize="12sp" />
+            android:textAlignment="center"
+            android:textSize="16sp" />
 
-        <CheckBox
-            android:id="@+id/switchGlutenFree"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tvDietaryRestrictionTitleText"
-            android:layout_marginStart="@dimen/border_margin"
-            android:layout_toEndOf="@+id/switchVegan"
-            android:clickable="false"
-            android:showText="false"
+        <TextView
+            android:id="@+id/tvGlutenFree"
+            android:layout_width="190dp"
+            android:layout_height="37dp"
+            android:layout_below="@id/tvVegetarian"
+            android:layout_marginEnd="@dimen/layout_margin"
+            android:layout_marginBottom="@dimen/border_margin"
+            android:background="@drawable/rounded_rectangle_dietary_restr"
             android:text="@string/gluten_free"
-            android:textSize="12sp" />
+            android:textAlignment="center"
+            android:textSize="16sp" />
 
-        <CheckBox
-            android:id="@+id/switchDairyFree"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tvDietaryRestrictionTitleText"
-            android:layout_marginStart="@dimen/border_margin"
-            android:layout_toEndOf="@+id/switchGlutenFree"
-            android:clickable="false"
-            android:showText="false"
+        <TextView
+            android:id="@+id/tvDairyFree"
+            android:layout_width="190dp"
+            android:layout_height="37dp"
+            android:layout_below="@id/tvVegan"
+            android:layout_marginBottom="@dimen/border_margin"
+            android:layout_toEndOf="@id/tvGlutenFree"
+            android:background="@drawable/rounded_rectangle_dietary_restr"
             android:text="@string/dairy_free"
-            android:textSize="12sp" />
+            android:textAlignment="center"
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/tvIngredientTitleText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/switchVegetarian"
+            android:layout_below="@+id/tvGlutenFree"
             android:layout_alignParentStart="true"
-            android:layout_marginStart="0dp"
+            android:layout_marginTop="8dp"
             android:text="@string/ingredients"
-            android:textSize="@dimen/recipe_subtext_size" />
+            android:textColor="@color/navy_blue"
+            android:textSize="17sp" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvIngredients"
