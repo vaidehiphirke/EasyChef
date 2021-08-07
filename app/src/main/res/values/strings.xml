@@ -30,8 +30,8 @@
     <string name="dairy_free">Dairy-free</string>
     <string name="steps">Steps</string>
     <string name="step">Step #</string>
-    <string name="ingredients_needed">Ingredients Needed</string>
-    <string name="equipment_needed">Equipment Needed</string>
+    <string name="ingredients_needed">Ingredients Needed:</string>
+    <string name="equipment_needed">Equipment Needed:</string>
     <string name="step_text_here">Step text here</string>
     <string name="action_settings">Settings</string>
     <string name="recipe_steps">Recipe Steps</string>
