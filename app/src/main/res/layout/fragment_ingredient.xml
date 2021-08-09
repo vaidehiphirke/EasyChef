@@ -6,10 +6,11 @@
     android:layout_margin="4dp"
     tools:context=".activities.MainActivity">
 
-    <ImageButton
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnGetRecipes"
         android:layout_width="100dp"
         android:layout_height="100dp"
+        android:layout_alignBottom="@id/rv_recipes"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_marginEnd="4dp"
