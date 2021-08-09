@@ -42,7 +42,7 @@ public class SaveRecipeToFavoritesUtils extends Fragment {
     }
 
     private int getPosition() {
-        if (viewHolder == null) {
+        if (viewHolder == null || viewHolder.getAdapterPosition() == -1) {
             return 0;
         }
         return viewHolder.getAdapterPosition();
