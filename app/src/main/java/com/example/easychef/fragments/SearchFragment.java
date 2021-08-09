@@ -141,7 +141,7 @@ public class SearchFragment extends RecipeListFragmentAbstract {
 
     private List<Recipe> getPersonalizedExplorePage(List<Recipe> recipesToAdd, int numberOfAdditions) {
         final List<Recipe> exploreRecipes = new ArrayList<>();
-        for (int i = 0; i < numberOfAdditions; i++) {
+        for (int i = 0; i < numberOfAdditions & i < recipesToAdd.size(); i++) {
             exploreRecipes.add(recipesToAdd.remove(0));
         }
         return exploreRecipes;
